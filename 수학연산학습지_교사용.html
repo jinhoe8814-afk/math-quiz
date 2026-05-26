@@ -346,13 +346,15 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 /* ════════════════════════════════════════════
    ★ JSONBin 설정 (localStorage에서 불러옴)
    ════════════════════════════════════════════ */
-let BIN_KEY='',SETTINGS_BIN='',RECORDS_BIN='';
+let BIN_KEY='$2a$10$Y7BI8UEEsG.457oBthZTOeBREeuwaNLjJTVnWXSvTbRpB.GZlq/PC';
+let SETTINGS_BIN='6a0d18dd6610dd3ae8732886';
+let RECORDS_BIN='6a0d19256610dd3ae8732a5c';
 const TEACHER_PW_KEY='mathTeacherPw2024';
 
 function loadCfgFromLocal(){
-  BIN_KEY=localStorage.getItem('mjbin_key')||'';
-  SETTINGS_BIN=localStorage.getItem('mjbin_settings')||'';
-  RECORDS_BIN=localStorage.getItem('mjbin_records')||'';
+  BIN_KEY=localStorage.getItem('mjbin_key')||BIN_KEY;
+  SETTINGS_BIN=localStorage.getItem('mjbin_settings')||SETTINGS_BIN;
+  RECORDS_BIN=localStorage.getItem('mjbin_records')||RECORDS_BIN;
   if(BIN_KEY){document.getElementById('cfgKey').value=BIN_KEY}
   if(SETTINGS_BIN){document.getElementById('cfgSettings').value=SETTINGS_BIN}
   if(RECORDS_BIN){document.getElementById('cfgRecords').value=RECORDS_BIN}
