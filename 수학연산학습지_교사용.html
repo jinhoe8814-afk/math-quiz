@@ -354,18 +354,19 @@ const TEACHER_PW_KEY='mathTeacherPw2024';
 /* ════════════════
    Google Sheets API
    ════════════════ */
-const SETTINGS_URL='https://script.google.com/macros/s/AKfycbxeeSo-tIyrShUB9MQ-7bNc3ISqN6pwOWbWp9VhVjXk4CLT3vT9PvDjoFZM1uP_ntf9uw/exec';
-const RECORDS_URL='https://script.google.com/macros/s/AKfycbwvV8vHuDH7wXC4JwtnUMako7e6ToWwCCcYx6PUbjfliOqbpYnO9Pvn1GDJMAlYr0cz/exec';
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbx5D1ZU5cWuAwwr2r88d6cPw7ogRD4rDrPTWoSQXL1FcT4Yb73mqWD1QlZdNq8vmE3SGA/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbyN5-PtjrUlrSKfp9Vs--mj-O7lsC1wigbIS__7z9aSFB35wt26cD-1LL2m7rw-sac/exec';
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  const r=await fetch(url);
+  const r=await fetch(url,{redirect:'follow'});
   if(!r.ok)throw new Error('get fail: '+r.status);
   return r.json();
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+  const encoded=encodeURIComponent(JSON.stringify(data));
+  const r=await fetch(url+'?data='+encoded,{redirect:'follow'});
   if(!r.ok)throw new Error('put fail: '+r.status);
   return r.json();
 }
@@ -743,7 +744,6 @@ function showToast(msg){
 }
 
 /* 초기화 */
-loadCfgFromLocal();
 </script>
 </body>
 </html>
