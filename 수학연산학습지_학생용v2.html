@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>수학 연산 학습 — 학생용</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2563EB;--blue-lt:#EFF6FF;--blue-bd:#BFDBFE;
+  --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
+  --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
+  --amber:#D97706;--amber-lt:#FFFBEB;
+  --gray:#6B7280;--gray-lt:#F9FAFB;--gray-bd:#E5E7EB;
+  --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
+  --bg:#F3F4F6;--card:#FFFFFF;--radius:12px;--rsm:8px;
+}
+/* 분수 표기 */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.1}
+.frac span:first-child{border-bottom:2px solid currentColor;padding:0 3px;font-size:.9em;text-align:center}
+.frac span:last-child{padding:0 3px;font-size:.9em;text-align:center}
+/* 팁 버튼 */
+.tip-btn{display:inline-flex;align-items:center;gap:5px;margin-bottom:12px;padding:7px 14px;border:1.5px solid var(--amber);border-radius:var(--rsm);background:var(--amber-lt);color:var(--amber);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.tip-btn:hover{background:#FDE68A}
+.tip-box{background:var(--amber-lt);border-left:4px solid var(--amber);border-radius:0 var(--rsm) var(--rsm) 0;padding:12px 14px;font-size:13px;color:#92400E;line-height:1.85;display:none;margin-bottom:12px;white-space:pre-line}
+.tip-box.show{display:block}
+/* 응용문제 배경 강조 */
+.pcard.applied{border-left:4px solid var(--purple);background:linear-gradient(135deg,#fff 90%,var(--purple-lt) 100%)}
+.applied-tag{font-size:10px;background:var(--purple-lt);color:var(--purple);border-radius:10px;padding:2px 7px;font-weight:700;margin-left:6px;vertical-align:middle}
+body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-height:100vh}
+
+/* 설정 오버레이 */
+#setupOverlay{position:fixed;inset:0;background:rgba(17,24,39,.65);display:flex;align-items:center;justify-content:center;z-index:100}
+.sc{background:var(--card);border-radius:20px;padding:2.5rem 2rem;width:min(360px,92vw);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.sc-icon{font-size:52px;margin-bottom:.75rem}
+.sc-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.sc-sub{font-size:14px;color:var(--text2);margin-bottom:1.75rem;line-height:1.6}
+.name-inp{width:100%;padding:14px;border:2px solid var(--gray-bd);border-radius:var(--rsm);font-size:20px;text-align:center;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
+.name-inp:focus{border-color:var(--blue)}
+.cfg-preview{margin-top:.75rem;padding:.75rem 1rem;background:var(--blue-lt);border-radius:var(--rsm);font-size:13px;color:var(--blue);line-height:1.8;display:none;text-align:left}
+.start-btn{margin-top:1rem;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--rsm);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.start-btn:hover{opacity:.88}
+.start-btn:disabled{opacity:.4;cursor:default}
+.err-txt{margin-top:.65rem;font-size:12px;color:var(--red);min-height:18px}
+
+/* 상단 바 */
+.topbar{background:var(--card);border-bottom:1px solid var(--gray-bd);padding:.8rem 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.tbl{font-size:20px}
+.tb-info{flex:1}
+.tb-title{font-size:15px;font-weight:700;color:var(--text)}
+.tb-sub{font-size:12px;color:var(--text2);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:8px}
+.nbadge{background:var(--blue-lt);color:var(--blue);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+.new-btn{padding:7px 13px;border:1.5px solid var(--gray-bd);border-radius:var(--rsm);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit}
+.new-btn:hover{background:var(--gray-lt)}
+
+/* 진행 */
+.prog-section{background:var(--card);border-bottom:1px solid var(--gray-bd);padding:.8rem 1.25rem}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.prog-label{color:var(--text2)}
+.prog-cnt{font-weight:700;color:var(--text)}
+.prog-bar{height:6px;background:var(--gray-bd);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .35s}
+.dot-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.dot{width:22px;height:22px;border-radius:50%;background:var(--gray-bd);border:none;cursor:pointer;font-size:10px;font-weight:700;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.cur{outline:2.5px solid var(--blue);outline-offset:2px}
+.dot.ans{background:var(--blue-lt);color:var(--blue)}
+.dot.ok{background:var(--green-lt);color:var(--green)}
+.dot.ng{background:var(--red-lt);color:var(--red)}
+
+/* 문제 카드 */
+.content{padding:1.1rem;max-width:620px;margin:0 auto}
+.pcard{background:var(--card);border-radius:var(--radius);padding:1.5rem;border:1px solid var(--gray-bd)}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.pno{font-size:12px;font-weight:600;color:var(--text2)}
+.ptag{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.pq{font-size:24px;font-weight:700;color:var(--text);margin-bottom:1.25rem;line-height:1.5;word-break:keep-all}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cbtn{padding:14px 16px;border:2px solid var(--gray-bd);border-radius:var(--rsm);background:var(--card);cursor:pointer;font-size:15px;color:var(--text);text-align:left;font-family:inherit;display:flex;align-items:center;gap:10px;transition:all .15s;line-height:1.4;word-break:keep-all}
+.cbtn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-lt);color:var(--blue)}
+.cbtn.sel{border-color:var(--blue);background:var(--blue-lt);color:var(--blue)}
+.cbtn.correct{border-color:var(--green);background:var(--green-lt);color:var(--green)}
+.cbtn.wrong{border-color:var(--red);background:var(--red-lt);color:var(--red)}
+.cbtn:disabled{cursor:default}
+.cnum{min-width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.explain{margin-top:10px;padding:.75rem 1rem;background:var(--amber-lt);border-left:3px solid var(--amber);border-radius:0 var(--rsm) var(--rsm) 0;font-size:13px;color:#92400E;line-height:1.7;display:none}
+.explain.show{display:block}
+
+/* 네비 */
+.navbar{background:var(--card);border-top:1px solid var(--gray-bd);padding:.8rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0}
+.nprev,.nnext{padding:10px 18px;border:1.5px solid var(--gray-bd);border-radius:var(--rsm);background:transparent;font-size:14px;color:var(--text2);cursor:pointer;font-family:inherit}
+.nprev:hover,.nnext:hover{background:var(--gray-lt)}
+.nprev:disabled,.nnext:disabled{opacity:.3;cursor:default}
+.subbtn{padding:10px 26px;background:var(--blue);color:#fff;border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.subbtn:hover{opacity:.88}
+.subbtn:disabled{opacity:.35;cursor:default}
+
+/* 결과 */
+#resultOverlay{position:fixed;inset:0;background:rgba(17,24,39,.75);display:none;align-items:center;justify-content:center;z-index:50}
+#resultOverlay.show{display:flex}
+.rc{background:var(--card);border-radius:20px;padding:2.5rem 2rem;width:min(380px,92vw);text-align:center}
+.r-emoji{font-size:52px;margin-bottom:.5rem}
+.r-score{font-size:54px;font-weight:800;color:var(--text);line-height:1}
+.r-score span{font-size:22px;font-weight:600;color:var(--text2)}
+.r-sub{font-size:14px;color:var(--text2);margin:.5rem 0 1.25rem}
+.r-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
+.rg{background:var(--gray-lt);border-radius:var(--rsm);padding:.75rem .5rem;text-align:center}
+.rg-l{font-size:11px;color:var(--text3);margin-bottom:3px}
+.rg-v{font-size:18px;font-weight:700;color:var(--text)}
+.r-msg{padding:.75rem 1rem;border-radius:var(--rsm);font-size:14px;font-weight:700;margin-bottom:1.25rem}
+.r-acts{display:flex;flex-direction:column;gap:8px}
+.ra{padding:13px;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.ra-p{background:var(--blue);color:#fff}
+.ra-s{background:var(--gray-lt);color:var(--text2);border:1.5px solid var(--gray-bd)!important}
+
+/* 점수 히스토리 */
+.hist-wrap{margin-top:1rem;background:var(--gray-lt);border-radius:var(--rsm);padding:1rem}
+.hist-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
+.hist-chart{display:flex;align-items:flex-end;gap:5px;height:70px}
+.hbar{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px}
+.hbar-fill{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height .4s}
+.hbar-lbl{font-size:8px;color:var(--text3);text-align:center;overflow:hidden;white-space:nowrap;width:100%;text-overflow:ellipsis}
+.hbar-val{font-size:9px;font-weight:700}
+.hist-stat-row{display:flex;gap:8px;margin-top:.75rem}
+.hstat{flex:1;text-align:center;background:var(--card);border-radius:6px;padding:6px 4px}
+.hstat-l{font-size:10px;color:var(--text3);margin-bottom:2px}
+.hstat-v{font-size:14px;font-weight:700;color:var(--text)}
+.trend-up{color:var(--green)}
+.trend-dn{color:var(--red)}
+.trend-eq{color:var(--text2)}
+.no-hist{font-size:12px;color:var(--text3);text-align:center;padding:.5rem 0}
+
+/* 로딩 */
+#loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:200}
+#loading.show{display:flex}
+.spin{width:36px;height:36px;border:3px solid var(--gray-bd);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ld-msg{font-size:14px;color:var(--text2)}
+
+/* no-cfg */
+.nocfg{text-align:center;padding:3rem 1rem}
+.nocfg-icon{font-size:42px;margin-bottom:.75rem}
+.nocfg-t{font-size:16px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.nocfg-d{font-size:13px;color:var(--text2);line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- ① 이름 입력 오버레이 -->
+<div id="setupOverlay">
+  <div class="sc">
+    <div class="sc-icon">✏️</div>
+    <div class="sc-title">수학 연산 학습</div>
+    <div class="sc-sub">이름을 입력하면 선생님이 설정한<br>학년과 영역의 문제가 출제됩니다.<br><small style="font-size:12px;color:#9CA3AF">이름은 다음 방문 시 자동으로 입력됩니다.</small></div>
+    <input class="name-inp" id="nameInp" type="text" placeholder="이름 입력" maxlength="10"
+      oninput="onNameInput()" onkeydown="if(event.key==='Enter')tryStart()"/>
+    <div class="cfg-preview" id="cfgPreview"></div>
+    <button class="start-btn" id="startBtn" onclick="tryStart()" disabled>문제 시작하기 →</button>
+    <div class="err-txt" id="setupErr"></div>
+  </div>
+</div>
+
+<!-- 로딩 -->
+<div id="loading"><div class="spin"></div><div class="ld-msg" id="ldMsg">불러오는 중...</div></div>
+
+<!-- 결과 오버레이 -->
+<div id="resultOverlay">
+  <div class="rc">
+    <div class="r-emoji" id="rEmoji"></div>
+    <div class="r-score" id="rScore"></div>
+    <div class="r-sub" id="rSub"></div>
+    <div class="r-grid" id="rGrid"></div>
+    <div class="r-msg" id="rMsg"></div>
+    <div class="hist-wrap" id="histWrap"></div>
+    <div class="r-acts">
+      <button class="ra ra-p" onclick="retryQuiz()">↺ 다시 풀기 (새 문제)</button>
+      <button class="ra ra-s" onclick="location.reload()">이름 다시 입력</button>
+    </div>
+  </div>
+</div>
+
+<!-- 메인 UI -->
+<div id="mainUI" style="display:none">
+  <div class="topbar">
+    <span class="tbl">📐</span>
+    <div class="tb-info">
+      <div class="tb-title">수학 연산 학습</div>
+      <div class="tb-sub" id="topSub"></div>
+    </div>
+    <div class="tb-right">
+      <span class="nbadge" id="nameBadge"></span>
+      <button class="new-btn" onclick="retryQuiz()">↺ 새 문제</button>
+    </div>
+  </div>
+
+  <div class="prog-section">
+    <div class="prog-row"><span class="prog-label">풀이 진행</span><span class="prog-cnt" id="progCnt">0 / 20</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="dot-row" id="dotRow"></div>
+  </div>
+
+  <div class="content">
+    <div class="pcard">
+      <div class="ph">
+        <span class="pno" id="pNo"></span>
+        <span class="ptag" id="pTag"></span>
+      </div>
+      <div class="pq" id="pQ"></div>
+      <button class="tip-btn" id="tipBtn" onclick="toggleTip()" style="display:none">💡 팁 보기</button>
+      <div class="tip-box" id="tipBox"></div>
+      <div class="choices" id="choices"></div>
+      <div class="explain" id="explain"></div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <button class="nprev" id="prevBtn" onclick="nav(-1)" disabled>← 이전</button>
+    <button class="subbtn" id="subBtn" onclick="submitQuiz()" disabled>채점하기</button>
+    <button class="nnext" id="nextBtn" onclick="nav(1)">다음 →</button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   ★ JSONBin 설정 (교사 파일과 동일하게 입력)
+   ════════════════════════════════════════════ */
+const BIN_KEY      = '$2a$10$Y7BI8UEEsG.457oBthZTOeBREeuwaNLjJTVnWXSvTbRpB.GZlq/PC';   // ← jsonbin.io Master Key
+const SETTINGS_BIN = '6a0d18dd6610dd3ae8732886';       // ← 학생 설정 Bin ID
+const RECORDS_BIN  = '6a0d19256610dd3ae8732a5c';        // ← 성적 기록 Bin ID
+
+/* ════════════════════════════════════════
+   2022 개정교육과정 학년별 연산 문제 생성
+   ════════════════════════════════════════ */
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+
+// 분수 표기: "3/4" → <span class="frac"><span>3</span><span>4</span></span>
+function fracHTML(str){
+  // n/d 패턴을 찾아 HTML 분수로 변환 (소수점 있는 숫자는 제외)
+  return String(str).replace(/(\d+)\/(\d+)/g,(_,n,d)=>
+    `<span class="frac"><span>${n}</span><span>${d}</span></span>`);
+}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+// 수준별 문제 난이도 조정
+function adjustLevel(p,level){
+  /* ── 하: 기본 그대로 (쉬운 숫자, 넓은 오답 범위) ── */
+  if(level==='하') return p;
+
+  /* ── 중: 숫자 범위 확장 + 오답을 정답에 가깝게 ── */
+  if(level==='중'){
+    const q={...p,choices:[...p.choices]};
+    const ansNum=parseFloat(q.ans);
+    if(!isNaN(ansNum)&&Number.isInteger(ansNum)&&!q.ans.includes('/')){
+      // 오답: 정답의 ±5~15% 범위로 혼동 유도
+      const spread=Math.max(3,Math.round(ansNum*0.12)||5);
+      const wrongs=new Set();let t=0;
+      while(wrongs.size<3&&t++<60){
+        const v=ansNum+ri(-spread,spread);
+        if(v!==ansNum&&v>=0)wrongs.add(String(v));
+      }
+      if(wrongs.size===3)q.choices=shuffle([q.ans,...[...wrongs]]);
+    }
+    return q;
+  }
+
+  /* ── 상: 문제 자체를 더 어렵게 재생성 ── */
+  if(level==='상'){
+    const grade=studentCfg?studentCfg.grade:3;
+    // 숫자 범위 크게 확장 + 오답을 매우 가깝게
+    const hard=buildHardProblem(p,grade);
+    return hard;
+  }
+
+  return p;
+}
+
+/* 상 난이도: 문제 숫자 범위 한 단계 위 학년 수준으로 상향 */
+function buildHardProblem(p,grade){
+  const q={...p,choices:[...p.choices]};
+  const ansNum=parseFloat(q.ans);
+
+  // ① 숫자가 포함된 식이면 숫자 자체를 더 크게 교체
+  let newQ=q.q;
+  let newAns=q.ans;
+
+  // 연산 패턴 감지 후 숫자 범위 확장
+  const addMatch=q.q.match(/^(\d+)\s*\+\s*(\d+)/);
+  const subMatch=q.q.match(/^(\d+)\s*-\s*(\d+)/);
+  const mulMatch=q.q.match(/^(\d+)\s*[×x\*]\s*(\d+)/);
+  const divMatch=q.q.match(/^(\d+)\s*[÷\/]\s*(\d+)/);
+
+  if(addMatch){
+    // 덧셈: 숫자 범위를 현재보다 1.5~3배 확장
+    const a=parseInt(addMatch[1]),b=parseInt(addMatch[2]);
+    const mul=grade<=2?3:grade<=4?2:1.5;
+    const na=Math.round(a*mul)+ri(0,Math.round(a*0.3));
+    const nb=Math.round(b*mul)+ri(0,Math.round(b*0.3));
+    newQ=q.q.replace(addMatch[1],na).replace(addMatch[2],nb);
+    newAns=String(na+nb);
+  } else if(subMatch){
+    const a=parseInt(subMatch[1]),b=parseInt(subMatch[2]);
+    const mul=grade<=2?3:grade<=4?2:1.5;
+    const na=Math.round(a*mul)+ri(0,20);
+    const nb=Math.min(na-1,Math.round(b*mul)+ri(0,10));
+    newQ=q.q.replace(subMatch[1],na).replace(subMatch[2],nb);
+    newAns=String(na-nb);
+  } else if(mulMatch){
+    const a=parseInt(mulMatch[1]),b=parseInt(mulMatch[2]);
+    // 곱셈: 두 자리×두 자리, 세 자리×두 자리로 확장
+    const na=grade<=3?ri(10,30):grade<=4?ri(20,99):ri(50,200);
+    const nb=grade<=3?ri(6,9):ri(11,25);
+    newQ=q.q.replace(mulMatch[0],`${na} × ${nb}`);
+    newAns=String(na*nb);
+  } else if(divMatch){
+    const b=parseInt(divMatch[2])||ri(2,9);
+    // 나눗셈: 더 큰 수로 나누기
+    const nb=grade<=3?ri(2,9):ri(6,15);
+    const quotient=ri(10,grade<=3?30:99);
+    const na=nb*quotient;
+    newQ=q.q.replace(divMatch[0],`${na} ÷ ${nb}`);
+    newAns=String(quotient);
+  }
+
+  // ② 오답: 정답과 1~3% 차이로 매우 유사하게
+  const newAnsNum=parseFloat(newAns);
+  let wrongs=new Set();let t=0;
+  const tinySpread=Math.max(2,Math.round(newAnsNum*0.04)||3);
+  while(wrongs.size<3&&t++<80){
+    const v=newAnsNum+ri(-tinySpread,tinySpread);
+    if(v!==newAnsNum&&v>=0)wrongs.add(String(v));
+  }
+
+  return{
+    ...q,
+    q:newQ,
+    ans:newAns,
+    choices:wrongs.size===3?shuffle([newAns,...[...wrongs]]):q.choices,
+    tip:q.tip // 팁은 유지
+  };
+}
+
+// 숫자 정답 오답 자동 생성
+function numWrong(ans,n=3){
+  const sp=Math.max(2,Math.round(Math.abs(ans)*0.25)||3);
+  const s=new Set();let t=0;
+  while(s.size<n&&t++<60){const v=ans+ri(-sp,sp);if(v!==ans&&v>=0)s.add(v)}
+  return [...s];
+}
+
+// 문제 객체 생성 헬퍼 (tip: 팁 내용, applied: 응용문제 여부)
+function P(q,ans,domain,wrong,tip,applied){
+  const w=wrong||numWrong(typeof ans==='number'?ans:parseFloat(ans)||0);
+  return{q,ans:String(ans),domain,choices:shuffle([String(ans),...w.map(String).slice(0,3)]),tip:tip||'',applied:!!applied};
+}
+
+/* ── 학년별 문제 생성기 (단순연산 + 응용문제 혼합) ── */
+const GEN={
+  /* 1학년 */
+  1:[
+    // 단순 연산
+    ()=>{const a=ri(1,9),b=ri(1,10-a);return P(`${a} + ${b} = □`,a+b,'덧셈',null,'더하기는 두 수를 합치는 것이에요.\n예) 사과 2개 + 3개 = 5개')},
+    ()=>{const a=ri(2,10),b=ri(1,a-1);return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'빼기는 전체에서 일부를 없애는 것이에요.\n예) 사탕 5개 중 2개 먹으면 3개 남아요.')},
+    ()=>{const a=ri(1,9),b=ri(1,10-a);return P(`□ + ${b} = ${a+b}`,a,'덧셈',null,`□ + ${b} = ${a+b}\n→ □ = ${a+b} - ${b} = ${a}\n뒤에서 빼면 모르는 수를 찾을 수 있어요!`)},
+    ()=>{const a=ri(2,9),b=ri(1,a-1);return P(`${a} - □ = ${a-b}`,b,'뺄셈',null,`${a} - □ = ${a-b}\n→ □ = ${a} - ${a-b} = ${b}`)},
+    // 응용 문제
+    ()=>{const a=ri(1,5),b=ri(1,5);return P(`사탕이 ${a}개 있었는데 ${b}개를 더 받았어요. 사탕은 모두 몇 개인가요?`,a+b,'덧셈(응용)',null,`(처음 사탕) + (받은 사탕) = 전체\n${a} + ${b} = ?`,true)},
+    ()=>{const a=ri(3,9),b=ri(1,a-1);return P(`구슬이 ${a}개 있었는데 ${b}개를 잃어버렸어요. 남은 구슬은 몇 개인가요?`,a-b,'뺄셈(응용)',null,`(처음 구슬) - (잃어버린 구슬) = 남은 구슬\n${a} - ${b} = ?`,true)},
+    ()=>{const a=ri(1,4),b=ri(1,4);return P(`강아지가 ${a}마리, 고양이가 ${b}마리 있어요. 동물은 모두 몇 마리인가요?`,a+b,'덧셈(응용)',null,`강아지 수 + 고양이 수 = 전체 동물 수\n${a} + ${b} = ?`,true)},
+    ()=>{const t=ri(5,10),a=ri(1,t-1);return P(`버스에 ${t}명이 타고 있었는데 ${a}명이 내렸어요. 남은 사람은 몇 명인가요?`,t-a,'뺄셈(응용)',null,`(탄 사람) - (내린 사람) = 남은 사람\n${t} - ${a} = ?`,true)},
+  ],
+  /* 2학년 */
+  2:[
+    // 단순 연산
+    ()=>{const a=ri(10,89),b=ri(10,Math.min(99,99-a));return P(`${a} + ${b} = □`,a+b,'두 자리 덧셈',null,'일의 자리끼리 더하고, 십의 자리끼리 더해요.\n받아올림이 있으면 십의 자리에 1을 더해줘요.')},
+    ()=>{const a=ri(20,99),b=ri(10,a-10);return P(`${a} - ${b} = □`,a-b,'두 자리 뺄셈',null,'일의 자리끼리 빼고, 십의 자리끼리 빼요.\n받아내림이 필요하면 윗자리에서 10을 빌려와요.')},
+    ()=>{const a=pick([2,3,4,5]),b=ri(1,9);return P(`${a} × ${b} = □`,a*b,'곱셈',null,`곱셈은 같은 수를 여러 번 더한 것이에요.\n${a} × ${b} = ${a}를 ${b}번 더한 것 = ${Array(b).fill(a).join('+')} = ${a*b}`)},
+    ()=>{const a=ri(1,5),b=ri(1,9);return P(`□ × ${b} = ${a*b}`,a,'곱셈',null,`□ × ${b} = ${a*b}\n${b}단 곱셈구구를 생각해 보세요.\n□ = ${a*b} ÷ ${b} = ${a}`)},
+    // 응용 문제
+    ()=>{const price=pick([10,20,30,40,50]),n=ri(2,5);return P(`지우개 한 개가 ${price}원이에요. ${n}개를 사면 얼마인가요?`,price*n,'곱셈(응용)',null,`(한 개 값) × (개수) = 전체 값\n${price} × ${n} = ?`,true)},
+    ()=>{const total=ri(20,80),give=ri(5,total-5);return P(`용돈 ${total}원을 받아서 ${give}원을 저금했어요. 남은 용돈은 얼마인가요?`,total-give,'뺄셈(응용)',null,`(받은 용돈) - (저금한 돈) = 남은 돈\n${total} - ${give} = ?`,true)},
+    ()=>{const rows=ri(2,5),cols=ri(2,5);return P(`의자가 한 줄에 ${cols}개씩 ${rows}줄 있어요. 의자는 모두 몇 개인가요?`,rows*cols,'곱셈(응용)',null,`(한 줄 의자 수) × (줄 수) = 전체 의자 수\n${cols} × ${rows} = ?`,true)},
+    ()=>{const a=ri(30,90),b=ri(10,a-10),c=ri(1,9);return P(`${a}에서 ${b}을 빼고 ${c}을 더하면?`,a-b+c,'혼합(응용)',null,`순서대로 계산해요.\n${a} - ${b} = ${a-b}\n${a-b} + ${c} = ${a-b+c}`,true)},
+  ],
+  /* 3학년 */
+  3:[
+    // 단순 연산
+    ()=>{const a=ri(100,499),b=ri(100,Math.min(899,999-a));return P(`${a} + ${b} = □`,a+b,'세 자리 덧셈',null,'일 → 십 → 백의 자리 순서로 더해요.\n각 자리에서 받아올림이 있으면 윗자리에 1을 더해요.')},
+    ()=>{const a=ri(300,999),b=ri(100,a-100);return P(`${a} - ${b} = □`,a-b,'세 자리 뺄셈',null,'일 → 십 → 백의 자리 순서로 빼요.\n받아내림이 필요하면 윗자리에서 10을 빌려와요.')},
+    ()=>{const a=ri(2,9),b=ri(2,9);return P(`${a} × ${b} = □`,a*b,'곱셈구구',null,`${a}단 곱셈구구를 떠올려 보세요.\n${a} × ${b} = ${a*b}`)},
+    ()=>{const b=ri(2,9),a=b*ri(1,9);return P(`${a} ÷ ${b} = □`,a/b,'나눗셈',null,`나눗셈은 곱셈의 반대예요.\n${b} × □ = ${a} → □ = ${a/b}\n${b}단 곱셈구구에서 ${a}가 나오는 곳을 찾아요!`)},
+    // 응용 문제
+    ()=>{const stu=ri(20,35),book=ri(2,5);return P(`학생 ${stu}명에게 책을 ${book}권씩 나눠줘야 해요. 책은 모두 몇 권 필요한가요?`,stu*book,'곱셈(응용)',null,`(학생 수) × (1인당 책 수) = 전체 책 수\n${stu} × ${book} = ?`,true)},
+    ()=>{const total=ri(100,300),n=ri(2,5);return P(`연필 ${total}자루를 ${n}명이 똑같이 나누면 한 명이 몇 자루씩 받나요?`,Math.floor(total/n),'나눗셈(응용)',null,`(전체 연필) ÷ (사람 수) = 1인당 연필 수\n${total} ÷ ${n} = ?\n나머지가 있다면 몫만 답해요.`,true)},
+    ()=>{const d=ri(3,7),n1=ri(1,d-1),n2=ri(1,d-1);const ans=n1+n2<=d?`${n1+n2}/${d}`:`1${n1+n2-d>0?`과 ${n1+n2-d}/${d}`:''}`;const correctAns=n1+n2;return P(`피자 한 판을 ${d}조각으로 나눴어요. 내가 ${n1}조각, 동생이 ${n2}조각 먹었어요. 둘이 먹은 양은 전체의 얼마인가요?`,`${Math.min(correctAns,d)}/${d}`,'분수(응용)',[`${n1}/${d}`,`${n2}/${d}`,`${correctAns+1}/${d}`],`분모가 같은 분수의 덧셈:\n${n1}/${d} + ${n2}/${d} = ${correctAns}/${d}\n분모는 그대로! 분자끼리만 더해요.`,true)},
+    ()=>{const speed=ri(2,9),time=ri(100,400);return P(`자동차가 1분에 ${speed}km를 달려요. ${time}분 동안 달리면 몇 km를 가나요?`,speed*time,'곱셈(응용)',null,`(속력) × (시간) = (거리)\n${speed} × ${time} = ?`,true)},
+  ],
+  /* 4학년 */
+  4:[
+    // 단순 연산
+    ()=>{const a=ri(100,999),b=ri(2,9);return P(`${a} × ${b} = □`,a*b,'세 자리×한 자리',null,`일의 자리부터 곱하고 받아올림을 잊지 마세요.\n${a} × ${b}:\n  (${a%100<10?'0'+a%100:a%100 < 100 ? a%100 : a%100}) × ${b} 부터 계산해요.`)},
+    ()=>{const a=ri(10,99),b=ri(10,99);return P(`${a} × ${b} = □`,a*b,'두 자리×두 자리',null,`(${Math.floor(a/10)}×10 + ${a%10}) × ${b}\n= ${Math.floor(a/10)*10} × ${b} + ${a%10} × ${b}\n= ${Math.floor(a/10)*10*b} + ${(a%10)*b}\n= ${a*b}`)},
+    ()=>{const b=ri(2,9),q=ri(10,99),a=b*q;return P(`${a} ÷ ${b} = □`,q,'나눗셈',null,`나눗셈 확인: (몫) × (나누는 수) = 나뉘는 수\n□ × ${b} = ${a}\n□ = ${q}`)},
+    ()=>{const b=ri(2,9),q=ri(10,30),a=b*q+ri(1,b-1);return P(`${a} ÷ ${b} = □ ···${a%b}`,Math.floor(a/b),'나머지 나눗셈',null,`나뉘는 수 = 몫 × 나누는 수 + 나머지\n${a} = □ × ${b} + ${a%b}\n몫 = ${Math.floor(a/b)}`)},
+    // 응용 문제
+    ()=>{const price=ri(100,500),n=ri(10,30);return P(`공책 한 권이 ${price}원이에요. ${n}권을 사면 얼마인가요?`,price*n,'곱셈(응용)',null,`(단가) × (수량) = 총 금액\n${price} × ${n} = ?`,true)},
+    ()=>{const total=ri(100,500),n=ri(2,8),r=total%n;const q=Math.floor(total/n);return P(`사탕 ${total}개를 ${n}명에게 똑같이 나누면 한 명이 몇 개씩 받고, 몇 개가 남나요?`,`${q}개, 나머지${r}개`,'나눗셈(응용)',[`${q+1}개, 나머지${r}개`,`${q}개, 나머지${r+1}개`,`${q-1}개, 나머지${r}개`],`(전체) ÷ (인원) = 몫 ··· 나머지\n${total} ÷ ${n} = ${q} ··· ${r}`,true)},
+    ()=>{const d=pick([4,5,6,8]),n1=ri(1,d-2),n2=ri(1,d-n1-1);return P(`색 테이프의 ${n1}/${d}은 빨간색, ${n2}/${d}은 파란색이에요. 두 색깔을 합치면 전체의 얼마인가요?`,`${n1+n2}/${d}`,'분수(응용)',[`${n1}/${d}`,`${n2}/${d}`,`${n1+n2+1}/${d}`],`분모가 같은 분수 덧셈:\n${n1}/${d} + ${n2}/${d} = ${n1+n2}/${d}\n분모는 그대로, 분자끼리만 더해요!`,true)},
+    ()=>{const w=ri(10,30)*100,boxes=ri(3,8);return P(`한 상자에 ${w}g짜리 물건이 들어 있어요. ${boxes}상자면 모두 몇 g인가요?`,w*boxes,'곱셈(응용)',null,`(한 상자 무게) × (상자 수) = 전체 무게\n${w} × ${boxes} = ?`,true)},
+  ],
+  /* 5학년 */
+  5:[
+    // 단순 연산
+    ()=>{const a=ri(2,9),b=ri(2,9),c=ri(1,5);return P(`(${a}+${b})×${c} = □`,(a+b)*c,'혼합 계산',null,`★ 괄호를 먼저 계산해요!\n(${a}+${b}) = ${a+b}\n${a+b} × ${c} = ${(a+b)*c}`)},
+    ()=>{const a=ri(2,9),b=ri(2,9),c=ri(1,5);return P(`${a}×${c}+${b}×${c} = □`,a*c+b*c,'혼합 계산',null,`곱셈을 먼저, 그 다음 덧셈이에요.\n${a}×${c} = ${a*c}\n${b}×${c} = ${b*c}\n${a*c} + ${b*c} = ${a*c+b*c}\n\n💡 분배법칙: (${a}+${b})×${c} = ${a*c+b*c}`)},
+    ()=>{const n1=ri(1,4),d1=pick([2,3,4,5]),n2=ri(1,4),d2=pick([2,3,4,5]);const r=n1*n2,rd=d1*d2;const g=(a,b)=>b===0?a:g(b,a%b);const gg=g(r,rd);return P(`${n1}/${d1} × ${n2}/${d2} = □`,`${r/gg}/${rd/gg}`,'분수 곱셈',[`${n1+n2}/${d1+d2}`,`${n1*d2}/${d1*n2}`,`${r+1}/${rd}`],`분수 곱셈: 분자끼리 곱하고, 분모끼리 곱해요.\n${n1}/${d1} × ${n2}/${d2} = ${n1}×${n2} / ${d1}×${d2} = ${r}/${rd}\n약분하면: ${r/gg}/${rd/gg}`)},
+    ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} + ${b} = □`,(+a+ +b).toFixed(1),'소수 덧셈',null,`소수점 자리를 맞춰 더해요.\n  ${a}\n+ ${b}\n= ${(+a+ +b).toFixed(1)}`)},
+    // 응용 문제
+    ()=>{const priceA=ri(100,500),priceB=ri(100,500),n=ri(2,5);const total=(priceA+priceB)*n;return P(`A물건 ${priceA}원, B물건 ${priceB}원을 각각 ${n}개씩 샀어요. 총 얼마인가요?`,total,'혼합(응용)',null,`(A값+B값) × 개수 = 총금액\n(${priceA}+${priceB}) × ${n}\n= ${priceA+priceB} × ${n}\n= ${total}`,true)},
+    ()=>{const total=ri(100,500),n=ri(2,4);const each=Math.floor(total/n);return P(`${total}L의 물을 ${n}명이 똑같이 나누면 한 명이 몇 L씩 마시나요?`,each,'나눗셈(응용)',null,`(전체) ÷ (인원 수) = 1인당 양\n${total} ÷ ${n} = ${each}`,true)},
+    ()=>{const d=pick([3,4,5,6]),n=ri(1,d-1),ate=ri(1,n);return P(`피자 ${n}/${d}판이 있었는데 ${ate}/${d}판을 먹었어요. 남은 피자는 전체의 얼마인가요?`,`${n-ate}/${d}`,'분수(응용)',[`${n}/${d}`,`${ate}/${d}`,`${n+ate}/${d}`],`(있던 양) - (먹은 양) = 남은 양\n${n}/${d} - ${ate}/${d} = ${n-ate}/${d}\n분모가 같으면 분자끼리만 빼요!`,true)},
+    ()=>{const km=(ri(1,5)/10+ri(1,9)/10).toFixed(1);const times=ri(2,5);return P(`매일 ${km}km를 걸으면 ${times}일 동안 모두 몇 km를 걷나요?`,(+km*times).toFixed(1),'소수(응용)',null,`(하루 거리) × (일 수) = 전체 거리\n${km} × ${times} = ${(+km*times).toFixed(1)}`,true)},
+  ],
+  /* 6학년 */
+  6:[
+    // 단순 연산
+    ()=>{const n1=ri(1,6),d1=pick([2,3,4,5,6]),n2=ri(1,6),d2=pick([2,3,4,5,6]);const r=n1*d2,rd=d1*n2;const g=(a,b)=>b===0?a:g(b,a%b);const gg=g(r,rd);return P(`${n1}/${d1} ÷ ${n2}/${d2} = □`,`${r/gg}/${rd/gg}`,'분수 나눗셈',[`${n1*n2}/${d1*d2}`,`${n1+n2}/${d1}`,`${r}/${rd}`],`분수 나눗셈 = 뒤 분수를 뒤집어서 곱하기(역수)!\n${n1}/${d1} ÷ ${n2}/${d2}\n= ${n1}/${d1} × ${d2}/${n2}\n= ${n1*d2}/${d1*n2} = ${r/gg}/${rd/gg}`)},
+    ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} × ${b} = □`,(+a* +b).toFixed(2),'소수 곱셈',null,`소수점 없이 곱한 뒤 소수점을 찍어요.\n${a.replace('.','')} × ${b.replace('.','')= String(Math.round(+a*10)*Math.round(+b*10))}\n소수점 아래 자리수: 1+1=2자리 → ${(+a* +b).toFixed(2)}`)},
+    ()=>{const a=ri(1,9),b=ri(1,9);return P(`${a} : ${b}에서 비율은? (분수)`,`${a}/${a+b}`,'비와 비율',[`${a}/${b}`,`${b}/${a+b}`,`${a+b}/${a}`],`비율 = 비교하는 양 ÷ 기준량\n${a} : ${b}에서 전체는 ${a+b}\n${a}의 비율 = ${a}/${a+b}`)},
+    ()=>{const p=pick([10,20,25,50,75]);return P(`${p}%를 분수로 나타내면?`,`${p}/100`,'백분율',[`${p}/10`,`${p}/1000`,`${p+10}/100`],`% = 100분의 얼마\n${p}% = ${p}/100\n(분모를 100으로 하는 분수)`)},
+    // 응용 문제
+    ()=>{const total=ri(100,1000),pct=pick([10,20,25,50]);const ans=total*pct/100;return P(`${total}원의 ${pct}%는 얼마인가요?`,ans,'비율(응용)',null,`(전체) × (비율) = 구하는 양\n${total} × ${pct}/100 = ${total} × ${pct/100} = ${ans}\n\n💡 ${pct}%는 전체를 100으로 나눴을 때 ${pct}개`,true)},
+    ()=>{const speed=ri(3,9)*10,time=ri(2,5);return P(`자동차가 시속 ${speed}km로 ${time}시간 달렸어요. 간 거리는?`,speed*time,'비율(응용)',null,`거리 = 속력 × 시간\n${speed} × ${time} = ${speed*time}km`,true)},
+    ()=>{const total=ri(20,40),boyRatio=ri(3,7);const boys=Math.round(total*boyRatio/10);return P(`학생 ${total}명 중 남학생의 비율이 전체의 ${boyRatio*10}%예요. 남학생은 몇 명인가요?`,boys,'비율(응용)',null,`(전체) × (비율) = (남학생 수)\n${total} × ${boyRatio*10}/100 = ${boys}명`,true)},
+    ()=>{const n1=ri(1,4),d1=pick([3,4,5,6]),n2=ri(1,4),d2=pick([3,4,5,6]);const r=n1*d2,rd=d1*n2;const g=(a,b)=>b===0?a:g(b,a%b);const gg=g(r,rd);return P(`물 ${n1}/${d1}L를 ${n2}/${d2}L씩 컵에 나누면 몇 컵이 되나요?`,`${r/gg}/${rd/gg}`,'분수(응용)',[`${n1*n2}/${d1*d2}`,`${n1+n2}/${d1+d2}`,`${r}/${rd}`],`(전체 양) ÷ (한 컵 양) = 컵 수\n${n1}/${d1} ÷ ${n2}/${d2} = ${n1}/${d1} × ${d2}/${n2} = ${r/gg}/${rd/gg}`,true)},
+  ],
+};
+
+/* ════════════════════
+   JSONBin API 유틸
+/* ════════════════════
+   JSONBin API 유틸
+   ════════════════════ */
+const BIN_HDR={
+  'Content-Type':'application/json',
+  'X-Master-Key':BIN_KEY,
+  'X-Bin-Versioning':'false'
+};
+async function binGet(id){
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}/latest`,{headers:BIN_HDR});
+  if(!r.ok)throw new Error('get fail');
+  const d=await r.json();return d.record;
+}
+async function binPut(id,data){
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}`,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('put fail');
+  return r.json();
+}
+
+/* ════════════════════
+   앱 상태
+   ════════════════════ */
+let studentName='',studentCfg=null;
+let problems=[],curIdx=0,answers={},submitted=false;
+const PROB_COUNT=20;
+
+/* ════════
+   이름 입력
+   ════════ */
+let nameTimer=null;
+function onNameInput(){
+  const v=document.getElementById('nameInp').value.trim();
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('cfgPreview').style.display='none';
+  document.getElementById('setupErr').textContent='';
+  studentCfg=null;
+  clearTimeout(nameTimer);
+  if(!v)return;
+  nameTimer=setTimeout(()=>lookupStudent(v),600);
+}
+
+async function lookupStudent(name){
+  showLoad('설정 불러오는 중...');
+  try{
+    const settings=await binGet(SETTINGS_BIN);
+    const cfg=settings.students&&settings.students[name];
+    hideLoad();
+    if(cfg){
+      studentCfg=cfg;
+      const ginfo=GEN[cfg.grade];
+      const domLabel=cfg.domain==='all'?'전 영역':cfg.domain;
+      document.getElementById('cfgPreview').style.display='block';
+      document.getElementById('cfgPreview').innerHTML=
+        `<b>📋 ${name} 학생 설정</b><br>학년: ${cfg.grade}학년&nbsp;&nbsp;|&nbsp;&nbsp;영역: ${domLabel}<br>문제 수: ${PROB_COUNT}문제`;
+      document.getElementById('startBtn').disabled=false;
+      document.getElementById('setupErr').textContent='';
+    } else {
+      document.getElementById('setupErr').textContent='선생님이 아직 이 이름의 설정을 등록하지 않았습니다.';
+      document.getElementById('startBtn').disabled=true;
+    }
+  }catch(e){
+    hideLoad();
+    document.getElementById('setupErr').textContent='서버 연결에 실패했습니다. 잠시 후 다시 시도하세요.';
+  }
+}
+
+async function tryStart(){
+  const name=document.getElementById('nameInp').value.trim();
+  if(!name){document.getElementById('setupErr').textContent='이름을 입력하세요.';return}
+  if(!studentCfg){await lookupStudent(name);return}
+  studentName=name;
+  try{localStorage.setItem('mathQuizStudentName',name)}catch(e){}
+  document.getElementById('setupOverlay').style.display='none';
+  buildQuiz();
+}
+
+function loadSavedName(){
+  try{
+    const saved=localStorage.getItem('mathQuizStudentName');
+    if(saved){
+      document.getElementById('nameInp').value=saved;
+      onNameInput();
+    }
+  }catch(e){}
+}
+
+/* ════════════════
+   문제 생성
+   ════════════════ */
+function buildQuiz(){
+  const grade=studentCfg.grade;
+  const domain=studentCfg.domain;
+  const level=studentCfg.level||'중'; // '상','중','하'
+  const gens=GEN[grade];
+  if(!gens){showErr('설정 오류: 학년 정보가 없습니다.');return}
+
+  // 도메인 필터
+  let pool=[];
+  if(domain==='all'){
+    pool=[...gens];
+  } else {
+    pool=gens.filter(g=>{
+      const sample=g();
+      return sample.domain===domain||sample.domain.includes(domain);
+    });
+    if(!pool.length)pool=[...gens];
+  }
+
+  // 수준별 난이도 조정: 생성된 문제 후처리
+  window._quizLevel=level;
+
+  problems=[];
+  const seen=new Set();
+  let tries=0;
+  while(problems.length<PROB_COUNT&&tries++<300){
+    const g=pool[Math.floor(Math.random()*pool.length)];
+    const p=g();
+    const adj=adjustLevel(p,level);
+    if(!seen.has(adj.q)){seen.add(adj.q);problems.push(adj)}
+  }
+  answers={};curIdx=0;submitted=false;
+
+  document.getElementById('mainUI').style.display='block';
+  document.getElementById('nameBadge').textContent=studentName;
+  document.getElementById('topSub').textContent=
+    `${domain==='all'?'전 영역':domain} · ${new Date().toLocaleDateString('ko-KR')}`;
+  renderProb();
+}
+
+/* ════════════════
+   문제 렌더링
+   ════════════════ */
+function renderProb(){
+  updateProg();
+  updateDots();
+  const p=problems[curIdx];
+  const selIdx=answers[curIdx];
+  const nums=['①','②','③','④'];
+  document.getElementById('pNo').textContent=`${curIdx+1} / ${problems.length}`;
+  const tag=document.getElementById('pTag');
+  tag.textContent=p.domain;
+  tag.style.background='#EFF6FF';tag.style.color='#2563EB';
+  document.getElementById('pQ').innerHTML=fracHTML(p.q);
+  const expl=document.getElementById('explain');
+  if(submitted&&p.hint){expl.textContent='💡 '+p.hint;expl.classList.add('show')}
+  else{expl.textContent='';expl.classList.remove('show')}
+
+  const cb=document.getElementById('choices');
+  cb.innerHTML='';
+  p.choices.forEach((c,i)=>{
+    let cls='cbtn';
+    if(selIdx!==undefined&&selIdx===i)cls+=' sel';
+    if(submitted){
+      if(c===p.ans)cls+=' correct';
+      else if(selIdx===i&&c!==p.ans)cls+=' wrong';
+    }
+    const btn=document.createElement('button');
+    btn.className=cls;
+    btn.disabled=submitted;
+    btn.innerHTML=`<span class="cnum">${nums[i]}</span>${fracHTML(c)}`;
+    btn.onclick=()=>select(i);
+    cb.appendChild(btn);
+  });
+
+  document.getElementById('prevBtn').disabled=(curIdx===0);
+  document.getElementById('nextBtn').disabled=(curIdx===problems.length-1);
+  document.getElementById('subBtn').disabled=submitted||Object.keys(answers).length<problems.length;
+}
+
+function select(i){
+  if(submitted)return;
+  answers[curIdx]=i;
+  renderProb();
+  // 선택 즉시 다음 문제로 자동 이동 (마지막 문제 제외)
+  if(curIdx<problems.length-1){
+    setTimeout(()=>{curIdx++;renderProb();},400);
+  }
+}
+function nav(d){
+  curIdx=Math.max(0,Math.min(problems.length-1,curIdx+d));
+  document.getElementById('tipBox').classList.remove('show');
+  renderProb();
+}
+
+function updateProg(){
+  const done=Object.keys(answers).length;
+  const total=problems.length;
+  document.getElementById('progCnt').textContent=`${done} / ${total}`;
+  document.getElementById('progFill').style.width=`${Math.round(done/total*100)}%`;
+  document.getElementById('subBtn').disabled=submitted||done<total;
+}
+
+function updateDots(){
+  const row=document.getElementById('dotRow');
+  row.innerHTML='';
+  problems.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot'+(i===curIdx?' cur':'')
+      +(answers[i]!==undefined?(submitted?(problems[i].choices[answers[i]]===problems[i].ans?' ok':' ng'):' ans'):'');
+    d.textContent=i+1;
+    d.onclick=()=>{curIdx=i;renderProb()};
+    row.appendChild(d);
+  });
+}
+
+/* ════════════════
+   채점 & 저장
+   ════════════════ */
+async function submitQuiz(){
+  if(Object.keys(answers).length<problems.length){alert('모든 문제를 풀어주세요!');return}
+  submitted=true;
+  let correct=0;
+  const details=[];
+  problems.forEach((p,i)=>{
+    const chosen=p.choices[answers[i]];
+    const ok=chosen===p.ans;
+    if(ok)correct++;
+    details.push({q:p.q,ans:p.ans,chosen,ok,domain:p.domain,choices:p.choices});
+  });
+  const pct=Math.round(correct/problems.length*100);
+  renderProb();
+  showResult(correct,pct);
+  // 기록 저장
+  try{
+    const rec=await binGet(RECORDS_BIN);
+    const list=Array.isArray(rec.records)?rec.records:[];
+    list.push({
+      date:new Date().toISOString().split('T')[0],
+      time:new Date().toLocaleTimeString('ko-KR'),
+      name:studentName,
+      grade:studentCfg.grade+'학년',
+      domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
+      correct,total:problems.length,pct,details
+    });
+    await binPut(RECORDS_BIN,{records:list});
+  }catch(e){console.warn('기록 저장 실패',e)}
+}
+
+/* ── 로컬 점수 기록 (파일 수정해도 유지) ── */
+const LOCAL_HIST_KEY='mathQuizHistory_v1';
+function getLocalHist(name){
+  try{const d=localStorage.getItem(LOCAL_HIST_KEY);const all=d?JSON.parse(d):{};return all[name]||[];}catch(e){return[]}
+}
+function saveLocalHist(name,entry){
+  try{
+    const d=localStorage.getItem(LOCAL_HIST_KEY);const all=d?JSON.parse(d):{};
+    if(!all[name])all[name]=[];
+    all[name].push(entry);
+    // 최근 30개만 보관
+    if(all[name].length>30)all[name]=all[name].slice(-30);
+    localStorage.setItem(LOCAL_HIST_KEY,JSON.stringify(all));
+  }catch(e){}
+}
+
+function showResult(correct,pct){
+  // 로컬 기록 저장
+  const entry={date:new Date().toISOString().split('T')[0],time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),pct,correct,total:problems.length};
+  saveLocalHist(studentName,entry);
+
+  const emoji=pct===100?'🏆':pct>=80?'🌟':pct>=60?'👍':pct>=40?'💪':'📚';
+  const msg=pct===100?'완벽해요!':pct>=80?'잘했어요!':pct>=60?'좋아요, 조금만 더!':pct>=40?'다시 도전해봐요!':'포기하지 마세요!';
+  const msgColor=pct>=80?'#F0FDF4':pct>=60?'#FFFBEB':'#FEF2F2';
+  const msgTxt=pct>=80?'#16A34A':pct>=60?'#D97706':'#DC2626';
+  document.getElementById('rEmoji').textContent=emoji;
+  document.getElementById('rScore').innerHTML=`${pct}<span>점</span>`;
+  document.getElementById('rSub').textContent=`${studentName} · ${correct}/${problems.length} 정답`;
+
+  // 이번 결과와 이전 점수 비교
+  const hist=getLocalHist(studentName);
+  const prev=hist.length>=2?hist[hist.length-2]:null;
+  const diff=prev?pct-prev.pct:null;
+  const trendIcon=diff===null?'':diff>0?`<span class="trend-up">▲${diff}점</span>`:diff<0?`<span class="trend-dn">▼${Math.abs(diff)}점</span>`:`<span class="trend-eq">→ 유지</span>`;
+
+  document.getElementById('rGrid').innerHTML=
+    `<div class="rg"><div class="rg-l">정답</div><div class="rg-v">${correct}</div></div>
+     <div class="rg"><div class="rg-l">오답</div><div class="rg-v">${problems.length-correct}</div></div>
+     <div class="rg"><div class="rg-l">이전 대비</div><div class="rg-v" style="font-size:13px">${trendIcon||'-'}</div></div>`;
+  const rm=document.getElementById('rMsg');
+  rm.textContent=msg;rm.style.background=msgColor;rm.style.color=msgTxt;
+
+  // 점수 히스토리 차트 렌더링
+  renderHistChart(hist);
+
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function renderHistChart(hist){
+  const hw=document.getElementById('histWrap');
+  if(hist.length<2){hw.innerHTML='<div class="hist-title">📈 내 점수 기록</div><div class="no-hist">아직 기록이 부족해요. 더 풀어보세요!</div>';return}
+  const recent=hist.slice(-10);
+  const avg=Math.round(recent.reduce((s,h)=>s+h.pct,0)/recent.length);
+  const best=Math.max(...recent.map(h=>h.pct));
+  const maxV=Math.max(...recent.map(h=>h.pct),1);
+  const bars=recent.map(h=>{
+    const fh=Math.max(5,Math.round(h.pct/maxV*60));
+    const bc=h.pct>=80?'#16A34A':h.pct>=60?'#D97706':'#DC2626';
+    const lbl=h.date.slice(5)+' '+h.time;
+    return`<div class="hbar">
+      <div class="hbar-val" style="color:${bc}">${h.pct}</div>
+      <div class="hbar-fill" style="height:${fh}px;background:${bc}"></div>
+      <div class="hbar-lbl">${lbl}</div>
+    </div>`;
+  }).join('');
+  hw.innerHTML=`
+    <div class="hist-title"><span>📈 내 점수 변화 (최근 ${recent.length}회)</span></div>
+    <div class="hist-chart">${bars}</div>
+    <div class="hist-stat-row">
+      <div class="hstat"><div class="hstat-l">평균</div><div class="hstat-v">${avg}점</div></div>
+      <div class="hstat"><div class="hstat-l">최고</div><div class="hstat-v" style="color:#16A34A">${best}점</div></div>
+      <div class="hstat"><div class="hstat-l">응시 횟수</div><div class="hstat-v">${hist.length}회</div></div>
+    </div>`;
+}
+
+function retryQuiz(){
+  document.getElementById('resultOverlay').classList.remove('show');
+  buildQuiz();
+}
+
+/* ════════
+   유틸
+   ════════ */
+function showLoad(msg){const o=document.getElementById('loading');document.getElementById('ldMsg').textContent=msg||'';o.classList.add('show')}
+function hideLoad(){document.getElementById('loading').classList.remove('show')}
+function toggleTip(){
+  const box=document.getElementById('tipBox');
+  const btn=document.getElementById('tipBtn');
+  const showing=box.classList.contains('show');
+  box.classList.toggle('show');
+  btn.textContent=showing?'💡 팁 보기':'💡 팁 닫기';
+}
+function showErr(msg){alert(msg)}
+loadSavedName();
+</script>
+</body>
+</html>
