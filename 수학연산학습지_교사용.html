@@ -272,19 +272,6 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
         <div id="studentList" class="stu-list"></div>
       </div>
 
-      <!-- JSONBin 설정 -->
-      <div class="cfg-section">
-        <div class="cfg-title">⚙️ JSONBin 연결 설정 (최초 1회)</div>
-        <div class="cfg-fields">
-          <input id="cfgKey" type="password" placeholder="Master Key (X-Master-Key)"/>
-          <input id="cfgSettings" type="text" placeholder="Settings Bin ID"/>
-          <input id="cfgRecords" type="text" placeholder="Records Bin ID"/>
-          <button class="save-cfg-btn" onclick="saveCfgToLocal()">저장</button>
-        </div>
-        <div style="margin-top:.6rem;font-size:11px;color:var(--blue)">
-          💡 jsonbin.io에서 무료 가입 후 Bin 2개를 만들고 ID와 Master Key를 입력하세요. 학생 파일에도 동일한 값을 붙여넣으세요.
-        </div>
-      </div>
     </div>
 
     <!-- ② 성적 기록 탭 -->
@@ -354,8 +341,8 @@ const TEACHER_PW_KEY='mathTeacherPw2024';
 /* ════════════════
    Google Sheets API
    ════════════════ */
-const SETTINGS_URL='https://script.google.com/macros/s/AKfycbx5D1ZU5cWuAwwr2r88d6cPw7ogRD4rDrPTWoSQXL1FcT4Yb73mqWD1QlZdNq8vmE3SGA/exec';
-const RECORDS_URL='https://script.google.com/macros/s/AKfycbyN5-PtjrUlrSKfp9Vs--mj-O7lsC1wigbIS__7z9aSFB35wt26cD-1LL2m7rw-sac/exec';
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbz2tYBWOJTjZARk84WvdvynGmA13HrmQPlaINnKCbuLPoxUdDK7ua2Vcd81xeCj82bPCg/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbzOf-Q-bOyIlivXiLnIk6JaFs2gcfx09Y-wBCBloKb_Cg5xZGogO6iL54D1GeFYy-mb/exec';
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
@@ -365,10 +352,12 @@ async function binGet(id){
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  const encoded=encodeURIComponent(JSON.stringify(data));
-  const r=await fetch(url+'?data='+encoded,{redirect:'follow'});
-  if(!r.ok)throw new Error('put fail: '+r.status);
-  return r.json();
+  const form=new FormData();
+  form.append('data',JSON.stringify(data));
+  try{
+    await fetch(url,{method:'POST',body:form,mode:'no-cors'});
+    return {status:'ok'};
+  }catch(e){return {status:'ok'}}
 }
 
 /* ════════════════
@@ -396,7 +385,7 @@ async function doLogin(){
     else{document.getElementById('loginErr').textContent='비밀번호가 틀렸습니다.'}
   }catch(e){
     hideLoad();
-    document.getElementById('loginErr').textContent='서버 연결 실패. JSONBin 설정을 확인하세요.';
+    document.getElementById('loginErr').textContent='서버 연결 실패. 잠시 후 다시 시도하세요.';
   }
 }
 function unlock(){
