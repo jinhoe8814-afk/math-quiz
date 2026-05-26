@@ -43,6 +43,16 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .start-btn:disabled{opacity:.4;cursor:default}
 .err-txt{margin-top:.65rem;font-size:12px;color:var(--red);min-height:18px}
 
+/* 키 설정 팝업 */
+.key-setup{background:var(--card);border-radius:20px;padding:2rem 1.75rem;width:min(400px,94vw);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.key-setup-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.key-setup-sub{font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.6}
+.key-field{width:100%;padding:10px 12px;border:1.5px solid var(--gray-bd);border-radius:var(--rsm);font-size:12px;font-family:var(--font-mono,monospace);color:var(--text);margin-bottom:8px;outline:none}
+.key-field:focus{border-color:var(--blue)}
+.key-save-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+.key-save-btn:hover{opacity:.88}
+.key-note{font-size:11px;color:var(--text3);margin-top:.75rem;line-height:1.6}
+
 /* 상단 바 */
 .topbar{background:var(--card);border-bottom:1px solid var(--gray-bd);padding:.8rem 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
 .tbl{font-size:20px}
@@ -147,6 +157,21 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 <body>
 
 <!-- ① 이름 입력 오버레이 -->
+<!-- 키 설정 패널 (미설정 시 표시) -->
+<div id="keySetupOverlay" style="position:fixed;inset:0;background:rgba(17,24,39,.65);display:none;align-items:center;justify-content:center;z-index:200">
+  <div class="key-setup">
+    <div style="font-size:40px;margin-bottom:.5rem">⚙️</div>
+    <div class="key-setup-title">연결 설정 필요</div>
+    <div class="key-setup-sub">선생님께 JSONBin 연결 정보를 받아<br>아래에 입력하세요. (최초 1회만)</div>
+    <input class="key-field" id="ks_key" type="password" placeholder="Master Key ($2a$10$...)"/>
+    <input class="key-field" id="ks_settings" type="text" placeholder="Settings Bin ID"/>
+    <input class="key-field" id="ks_records" type="text" placeholder="Records Bin ID"/>
+    <button class="key-save-btn" onclick="saveKeySetup()">저장하고 시작하기</button>
+    <div class="key-note">입력한 정보는 이 기기에만 저장되며<br>외부로 전송되지 않습니다.</div>
+    <div class="err-txt" id="keySetupErr"></div>
+  </div>
+</div>
+
 <div id="setupOverlay">
   <div class="sc">
     <div class="sc-icon">✏️</div>
@@ -222,11 +247,12 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 
 <script>
 /* ════════════════════════════════════════════
-   ★ JSONBin 설정 (교사 파일과 동일하게 입력)
+   ★ JSONBin 설정 — localStorage에서 자동 로드
+      (교사 대시보드에서 설정하면 자동 공유됨)
    ════════════════════════════════════════════ */
-const BIN_KEY      = '$2a$10$Y7BI8UEEsG.457oBthZTOeBREeuwaNLjJTVnWXSvTbRpB.GZlq/PC';   // ← jsonbin.io Master Key
-const SETTINGS_BIN = '6a0d18dd6610dd3ae8732886';       // ← 학생 설정 Bin ID
-const RECORDS_BIN  = '6a0d19256610dd3ae8732a5c';        // ← 성적 기록 Bin ID
+let BIN_KEY      = localStorage.getItem('mjbin_key')||'';
+let SETTINGS_BIN = localStorage.getItem('mjbin_settings')||'';
+let RECORDS_BIN  = localStorage.getItem('mjbin_records')||'';
 
 /* ════════════════════════════════════════
    2022 개정교육과정 학년별 연산 문제 생성
@@ -524,6 +550,34 @@ function loadSavedName(){
   }catch(e){}
 }
 
+function checkKeySetup(){
+  BIN_KEY=localStorage.getItem('mjbin_key')||'';
+  SETTINGS_BIN=localStorage.getItem('mjbin_settings')||'';
+  RECORDS_BIN=localStorage.getItem('mjbin_records')||'';
+  if(!BIN_KEY||!SETTINGS_BIN||!RECORDS_BIN){
+    document.getElementById('keySetupOverlay').style.display='flex';
+    document.getElementById('setupOverlay').style.display='none';
+  } else {
+    document.getElementById('keySetupOverlay').style.display='none';
+    document.getElementById('setupOverlay').style.display='flex';
+    loadSavedName();
+  }
+}
+
+function saveKeySetup(){
+  const k=document.getElementById('ks_key').value.trim();
+  const s=document.getElementById('ks_settings').value.trim();
+  const r=document.getElementById('ks_records').value.trim();
+  if(!k||!s||!r){document.getElementById('keySetupErr').textContent='세 가지 모두 입력해 주세요.';return}
+  localStorage.setItem('mjbin_key',k);
+  localStorage.setItem('mjbin_settings',s);
+  localStorage.setItem('mjbin_records',r);
+  BIN_KEY=k;SETTINGS_BIN=s;RECORDS_BIN=r;
+  document.getElementById('keySetupOverlay').style.display='none';
+  document.getElementById('setupOverlay').style.display='flex';
+  loadSavedName();
+}
+
 /* ════════════════
    문제 생성
    ════════════════ */
@@ -769,7 +823,7 @@ function toggleTip(){
   btn.textContent=showing?'💡 팁 보기':'💡 팁 닫기';
 }
 function showErr(msg){alert(msg)}
-loadSavedName();
+checkKeySetup();
 </script>
 </body>
 </html>
