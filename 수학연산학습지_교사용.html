@@ -346,41 +346,27 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 /* ════════════════════════════════════════════
    ★ JSONBin 설정 (localStorage에서 불러옴)
    ════════════════════════════════════════════ */
-let BIN_KEY='$2a$10$Y7BI8UEEsG.457oBthZTOeBREeuwaNLjJTVnWXSvTbRpB.GZlq/PC';
-let SETTINGS_BIN='6a0d18dd6610dd3ae8732886';
-let RECORDS_BIN='6a0d19256610dd3ae8732a5c';
+// Google Sheets 사용 — 별도 키 불필요
 const TEACHER_PW_KEY='mathTeacherPw2024';
 
-function loadCfgFromLocal(){
-  BIN_KEY=localStorage.getItem('mjbin_key')||BIN_KEY;
-  SETTINGS_BIN=localStorage.getItem('mjbin_settings')||SETTINGS_BIN;
-  RECORDS_BIN=localStorage.getItem('mjbin_records')||RECORDS_BIN;
-  if(BIN_KEY){document.getElementById('cfgKey').value=BIN_KEY}
-  if(SETTINGS_BIN){document.getElementById('cfgSettings').value=SETTINGS_BIN}
-  if(RECORDS_BIN){document.getElementById('cfgRecords').value=RECORDS_BIN}
-}
-function saveCfgToLocal(){
-  BIN_KEY=document.getElementById('cfgKey').value.trim();
-  SETTINGS_BIN=document.getElementById('cfgSettings').value.trim();
-  RECORDS_BIN=document.getElementById('cfgRecords').value.trim();
-  localStorage.setItem('mjbin_key',BIN_KEY);
-  localStorage.setItem('mjbin_settings',SETTINGS_BIN);
-  localStorage.setItem('mjbin_records',RECORDS_BIN);
-  showToast('✅ 연결 설정이 저장되었습니다. 학생 파일에도 동일하게 입력하세요.');
-}
+// Google Sheets 사용 — 키 설정 불필요
 
 /* ════════════════
-   JSONBin API
+   Google Sheets API
    ════════════════ */
-function binHdr(){return{'Content-Type':'application/json','X-Master-Key':BIN_KEY,'X-Bin-Versioning':'false'}}
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbxeeSo-tIyrShUB9MQ-7bNc3ISqN6pwOWbWp9VhVjXk4CLT3vT9PvDjoFZM1uP_ntf9uw/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbwvV8vHuDH7wXC4JwtnUMako7e6ToWwCCcYx6PUbjfliOqbpYnO9Pvn1GDJMAlYr0cz/exec';
+
 async function binGet(id){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}/latest`,{headers:binHdr()});
-  if(!r.ok)throw new Error(`get ${id} fail: ${r.status}`);
-  return (await r.json()).record;
+  const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('get fail: '+r.status);
+  return r.json();
 }
 async function binPut(id,data){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}`,{method:'PUT',headers:binHdr(),body:JSON.stringify(data)});
-  if(!r.ok)throw new Error(`put ${id} fail: ${r.status}`);
+  const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('put fail: '+r.status);
   return r.json();
 }
 
@@ -396,21 +382,14 @@ let records=[];
 async function doLogin(){
   const pw=document.getElementById('pwInput').value;
   if(!pw){document.getElementById('loginErr').textContent='비밀번호를 입력하세요.';return}
-  if(!BIN_KEY||!SETTINGS_BIN){
-    // JSONBin 미설정 시 로컬 비밀번호로 임시 로그인
-    const saved=localStorage.getItem(TEACHER_PW_KEY);
-    if(!saved){localStorage.setItem(TEACHER_PW_KEY,pw);unlock()}
-    else if(saved===pw){unlock()}
-    else{document.getElementById('loginErr').textContent='비밀번호가 틀렸습니다.'}
-    return;
-  }
+
   showLoad('로그인 중...');
   try{
-    const s=await binGet(SETTINGS_BIN);
+    const s=await binGet('settings');
     settings=s||{students:{},pw:''};
     hideLoad();
     if(!settings.pw){
-      settings.pw=pw;await binPut(SETTINGS_BIN,settings);
+      settings.pw=pw;await binPut('settings',settings);
       unlock();
     } else if(settings.pw===pw){unlock()}
     else{document.getElementById('loginErr').textContent='비밀번호가 틀렸습니다.'}
@@ -429,10 +408,10 @@ function unlock(){
    동기화
    ════════════════ */
 async function syncAll(){
-  if(!BIN_KEY){showToast('⚠️ JSONBin 설정을 먼저 입력하세요.');renderAll();return}
+  
   showLoad('데이터 동기화 중...');
   try{
-    const [s,r]=await Promise.all([binGet(SETTINGS_BIN),binGet(RECORDS_BIN)]);
+    const [s,r]=await Promise.all([binGet('settings'),binGet('records')]);
     settings=s||{students:{},pw:''};
     records=Array.isArray(r?.records)?r.records:[];
     hideLoad();
@@ -484,10 +463,8 @@ async function addStudent(){
   settings.students[name]={grade,domain,level:addLevel};
   document.getElementById('addName').value='';
   renderStudentList();
-  if(BIN_KEY&&SETTINGS_BIN){
-    try{await binPut(SETTINGS_BIN,settings);showToast(`✅ ${name} 설정 저장됨`);}
-    catch(e){showToast('❌ 저장 실패: '+e.message)}
-  }else{showToast(`✅ ${name} 설정됨 (로컬 — JSONBin 미설정)`)}
+  try{await binPut('settings',settings);showToast(`✅ ${name} 설정 저장됨`);}
+  catch(e){showToast('❌ 저장 실패: '+e.message)}
 }
 
 function renderStudentList(){
@@ -535,20 +512,16 @@ function updateStudentGrade(name,sel){
 function updateStudentDomain(name,sel){settings.students[name].domain=sel.value}
 function updateStudentLevel(name,sel){settings.students[name].level=sel.value}
 async function saveStudentCfg(name){
-  if(BIN_KEY&&SETTINGS_BIN){
-    try{await binPut(SETTINGS_BIN,settings);showToast(`✅ ${name} 설정 저장됨`);}
-    catch(e){showToast('❌ 저장 실패')}
-  }else showToast('⚠️ JSONBin 미설정 — 서버 저장 불가');
+  try{await binPut('settings',settings);showToast(`✅ ${name} 설정 저장됨`);}
+  catch(e){showToast('❌ 저장 실패')}
   renderStudentList();
 }
 async function deleteStudent(name){
   if(!confirm(`${name} 학생을 삭제할까요?`))return;
   delete settings.students[name];
   renderStudentList();
-  if(BIN_KEY&&SETTINGS_BIN){
-    try{await binPut(SETTINGS_BIN,settings);showToast(`🗑 ${name} 삭제됨`);}
-    catch(e){showToast('❌ 삭제 실패')}
-  }
+  try{await binPut('settings',settings);showToast(`🗑 ${name} 삭제됨`);}
+  catch(e){showToast('❌ 삭제 실패')}
 }
 
 /* ════════════════
@@ -637,10 +610,8 @@ function closeModal(){
 async function deleteRecord(idx){
   if(!confirm('이 기록을 삭제할까요?'))return;
   records.splice(idx,1);
-  if(BIN_KEY&&RECORDS_BIN){
-    try{await binPut(RECORDS_BIN,{records});showToast('🗑 삭제됨');}
-    catch(e){showToast('❌ 삭제 실패')}
-  }
+  try{await binPut('records',{records});showToast('🗑 삭제됨');}
+  catch(e){showToast('❌ 삭제 실패')}
   renderRecords();renderStats();
 }
 

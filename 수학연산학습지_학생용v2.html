@@ -157,21 +157,6 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 <body>
 
 <!-- ① 이름 입력 오버레이 -->
-<!-- 키 설정 패널 (미설정 시 표시) -->
-<div id="keySetupOverlay" style="position:fixed;inset:0;background:rgba(17,24,39,.65);display:none;align-items:center;justify-content:center;z-index:200">
-  <div class="key-setup">
-    <div style="font-size:40px;margin-bottom:.5rem">⚙️</div>
-    <div class="key-setup-title">연결 설정 필요</div>
-    <div class="key-setup-sub">선생님께 JSONBin 연결 정보를 받아<br>아래에 입력하세요. (최초 1회만)</div>
-    <input class="key-field" id="ks_key" type="password" placeholder="Master Key ($2a$10$...)"/>
-    <input class="key-field" id="ks_settings" type="text" placeholder="Settings Bin ID"/>
-    <input class="key-field" id="ks_records" type="text" placeholder="Records Bin ID"/>
-    <button class="key-save-btn" onclick="saveKeySetup()">저장하고 시작하기</button>
-    <div class="key-note">입력한 정보는 이 기기에만 저장되며<br>외부로 전송되지 않습니다.</div>
-    <div class="err-txt" id="keySetupErr"></div>
-  </div>
-</div>
-
 <div id="setupOverlay">
   <div class="sc">
     <div class="sc-icon">✏️</div>
@@ -247,12 +232,8 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 
 <script>
 /* ════════════════════════════════════════════
-   ★ JSONBin 설정 — localStorage에서 자동 로드
-      (교사 대시보드에서 설정하면 자동 공유됨)
+   ★ Google Sheets API 사용 — 키 불필요
    ════════════════════════════════════════════ */
-let BIN_KEY      = localStorage.getItem('mjbin_key')||'$2a$10$Y7BI8UEEsG.457oBthZTOeBREeuwaNLjJTVnWXSvTbRpB.GZlq/PC';
-let SETTINGS_BIN = localStorage.getItem('mjbin_settings')||'6a0d18dd6610dd3ae8732886';
-let RECORDS_BIN  = localStorage.getItem('mjbin_records')||'6a0d19256610dd3ae8732a5c';
 
 /* ════════════════════════════════════════
    2022 개정교육과정 학년별 연산 문제 생성
@@ -465,20 +446,20 @@ const GEN={
 /* ════════════════════
    JSONBin API 유틸
 /* ════════════════════
-   JSONBin API 유틸
+   Google Sheets API 유틸
    ════════════════════ */
-const BIN_HDR={
-  'Content-Type':'application/json',
-  'X-Master-Key':BIN_KEY,
-  'X-Bin-Versioning':'false'
-};
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbxeeSo-tIyrShUB9MQ-7bNc3ISqN6pwOWbWp9VhVjXk4CLT3vT9PvDjoFZM1uP_ntf9uw/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbwvV8vHuDH7wXC4JwtnUMako7e6ToWwCCcYx6PUbjfliOqbpYnO9Pvn1GDJMAlYr0cz/exec';
+
 async function binGet(id){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}/latest`,{headers:BIN_HDR});
+  const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
+  const r=await fetch(url);
   if(!r.ok)throw new Error('get fail');
-  const d=await r.json();return d.record;
+  return r.json();
 }
 async function binPut(id,data){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}`,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(data)});
+  const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
   if(!r.ok)throw new Error('put fail');
   return r.json();
 }
@@ -508,7 +489,7 @@ function onNameInput(){
 async function lookupStudent(name){
   showLoad('설정 불러오는 중...');
   try{
-    const settings=await binGet(SETTINGS_BIN);
+    const settings=await binGet('settings');
     const cfg=settings.students&&settings.students[name];
     hideLoad();
     if(cfg){
@@ -550,33 +531,7 @@ function loadSavedName(){
   }catch(e){}
 }
 
-function checkKeySetup(){
-  BIN_KEY=localStorage.getItem('mjbin_key')||'';
-  SETTINGS_BIN=localStorage.getItem('mjbin_settings')||'';
-  RECORDS_BIN=localStorage.getItem('mjbin_records')||'';
-  if(!BIN_KEY||!SETTINGS_BIN||!RECORDS_BIN){
-    document.getElementById('keySetupOverlay').style.display='flex';
-    document.getElementById('setupOverlay').style.display='none';
-  } else {
-    document.getElementById('keySetupOverlay').style.display='none';
-    document.getElementById('setupOverlay').style.display='flex';
-    loadSavedName();
-  }
-}
-
-function saveKeySetup(){
-  const k=document.getElementById('ks_key').value.trim();
-  const s=document.getElementById('ks_settings').value.trim();
-  const r=document.getElementById('ks_records').value.trim();
-  if(!k||!s||!r){document.getElementById('keySetupErr').textContent='세 가지 모두 입력해 주세요.';return}
-  localStorage.setItem('mjbin_key',k);
-  localStorage.setItem('mjbin_settings',s);
-  localStorage.setItem('mjbin_records',r);
-  BIN_KEY=k;SETTINGS_BIN=s;RECORDS_BIN=r;
-  document.getElementById('keySetupOverlay').style.display='none';
-  document.getElementById('setupOverlay').style.display='flex';
-  loadSavedName();
-}
+// Google Sheets 사용 — 키 설정 불필요
 
 /* ════════════════
    문제 생성
@@ -716,7 +671,7 @@ async function submitQuiz(){
   showResult(correct,pct);
   // 기록 저장
   try{
-    const rec=await binGet(RECORDS_BIN);
+    const rec=await binGet('records');
     const list=Array.isArray(rec.records)?rec.records:[];
     list.push({
       date:new Date().toISOString().split('T')[0],
@@ -726,7 +681,7 @@ async function submitQuiz(){
       domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
       correct,total:problems.length,pct,details
     });
-    await binPut(RECORDS_BIN,{records:list});
+    await binPut('records',{records:list});
   }catch(e){console.warn('기록 저장 실패',e)}
 }
 
@@ -823,7 +778,7 @@ function toggleTip(){
   btn.textContent=showing?'💡 팁 보기':'💡 팁 닫기';
 }
 function showErr(msg){alert(msg)}
-checkKeySetup();
+loadSavedName();
 </script>
 </body>
 </html>
