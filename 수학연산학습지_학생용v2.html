@@ -43,6 +43,27 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .start-btn:disabled{opacity:.4;cursor:default}
 .err-txt{margin-top:.65rem;font-size:12px;color:var(--red);min-height:18px}
 
+/* 구구단 관문 */
+#gateOverlay{position:fixed;inset:0;background:rgba(17,24,39,.75);display:none;align-items:center;justify-content:center;z-index:90}
+#gateOverlay.show{display:flex}
+.gate-card{background:var(--card);border-radius:20px;padding:2rem 1.75rem;width:min(380px,92vw);text-align:center}
+.gate-icon{font-size:44px;margin-bottom:.5rem}
+.gate-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.gate-sub{font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.6}
+.gate-q{font-size:28px;font-weight:800;color:var(--text);margin-bottom:1rem;padding:.75rem;background:var(--gray-lt);border-radius:var(--rsm)}
+.gate-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem}
+.gate-btn{padding:12px;border:2px solid var(--gray-bd);border-radius:var(--rsm);background:var(--card);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.gate-btn:hover{border-color:var(--blue);background:var(--blue-lt);color:var(--blue)}
+.gate-btn.gate-ok{border-color:var(--green);background:var(--green-lt);color:var(--green);pointer-events:none}
+.gate-btn.gate-ng{border-color:var(--red);background:var(--red-lt);color:var(--red);pointer-events:none}
+.gate-prog{font-size:12px;color:var(--text3);margin-top:.5rem}
+.gate-status{font-size:13px;font-weight:600;min-height:20px;margin-bottom:.5rem}
+
+/* 오답 수정 버튼 */
+.fix-btn{display:none;margin-top:8px;padding:7px 16px;border:1.5px solid var(--amber);border-radius:var(--rsm);background:var(--amber-lt);color:var(--amber);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.fix-btn.show{display:inline-block}
+.fix-btn:hover{background:var(--amber-bd)}
+
 /* 키 설정 팝업 */
 .key-setup{background:var(--card);border-radius:20px;padding:2rem 1.75rem;width:min(400px,94vw);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .key-setup-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:.4rem}
@@ -157,6 +178,19 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 <body>
 
 <!-- ① 이름 입력 오버레이 -->
+<!-- 구구단 관문 -->
+<div id="gateOverlay">
+  <div class="gate-card">
+    <div class="gate-icon">🔢</div>
+    <div class="gate-title">구구단 통과 관문</div>
+    <div class="gate-sub">문제를 시작하기 전에<br>구구단 3문제를 모두 맞혀야 합니다!</div>
+    <div class="gate-q" id="gateQ"></div>
+    <div class="gate-choices" id="gateChoices"></div>
+    <div class="gate-status" id="gateStatus"></div>
+    <div class="gate-prog" id="gateProg"></div>
+  </div>
+</div>
+
 <div id="setupOverlay">
   <div class="sc">
     <div class="sc-icon">✏️</div>
@@ -225,7 +259,10 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 
   <div class="navbar">
     <button class="nprev" id="prevBtn" onclick="nav(-1)" disabled>← 이전</button>
-    <button class="subbtn" id="subBtn" onclick="submitQuiz()" disabled>채점하기</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="subbtn" id="subBtn" onclick="submitQuiz()" disabled>채점하기</button>
+      <button class="fix-btn" id="fixBtn" onclick="fixAnswer()">✏️ 이 문제 수정하기</button>
+    </div>
     <button class="nnext" id="nextBtn" onclick="nav(1)">다음 →</button>
   </div>
 </div>
@@ -550,14 +587,18 @@ function buildQuiz(){
   const gens=GEN[grade];
   if(!gens){showErr('설정 오류: 학년 정보가 없습니다.');return}
 
-  // 도메인 필터
+  // 도메인 필터 — 정확한 영역 매칭
   let pool=[];
   if(domain==='all'){
     pool=[...gens];
   } else {
+    // 생성기를 여러 번 샘플링해서 정확한 도메인만 필터
     pool=gens.filter(g=>{
-      const sample=g();
-      return sample.domain===domain||sample.domain.includes(domain);
+      for(let t=0;t<5;t++){
+        const s=g();
+        if(s.domain===domain||s.domain.startsWith(domain.replace('(응용)',''))){return true}
+      }
+      return false;
     });
     if(!pool.length)pool=[...gens];
   }
@@ -565,6 +606,8 @@ function buildQuiz(){
   // 수준별 난이도 조정: 생성된 문제 후처리
   window._quizLevel=level;
 
+  // 구구단 관문 먼저
+  startGate(()=>{
   problems=[];
   const seen=new Set();
   let tries=0;
@@ -581,6 +624,7 @@ function buildQuiz(){
   document.getElementById('topSub').textContent=
     `${domain==='all'?'전 영역':domain} · ${new Date().toLocaleDateString('ko-KR')}`;
   renderProb();
+  }); // end gate callback
 }
 
 /* ════════════════
@@ -621,6 +665,16 @@ function renderProb(){
   document.getElementById('prevBtn').disabled=(curIdx===0);
   document.getElementById('nextBtn').disabled=(curIdx===problems.length-1);
   document.getElementById('subBtn').disabled=submitted||Object.keys(answers).length<problems.length;
+
+  // 채점 후 오답 문제에 수정 버튼 표시
+  const fixBtn=document.getElementById('fixBtn');
+  if(submitted&&answers[curIdx]!==undefined){
+    const p2=problems[curIdx];
+    const chosen=p2.choices[answers[curIdx]];
+    if(chosen!==p2.ans){
+      fixBtn.classList.add('show');
+    } else {fixBtn.classList.remove('show')}
+  } else {fixBtn.classList.remove('show')}
 }
 
 function select(i){
@@ -631,6 +685,15 @@ function select(i){
   if(curIdx<problems.length-1){
     setTimeout(()=>{curIdx++;renderProb();},400);
   }
+}
+
+function fixAnswer(){
+  // 현재 문제 답 초기화 후 다시 풀기
+  delete answers[curIdx];
+  submitted=false;
+  document.getElementById('fixBtn').classList.remove('show');
+  document.getElementById('subBtn').disabled=true;
+  renderProb();
 }
 function nav(d){
   curIdx=Math.max(0,Math.min(problems.length-1,curIdx+d));
@@ -777,6 +840,85 @@ function retryQuiz(){
    ════════ */
 function showLoad(msg){const o=document.getElementById('loading');document.getElementById('ldMsg').textContent=msg||'';o.classList.add('show')}
 function hideLoad(){document.getElementById('loading').classList.remove('show')}
+/* ════════════════════
+   구구단 관문
+   ════════════════════ */
+let gateProblems=[],gateIdx=0,gateCorrect=0,gateCallback=null;
+
+function makeGateProb(){
+  const a=ri(2,9),b=ri(2,9);
+  const ans=a*b;
+  const wrongs=new Set();
+  while(wrongs.size<3){const v=ans+ri(-5,5);if(v!==ans&&v>0)wrongs.add(v)}
+  return{q:`${a} × ${b} = ?`,ans:String(ans),choices:shuffle([String(ans),...[...wrongs]])};
+}
+
+function startGate(callback){
+  gateCallback=callback;
+  gateProblems=[makeGateProb(),makeGateProb(),makeGateProb()];
+  gateIdx=0;gateCorrect=0;
+  document.getElementById('gateOverlay').classList.add('show');
+  renderGate();
+}
+
+function renderGate(){
+  const p=gateProblems[gateIdx];
+  document.getElementById('gateQ').textContent=p.q;
+  document.getElementById('gateProg').textContent=`${gateIdx+1} / 3문제`;
+  document.getElementById('gateStatus').textContent='';
+  const gc=document.getElementById('gateChoices');
+  gc.innerHTML='';
+  p.choices.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='gate-btn';
+    btn.textContent=c;
+    btn.onclick=()=>selectGate(c,btn,p);
+    gc.appendChild(btn);
+  });
+}
+
+function selectGate(chosen,btn,p){
+  document.querySelectorAll('.gate-btn').forEach(b=>b.onclick=null);
+  const ok=chosen===p.ans;
+  btn.classList.add(ok?'gate-ok':'gate-ng');
+  // 오답이면 정답 표시
+  if(!ok){
+    document.querySelectorAll('.gate-btn').forEach(b=>{
+      if(b.textContent===p.ans)b.classList.add('gate-ok');
+    });
+  }
+  const status=document.getElementById('gateStatus');
+  if(ok){
+    gateCorrect++;
+    status.textContent='✓ 정답!';status.style.color='var(--green)';
+  } else {
+    status.textContent=`✗ 오답! 정답은 ${p.ans}`;status.style.color='var(--red)';
+  }
+  setTimeout(()=>{
+    gateIdx++;
+    if(gateIdx<3){
+      // 틀렸으면 새 문제로 교체 후 계속
+      if(!ok) gateProblems[gateIdx]=makeGateProb();
+      renderGate();
+    } else {
+      if(gateCorrect===3){
+        // 3문제 모두 정답
+        document.getElementById('gateOverlay').classList.remove('show');
+        if(gateCallback)gateCallback();
+      } else {
+        // 틀린 문제 있으면 처음부터 다시
+        const status2=document.getElementById('gateStatus');
+        status2.textContent=`${gateCorrect}/3 정답 — 다시 도전!`;status2.style.color='var(--red)';
+        setTimeout(()=>{
+          gateProblems=[makeGateProb(),makeGateProb(),makeGateProb()];
+          gateIdx=0;gateCorrect=0;
+          renderGate();
+        },1500);
+      }
+    }
+  },900);
+}
+
 function toggleTip(){
   const box=document.getElementById('tipBox');
   const btn=document.getElementById('tipBtn');
