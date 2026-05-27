@@ -728,25 +728,26 @@ function loadSavedName(){
 function buildQuiz(){
   const grade=studentCfg.grade;
   const domain=studentCfg.domain;
-  const level=studentCfg.level||'중'; // '상','중','하'
-  const gens=GEN[grade];
-  if(!gens){showErr('설정 오류: 학년 정보가 없습니다.');return}
+  const level=studentCfg.level||'중';
+  const gradeObj=GEN[grade];
+  if(!gradeObj){showErr('설정 오류: 학년 정보가 없습니다.');return}
 
-  // 도메인 필터 — 정확한 영역 매칭
+  // GEN 구조: {학년: {영역: [생성기배열]}}
+  // 도메인 필터
   let pool=[];
   if(domain==='all'){
-    pool=[...gens];
+    // 전 영역: 모든 영역의 생성기를 합침
+    pool=Object.values(gradeObj).flat();
   } else {
-    // 생성기를 여러 번 샘플링해서 정확한 도메인만 필터
-    pool=gens.filter(g=>{
-      for(let t=0;t<5;t++){
-        const s=g();
-        if(s.domain===domain||s.domain.startsWith(domain.replace('(응용)',''))){return true}
-      }
-      return false;
-    });
-    if(!pool.length)pool=[...gens];
+    // 특정 영역만
+    pool=gradeObj[domain]||[];
+    if(!pool.length){
+      // 영역명 부분 일치 시도
+      const key=Object.keys(gradeObj).find(k=>k.includes(domain)||domain.includes(k));
+      pool=key?gradeObj[key]:Object.values(gradeObj).flat();
+    }
   }
+  if(!pool.length)pool=Object.values(gradeObj).flat();
 
   // 수준별 난이도 조정: 생성된 문제 후처리
   window._quizLevel=level;
