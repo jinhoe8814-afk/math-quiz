@@ -285,6 +285,7 @@ function fracHTML(str){
 }
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function gcd(a,b){return b===0?a:gcd(b,a%b)}
 
 // 수준별 문제 난이도 조정
 function adjustLevel(p,level){
@@ -385,24 +386,6 @@ function buildHardProblem(p,grade){
 }
 
 // 숫자 정답 오답 자동 생성
-function numWrong(ans,n=3){
-  const sp=Math.max(2,Math.round(Math.abs(ans)*0.25)||3);
-  const s=new Set();let t=0;
-  while(s.size<n&&t++<60){const v=ans+ri(-sp,sp);if(v!==ans&&v>=0)s.add(v)}
-  return [...s];
-}
-
-// 문제 객체 생성 헬퍼 (tip: 팁 내용, applied: 응용문제 여부)
-function P(q,ans,domain,wrong,tip,applied){
-  const w=wrong||numWrong(typeof ans==='number'?ans:parseFloat(ans)||0);
-  return{q,ans:String(ans),domain,choices:shuffle([String(ans),...w.map(String).slice(0,3)]),tip:tip||'',applied:!!applied};
-}
-
-/* ── 학년별·단원별 연산 문제 생성기 ── */
-const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=ri(0,i);[b[i],b[j]]=[b[j],b[i]]}return b}
-function gcd(a,b){return b===0?a:gcd(b,a%b)}
 function numWrong(ans,spread){
   const s=spread||Math.max(2,Math.round(Math.abs(ans)*0.2)||3);
   const st=new Set();let t=0;
@@ -410,12 +393,16 @@ function numWrong(ans,spread){
   while(st.size<3)st.add(ans+st.size+1);
   return[...st];
 }
+
+// 문제 객체 생성 헬퍼
 function P(q,ans,domain,wrong,tip,applied){
   const a=String(ans);
   const w=wrong?wrong.map(String):numWrong(parseFloat(a)||0).map(String);
   const choices=shuffle([a,...w.slice(0,3)]);
   return{q,ans:a,domain,choices,tip:tip||'',applied:!!applied};
 }
+
+/* ── 학년별·단원별 연산 문제 생성기 ── */
 
 const GEN={
   1:{
