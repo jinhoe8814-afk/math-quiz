@@ -597,8 +597,8 @@ const GEN={
       },
       ()=>{
         const a=pick([2,3,4,6]),b=pick([3,4,5,6]).valueOf();
-        if(a===b)return null;
-        const l=a*b/gcd(a,b);
+        const bVal=b===a?b+1:b;
+        const l=a*bVal/gcd(a,bVal);
         return P(`${a}와 ${b}의 최소공배수(공통분모)는?`,l,'약분과 통분',
           [l+a,l+b,l*2],
           '최소공배수 = 두 수의 공통 배수 중 가장 작은 수\n\n'+a+'의 배수: '+Array.from({length:6},(_,i)=>a*(i+1)).join(', ')+'...\n'+b+'의 배수: '+Array.from({length:6},(_,i)=>b*(i+1)).join(', ')+'...\n\n처음 만나는 공통 배수 = '+l+'\n→ 통분할 때 공통분모로 사용!');
@@ -856,7 +856,9 @@ function buildQuiz(){
   while(problems.length<PROB_COUNT&&tries++<300){
     const g=pool[Math.floor(Math.random()*pool.length)];
     const p=g();
+    if(!p||!p.q)continue;  // null 방어
     const adj=adjustLevel(p,level);
+    if(!adj||!adj.q)continue;
     if(!seen.has(adj.q)){seen.add(adj.q);problems.push(adj)}
   }
   answers={};curIdx=0;submitted=false;
