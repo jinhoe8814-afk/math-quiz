@@ -344,12 +344,34 @@ const TEACHER_PW_KEY='mathTeacherPw2024';
 const SETTINGS_URL='https://script.google.com/macros/s/AKfycbwpSfZT_ksZ-vHzokn7_bJii07pLbter47tb8-2COCI_Vwj4TP4-3qnfW6Xk3xeR9nzjQ/exec';
 const RECORDS_URL='https://script.google.com/macros/s/AKfycbz03GP2bGSa0eACax-djr-zniNepbm1Uy8dXDuowG0pK3V6juyVxGPjTtdlm_d-Urd6/exec';
 
+// JSONP 공통 함수
+function jsonpRequest(url, timeout=10000){
+  return new Promise((resolve, reject)=>{
+    const cbName='_cb'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const script=document.createElement('script');
+    const t=setTimeout(()=>{
+      cleanup();
+      reject(new Error('timeout'));
+    }, timeout);
+    function cleanup(){
+      try{delete window[cbName];}catch(e){}
+      try{script.remove();}catch(e){}
+      clearTimeout(t);
+    }
+    window[cbName]=(data)=>{
+      cleanup();
+      resolve(data);
+    };
+    script.src=url+(url.includes('?')?'&':'?')+'callback='+cbName;
+    script.onerror=()=>{cleanup();reject(new Error('script error'));};
+    document.head.appendChild(script);
+  });
+}
+
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
   try{
-    const r=await fetch(url,{redirect:'follow'});
-    const text=await r.text();
-    const data=JSON.parse(text);
+    const data=await jsonpRequest(url);
     try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
     return data;
   }catch(e){
@@ -357,7 +379,7 @@ async function binGet(id){
       const cached=localStorage.getItem('mathCache_'+id);
       if(cached)return JSON.parse(cached);
     }catch(e2){}
-    throw new Error('연결 실패');
+    throw new Error('연결 실패: '+e.message);
   }
 }
 async function binPut(id,data){
@@ -365,8 +387,10 @@ async function binPut(id,data){
   try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
   try{
     const encoded=encodeURIComponent(JSON.stringify(data));
-    await fetch(url+'?data='+encoded,{redirect:'follow'});
-  }catch(e){}
+    await jsonpRequest(url+'?data='+encoded);
+  }catch(e){
+    console.warn('서버 저장 실패(로컬엔 저장됨):', e.message);
+  }
   return {status:'ok'};
 }
 
