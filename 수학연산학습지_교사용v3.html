@@ -346,59 +346,32 @@ const RECORDS_URL='https://script.google.com/macros/s/AKfycby2CEB4UMkifzu3YecrWv
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  return new Promise((resolve,reject)=>{
-    const cbName='_cb'+Date.now();
-    const script=document.createElement('script');
-    const timer=setTimeout(()=>{
-      delete window[cbName];script.remove();
-      // 타임아웃 시 로컬 캐시 사용
-      try{
-        const cached=localStorage.getItem('mathCache_'+id);
-        if(cached){resolve(JSON.parse(cached));return;}
-      }catch(e){}
-      reject(new Error('timeout'));
-    },8000);
-    window[cbName]=(data)=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
-      resolve(data);
-    };
-    script.src=url+'?callback='+cbName;
-    script.onerror=()=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      try{
-        const cached=localStorage.getItem('mathCache_'+id);
-        if(cached){resolve(JSON.parse(cached));return;}
-      }catch(e){}
-      reject(new Error('script error'));
-    };
-    document.head.appendChild(script);
-  });
+  try{
+    const r=await fetch(url,{redirect:'follow',mode:'cors'});
+    const data=await r.json();
+    try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
+    return data;
+  }catch(e){
+    // CORS 실패 시 로컬 캐시 사용
+    try{
+      const cached=localStorage.getItem('mathCache_'+id);
+      if(cached)return JSON.parse(cached);
+    }catch(e2){}
+    throw e;
+  }
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
   // 로컬 캐시에 먼저 저장
   try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
-  // JSONP로 서버 저장
-  return new Promise((resolve)=>{
-    const cbName='_cbp'+Date.now();
-    const script=document.createElement('script');
-    const timer=setTimeout(()=>{
-      delete window[cbName];script.remove();
-      resolve({status:'ok'}); // 타임아웃이어도 로컬엔 저장됨
-    },10000);
-    window[cbName]=(res)=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      resolve(res||{status:'ok'});
-    };
+  // fetch로 서버 저장 (redirect follow)
+  try{
     const encoded=encodeURIComponent(JSON.stringify(data));
-    script.src=url+'?callback='+cbName+'&data='+encoded;
-    script.onerror=()=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      resolve({status:'ok'});
-    };
-    document.head.appendChild(script);
-  });
+    await fetch(url+'?data='+encoded,{redirect:'follow',mode:'cors'});
+  }catch(e){
+    // CORS 실패해도 로컬엔 저장됨 - 무시
+  }
+  return {status:'ok'};
 }
 
 /* ════════════════
