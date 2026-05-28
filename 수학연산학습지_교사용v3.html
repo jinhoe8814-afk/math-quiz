@@ -377,14 +377,28 @@ async function binGet(id){
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  const encoded=encodeURIComponent(JSON.stringify(data));
-  // 저장: no-cors fetch (응답 무시) + JSONP 백업
-  try{
-    await fetch(url+'?data='+encoded,{mode:'no-cors'});
-  }catch(e){}
-  // 로컬에도 저장
+  // 로컬 캐시에 먼저 저장
   try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
-  return {status:'ok'};
+  // JSONP로 서버 저장
+  return new Promise((resolve)=>{
+    const cbName='_cbp'+Date.now();
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{
+      delete window[cbName];script.remove();
+      resolve({status:'ok'}); // 타임아웃이어도 로컬엔 저장됨
+    },10000);
+    window[cbName]=(res)=>{
+      clearTimeout(timer);delete window[cbName];script.remove();
+      resolve(res||{status:'ok'});
+    };
+    const encoded=encodeURIComponent(JSON.stringify(data));
+    script.src=url+'?callback='+cbName+'&data='+encoded;
+    script.onerror=()=>{
+      clearTimeout(timer);delete window[cbName];script.remove();
+      resolve({status:'ok'});
+    };
+    document.head.appendChild(script);
+  });
 }
 
 /* ════════════════
@@ -429,15 +443,35 @@ async function syncAll(){
   showLoad('데이터 동기화 중...');
   try{
     const [s,r]=await Promise.all([binGet('settings'),binGet('records')]);
-    settings=s||{students:{},pw:''};
+    // 서버 데이터와 로컬 캐시 병합 (학생 수가 더 많은 쪽 우선)
+    const serverStudents=s?.students||{};
+    let localSettings={students:{},pw:''};
+    try{const lc=localStorage.getItem('mathCache_settings');if(lc)localSettings=JSON.parse(lc);}catch(e){}
+    const localStudents=localSettings.students||{};
+    const serverCount=Object.keys(serverStudents).length;
+    const localCount=Object.keys(localStudents).length;
+    if(serverCount>=localCount){
+      settings=s||{students:{},pw:''};
+    } else {
+      // 로컬이 더 많으면 로컬 우선, 서버에 다시 저장
+      settings=localSettings;
+      settings.pw=s?.pw||localSettings.pw;
+      await binPut('settings',settings);
+    }
     records=Array.isArray(r?.records)?r.records:[];
+    // 로컬 캐시 갱신
+    try{localStorage.setItem('mathCache_settings',JSON.stringify(settings));}catch(e){}
     hideLoad();
     document.getElementById('lastSync').textContent=`동기화: ${new Date().toLocaleTimeString('ko-KR')}`;
     renderAll();
     showToast('✅ 동기화 완료');
   }catch(e){
     hideLoad();showToast('❌ 서버 연결 실패: '+e.message);
-    renderAll();
+    // 서버 실패 시 로컬 캐시로 복구
+    try{
+      const lc=localStorage.getItem('mathCache_settings');
+      if(lc){settings=JSON.parse(lc);renderAll();}
+    }catch(e2){}
   }
 }
 function renderAll(){renderStudentList();renderRecords();renderStats();updateDomainFilter();}
