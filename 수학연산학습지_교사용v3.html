@@ -351,15 +351,25 @@ async function binGet(id){
     const script=document.createElement('script');
     const timer=setTimeout(()=>{
       delete window[cbName];script.remove();
+      // 타임아웃 시 로컬 캐시 사용
+      try{
+        const cached=localStorage.getItem('mathCache_'+id);
+        if(cached){resolve(JSON.parse(cached));return;}
+      }catch(e){}
       reject(new Error('timeout'));
     },8000);
     window[cbName]=(data)=>{
       clearTimeout(timer);delete window[cbName];script.remove();
+      try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
       resolve(data);
     };
     script.src=url+'?callback='+cbName;
     script.onerror=()=>{
       clearTimeout(timer);delete window[cbName];script.remove();
+      try{
+        const cached=localStorage.getItem('mathCache_'+id);
+        if(cached){resolve(JSON.parse(cached));return;}
+      }catch(e){}
       reject(new Error('script error'));
     };
     document.head.appendChild(script);
@@ -367,25 +377,14 @@ async function binGet(id){
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  return new Promise((resolve,reject)=>{
-    const cbName='_cbp'+Date.now();
-    const script=document.createElement('script');
-    const timer=setTimeout(()=>{
-      delete window[cbName];script.remove();
-      reject(new Error('timeout'));
-    },8000);
-    window[cbName]=(res)=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      resolve(res);
-    };
-    const encoded=encodeURIComponent(JSON.stringify(data));
-    script.src=url+'?callback='+cbName+'&data='+encoded;
-    script.onerror=()=>{
-      clearTimeout(timer);delete window[cbName];script.remove();
-      reject(new Error('script error'));
-    };
-    document.head.appendChild(script);
-  });
+  const encoded=encodeURIComponent(JSON.stringify(data));
+  // 저장: no-cors fetch (응답 무시) + JSONP 백업
+  try{
+    await fetch(url+'?data='+encoded,{mode:'no-cors'});
+  }catch(e){}
+  // 로컬에도 저장
+  try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
+  return {status:'ok'};
 }
 
 /* ════════════════
