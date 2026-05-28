@@ -323,66 +323,68 @@ function adjustLevel(p,level){
 /* 상 난이도: 문제 숫자 범위 한 단계 위 학년 수준으로 상향 */
 function buildHardProblem(p,grade){
   const q={...p,choices:[...p.choices]};
-  const ansNum=parseFloat(q.ans);
 
-  // ① 숫자가 포함된 식이면 숫자 자체를 더 크게 교체
-  let newQ=q.q;
-  let newAns=q.ans;
+  // 분수/텍스트/특수 영역은 숫자 변환 없이 오답만 조정
+  const isFrac=q.ans.includes('/');
+  const isText=isNaN(parseFloat(q.ans));
+  const specialDomains=['약분과 통분','분수','분수의 덧셈과 뺄셈','분수의 곱셈','분수의 나눗셈',
+    '도형(평면)','평면도형','합동과 대칭','직육면체','각기둥과 각뿔','겉넓이와 부피',
+    '시각과 시간','막대그래프','막대·꺾은선 그래프','평균과 가능성','자료와 가능성',
+    '비와 비율','비례식과 비례배분','규칙 찾기','규칙과 대응','평면도형의 이동'];
+  const isSpecial=specialDomains.includes(q.domain);
 
-  // 연산 패턴 감지 후 숫자 범위 확장
+  if(isFrac||isText||isSpecial){
+    if(isFrac){
+      const parts=q.ans.split('/');
+      const fn=parseInt(parts[0]),fd=parseInt(parts[1]);
+      const candidates=[
+        `${fn+1}/${fd}`,`${fn-1}/${fd}`,`${fn}/${fd+1}`,`${fn}/${fd-1}`,
+        `${fn+1}/${fd+1}`,`${fn-1}/${fd-1}`
+      ].filter(w=>w!==q.ans&&!w.includes('/0')&&!w.startsWith('0/')&&!w.startsWith('-'));
+      const wrongs=candidates.slice(0,3);
+      if(wrongs.length===3)return{...q,choices:shuffle([q.ans,...wrongs]),tip:q.tip};
+    }
+    return q;
+  }
+
+  // 순수 연산 문제: 숫자 범위 확장
+  let newQ=q.q,newAns=q.ans;
   const addMatch=q.q.match(/^(\d+)\s*\+\s*(\d+)/);
   const subMatch=q.q.match(/^(\d+)\s*-\s*(\d+)/);
-  const mulMatch=q.q.match(/^(\d+)\s*[×x\*]\s*(\d+)/);
-  const divMatch=q.q.match(/^(\d+)\s*[÷\/]\s*(\d+)/);
+  const mulMatch=q.q.match(/^(\d+)\s*×\s*(\d+)/);
+  const divMatch=q.q.match(/^(\d+)\s*÷\s*(\d+)/);
 
   if(addMatch){
-    // 덧셈: 숫자 범위를 현재보다 1.5~3배 확장
-    const a=parseInt(addMatch[1]),b=parseInt(addMatch[2]);
     const mul=grade<=2?3:grade<=4?2:1.5;
-    const na=Math.round(a*mul)+ri(0,Math.round(a*0.3));
-    const nb=Math.round(b*mul)+ri(0,Math.round(b*0.3));
-    newQ=q.q.replace(addMatch[1],na).replace(addMatch[2],nb);
-    newAns=String(na+nb);
-  } else if(subMatch){
-    const a=parseInt(subMatch[1]),b=parseInt(subMatch[2]);
+    const na=Math.round(parseInt(addMatch[1])*mul)+ri(1,10);
+    const nb=Math.round(parseInt(addMatch[2])*mul)+ri(1,10);
+    newQ=`${na} + ${nb} = □`;newAns=String(na+nb);
+  }else if(subMatch){
     const mul=grade<=2?3:grade<=4?2:1.5;
-    const na=Math.round(a*mul)+ri(0,20);
-    const nb=Math.min(na-1,Math.round(b*mul)+ri(0,10));
-    newQ=q.q.replace(subMatch[1],na).replace(subMatch[2],nb);
-    newAns=String(na-nb);
-  } else if(mulMatch){
-    const a=parseInt(mulMatch[1]),b=parseInt(mulMatch[2]);
-    // 곱셈: 두 자리×두 자리, 세 자리×두 자리로 확장
+    const na=Math.round(parseInt(subMatch[1])*mul)+ri(1,20);
+    const nb=Math.min(na-1,Math.round(parseInt(subMatch[2])*mul)+ri(1,10));
+    newQ=`${na} - ${nb} = □`;newAns=String(na-nb);
+  }else if(mulMatch){
     const na=grade<=3?ri(10,30):grade<=4?ri(20,99):ri(50,200);
     const nb=grade<=3?ri(6,9):ri(11,25);
-    newQ=q.q.replace(mulMatch[0],`${na} × ${nb}`);
-    newAns=String(na*nb);
-  } else if(divMatch){
-    const b=parseInt(divMatch[2])||ri(2,9);
-    // 나눗셈: 더 큰 수로 나누기
+    newQ=`${na} × ${nb} = □`;newAns=String(na*nb);
+  }else if(divMatch){
     const nb=grade<=3?ri(2,9):ri(6,15);
     const quotient=ri(10,grade<=3?30:99);
     const na=nb*quotient;
-    newQ=q.q.replace(divMatch[0],`${na} ÷ ${nb}`);
-    newAns=String(quotient);
+    newQ=`${na} ÷ ${nb} = □`;newAns=String(quotient);
   }
 
-  // ② 오답: 정답과 1~3% 차이로 매우 유사하게
   const newAnsNum=parseFloat(newAns);
-  let wrongs=new Set();let t=0;
-  const tinySpread=Math.max(2,Math.round(newAnsNum*0.04)||3);
+  const spread=Math.max(2,Math.round(newAnsNum*0.04)||3);
+  const wrongs=new Set();let t=0;
   while(wrongs.size<3&&t++<80){
-    const v=newAnsNum+ri(-tinySpread,tinySpread);
+    const v=newAnsNum+ri(-spread,spread);
     if(v!==newAnsNum&&v>=0)wrongs.add(String(v));
   }
-
-  return{
-    ...q,
-    q:newQ,
-    ans:newAns,
+  return{...q,q:newQ,ans:newAns,
     choices:wrongs.size===3?shuffle([newAns,...[...wrongs]]):q.choices,
-    tip:q.tip // 팁은 유지
-  };
+    tip:q.tip};
 }
 
 // 숫자 정답 오답 자동 생성
@@ -427,7 +429,7 @@ const GEN={
       ()=>{const a=ri(3,8),b=ri(2,6);return P(`□ + ${b} = ${a+b}에서 □는?`,a,'규칙 찾기',null,'등호(=) 양쪽이 같아야 해요.\n□ = '+(a+b)+' - '+b+' = '+a)},
     ],
     '도형(평면)':[
-      ()=>{const q=pick([{q:'꼭짓점이 3개인 도형은?',a:'삼각형',w:['사각형','원','오각형'],t:'꼭짓점 = 뾰족한 점\n삼각형: 3개, 사각형: 4개, 오각형: 5개\n꼭짓점 3개 → 삼각형!'},{q:'변이 4개인 도형은?',a:'사각형',w:['삼각형','원','오각형'],t:'변 = 도형의 선분(테두리)\n삼각형: 3개, 사각형: 4개\n변 4개 → 사각형!'},{q:'꼭짓점이 없는 도형은?',a:'원',w:['삼각형','사각형','오각형'],t:'원은 뾰족한 점(꼭짓점)이 없는 둥근 도형이에요.\n삼각형, 사각형, 오각형은 모두 꼭짓점이 있어요.'},{q:'삼각형의 변은 몇 개?',a:'3개',w:['2개','4개','5개'],t:'삼각형(三角形):\n三 = 3, 角 = 각도\n변의 수 = 꼭짓점의 수 = 3개'},{q:'사각형의 꼭짓점은 몇 개?',a:'4개',w:['3개','5개','6개'],t:'사각형(四角形):\n四 = 4, 角 = 각도\n꼭짓점의 수 = 변의 수 = 4개'}]);return P(q.q,q.a,'도형(평면)',q.w,q.t)},
+      ()=>{const q=pick([{q:'꼭짓점이 3개인 도형은?',a:'삼각형',w:['사각형','원','오각형'],t:'꼭짓점 = 뾰족한 점\n삼각형: 3개, 사각형: 4개, 오각형: 5개\n꼭짓점 3개 → 삼각형!'},{q:'변이 4개인 도형은?',a:'사각형',w:['삼각형','원','오각형'],t:'변 = 도형의 선분(테두리)\n삼각형: 3개, 사각형: 4개\n변 4개 → 사각형!'},{q:'꼭짓점이 없는 도형은?',a:'원',w:['삼각형','사각형','오각형'],t:'원은 뾰족한 점(꼭짓점)이 없는 둥근 도형이에요.\n삼각형, 사각형, 오각형은 모두 꼭짓점이 있어요.'},{q:'삼각형의 변은 몇 개?',a:'3개',w:['2개','4개','5개'],t:'삼각형(三角形):\n三 = 3, 角 = 각도\n변의 수 = 꼭짓점의 수 = ?'},{q:'사각형의 꼭짓점은 몇 개?',a:'4개',w:['3개','5개','6개'],t:'사각형(四角形):\n四 = 4, 角 = 각도\n꼭짓점의 수 = 변의 수 = ?'}]);return P(q.q,q.a,'도형(평면)',q.w,q.t)},
     ],
     '시각과 시간':[
       ()=>{const h=ri(1,12),m=pick([0,30]);const ms=m===0?'정각':`${m}분`;const nh=h===12?1:h+1;return P(`${h}시 ${ms}에서 1시간 후는?`,`${nh}시 ${ms}`,'시각과 시간',null,'시계에서 1시간이 지나면\n짧은 바늘(시침)이 한 칸 앞으로 가요.\n'+h+'시 → '+(h===12?1:h+1)+'시')},
@@ -435,7 +437,7 @@ const GEN={
     ],
     '길이':[
       ()=>{const a=ri(10,50),b=ri(1,a-1);return P(`${a}cm에서 ${b}cm를 자르면?`,a-b,'길이',null,'자르고 남은 길이 = 전체 - 자른 길이\n'+a+' - '+b+' = '+(a-b)+'cm')},
-      ()=>{const q=pick([{q:'1m는 몇 cm?',a:'100cm',w:['10cm','1000cm','50cm'],t:'1m = 100cm\n기억법: m(미터)는 cm(센티미터)의 100배!\n자 100개를 이어붙이면 1m가 돼요.'},{q:'1m 50cm는 몇 cm?',a:'150cm',w:['105cm','15cm','1050cm'],t:'1m 50cm = 100cm + 50cm = 150cm\n1m = 100cm 이므로\n100 + 50 = 150cm'}]);return P(q.q,q.a,'길이',q.w,q.t)},
+      ()=>{const q=pick([{q:'1m는 몇 cm?',a:'100cm',w:['10cm','1000cm','50cm'],t:'1m = ?\n기억법: m(미터)는 cm(센티미터)의 100배!\n자 100개를 이어붙이면 1m가 돼요.'},{q:'1m 50cm는 몇 cm?',a:'150cm',w:['105cm','15cm','1050cm'],t:'1m 50cm = 100cm + 50cm = ?\n1m = 100cm 이므로\n100 + 50 = ?'}]);return P(q.q,q.a,'길이',q.w,q.t)},
     ],
   },
   2:{
@@ -467,11 +469,11 @@ const GEN={
       ()=>{const q=pick([{q:'1시간은 몇 분?',a:'60분',w:['30분','100분','120분'],t:'분침이 한 바퀴 돌면 = 60분 = 1시간\n30분 = 반 바퀴\n기억: 60분 = 1시간'},{q:'1분은 몇 초?',a:'60초',w:['100초','30초','120초'],t:'초침이 한 바퀴 돌면 = 60초 = 1분\n빠른 바늘(초침) 60번 = 1분!'},{q:'1년은 몇 개월?',a:'12개월',w:['6개월','10개월','24개월'],t:'1년 = 12개월\n1월~12월까지!\n기억법: 1년에 달력이 12장'},{q:'1주일은 며칠?',a:'7일',w:['5일','6일','10일'],t:'1주일 = 7일\n월·화·수·목·금·토·일'}]);return P(q.q,q.a,'시각과 시간',q.w,q.t)},
     ],
     '길이와 들이':[
-      ()=>{const km=ri(2,9);return P(`${km}km = □m`,km*1000,'길이와 들이',[km*100,km*10000,km*1000+100],'1km = 1000m\n→ '+km+'km = '+km+' × 1000 = '+(km*1000)+'m\n기억법: k(킬로) = 1000배!')},
+      ()=>{const km=ri(2,9);return P(`${km}km = □m`,km*1000,'길이와 들이',[km*100,km*10000,km*1000+100],'1km = ?\n→ '+km+'km = '+km+' × 1000 = '+(km*1000)+'m\n기억법: k(킬로) = 1000배!')},
       ()=>{const l=ri(2,9);return P(`${l}L = □mL`,l*1000,'길이와 들이',[l*100,l*10000,l*1000+100],'1L = 1000mL\n→ '+l+'L = '+l+' × 1000 = '+(l*1000)+'mL\n기억법: m(밀리) = 1/1000, 즉 1000mL = 1L')},
     ],
     '무게':[
-      ()=>{const kg=ri(2,9);return P(`${kg}kg = □g`,kg*1000,'무게',[kg*100,kg*10000,kg*1000+100],'1kg = 1000g\n→ '+kg+'kg = '+kg+' × 1000 = '+(kg*1000)+'g\nk(킬로) = 1000배!')},
+      ()=>{const kg=ri(2,9);return P(`${kg}kg = □g`,kg*1000,'무게',[kg*100,kg*10000,kg*1000+100],'1kg = ?\n→ '+kg+'kg = '+kg+' × 1000 = '+(kg*1000)+'g\nk(킬로) = 1000배!')},
       ()=>{const a=ri(1,5),b=ri(1,9)*100;return P(`${a}kg ${b}g = □g`,a*1000+b,'무게',null,'kg을 g으로 바꾼 뒤 더해요.\n'+a+'kg = '+(a*1000)+'g\n'+(a*1000)+' + '+b+' = '+(a*1000+b)+'g')},
     ],
   },
@@ -504,7 +506,7 @@ const GEN={
       ()=>{const a=ri(1,5);return P(`${a}.0과 크기가 같은 분수는?`,`${a*10}/10`,'소수',[`${a}/10`,`${a}/100`,`${a*100}/100`],'소수 ↔ 분수 변환:\n0.1 = 1/10, 0.01 = 1/100\n'+a+'.0 = '+a+' = '+a+'×10/10 = '+(a*10)+'/10')},
     ],
     '평면도형':[
-      ()=>{const q=pick([{q:'직각보다 작은 각?',a:'예각',w:['둔각','직각','평각'],t:'각도의 종류:\n• 예각: 0°~90° 미만 (날카로운 각)\n• 직각: 딱 90° (ㄱ 모양)\n• 둔각: 90°~180° 미만 (무딘 각)\n• 평각: 딱 180° (일직선)'},{q:'직각보다 큰 각?',a:'둔각',w:['예각','직각','평각'],t:'직각(90°)보다 크고 평각(180°)보다 작은 각\n= 둔각\n예) 120°, 150° 모두 둔각!'},{q:'직각은 몇 도?',a:'90°',w:['45°','180°','60°'],t:'직각 = 90°\n수직으로 만나는 각도\nㄱ 모양, 책 모서리 같은 각!'},{q:'삼각형 세 각도의 합?',a:'180°',w:['90°','360°','270°'],t:'삼각형 내각의 합 = 항상 180°\n어떤 삼각형이든 세 각을 더하면 180°\n예) 60°+70°+□° = 180° → □ = 50°'}]);return P(q.q,q.a,'평면도형',q.w,q.t)},
+      ()=>{const q=pick([{q:'직각보다 작은 각?',a:'예각',w:['둔각','직각','평각'],t:'각도의 종류:\n• 예각: 0°~90° 미만 (날카로운 각)\n• 직각: 딱 90° (ㄱ 모양)\n• 둔각: 90°~180° 미만 (무딘 각)\n• 평각: 딱 180° (일직선)'},{q:'직각보다 큰 각?',a:'둔각',w:['예각','직각','평각'],t:'직각(90°)보다 크고 평각(180°)보다 작은 각\n= 둔각\n예) 120°, 150° 모두 둔각!'},{q:'직각은 몇 도?',a:'90°',w:['45°','180°','60°'],t:'직각 = ?\n수직으로 만나는 각도\nㄱ 모양, 책 모서리 같은 각!'},{q:'삼각형 세 각도의 합?',a:'180°',w:['90°','360°','270°'],t:'삼각형 내각의 합 = 항상 180°\n어떤 삼각형이든 세 각을 더하면 180°\n예) 60°+70°+□° = 180° → □ = ?'}]);return P(q.q,q.a,'평면도형',q.w,q.t)},
       ()=>{const a=ri(3,8),b=ri(3,8);return P(`가로 ${a}cm, 세로 ${b}cm 직사각형의 둘레는?`,(a+b)*2,'평면도형',null,'직사각형 둘레:\n(가로+세로) × 2\n= ('+a+'+'+b+') × 2\n= '+(a+b)+' × 2\n= '+((a+b)*2)+'cm\n(마주 보는 변끼리 길이가 같으므로)')},
     ],
     '막대그래프':[
@@ -625,7 +627,7 @@ const GEN={
       ()=>{const q=pick([{q:'합동인 두 도형에서 대응변의 길이는?',a:'같다',w:['다르다','2배이다','절반이다'],t:'합동 = 모양과 크기가 완전히 같은 것\n합동인 도형:\n• 대응변의 길이가 같다\n• 대응각의 크기가 같다\n• 포개면 완전히 겹친다!'},{q:'선대칭도형에서 대칭축으로 접으면?',a:'완전히 겹친다',w:['절반만 겹친다','겹치지 않는다','알 수 없다'],t:'선대칭도형: 대칭축을 기준으로\n접었을 때 완전히 겹치는 도형\n예: 나비, 하트 모양\n접으면 양쪽이 딱 맞아요!'},{q:'점대칭도형은 대칭의 중심으로 몇 °회전하면 겹치나?',a:'180°',w:['90°','360°','270°'],t:'점대칭도형:\n대칭의 중심을 기준으로\n180° 돌리면 완전히 겹치는 도형\n예: S자, Z자, 평행사변형'}]);return P(q.q,q.a,'합동과 대칭',q.w,q.t)},
     ],
     '직육면체':[
-      ()=>{const q=pick([{q:'직육면체의 면 수는?',a:'6개',w:['4개','8개','12개'],t:'직육면체의 면:\n앞·뒤·좌·우·위·아래 = 6개\n마주 보는 면: 3쌍 (앞-뒤, 좌-우, 위-아래)'},{q:'직육면체의 꼭짓점 수는?',a:'8개',w:['6개','4개','12개'],t:'직육면체 꼭짓점:\n8개 (정육면체와 같아요)\n앞면 4개 + 뒷면 4개 = 8개'},{q:'직육면체의 모서리 수는?',a:'12개',w:['8개','6개','10개'],t:'직육면체 모서리:\n가로 4개 + 세로 4개 + 높이 4개 = 12개\n3방향 × 4개씩 = 12개!'},{q:'정육면체 모든 면의 모양은?',a:'정사각형',w:['직사각형','삼각형','마름모'],t:'정육면체(주사위 모양):\n모든 면이 정사각형!\n6개의 합동인 정사각형으로 이루어짐\n직육면체의 특별한 경우'}]);return P(q.q,q.a,'직육면체',q.w,q.t)},
+      ()=>{const q=pick([{q:'직육면체의 면 수는?',a:'6개',w:['4개','8개','12개'],t:'직육면체의 면:\n앞·뒤·좌·우·위·아래 = ?\n마주 보는 면: 3쌍 (앞-뒤, 좌-우, 위-아래)'},{q:'직육면체의 꼭짓점 수는?',a:'8개',w:['6개','4개','12개'],t:'직육면체 꼭짓점:\n8개 (정육면체와 같아요)\n앞면 4개 + 뒷면 4개 = ?'},{q:'직육면체의 모서리 수는?',a:'12개',w:['8개','6개','10개'],t:'직육면체 모서리:\n가로 4개 + 세로 4개 + 높이 4개 = ?\n3방향 × 4개씩 = 12개!'},{q:'정육면체 모든 면의 모양은?',a:'정사각형',w:['직사각형','삼각형','마름모'],t:'정육면체(주사위 모양):\n모든 면이 정사각형!\n6개의 합동인 정사각형으로 이루어짐\n직육면체의 특별한 경우'}]);return P(q.q,q.a,'직육면체',q.w,q.t)},
       ()=>{const l=ri(2,6),w=ri(2,6),h=ri(2,6);return P(`가로${l}, 세로${w}, 높이${h}cm 직육면체의 부피?`,l*w*h,'직육면체',null,'직육면체 부피:\n부피 = 가로 × 세로 × 높이\n= '+l+' × '+w+' × '+h+'\n= '+(l*w)+' × '+h+'\n= '+(l*w*h)+'cm³')},
     ],
     '다각형의 둘레와 넓이':[
@@ -648,7 +650,7 @@ const GEN={
       ()=>{const a=(ri(10,99)/10).toFixed(1),b=ri(2,5);return P(`${a} ÷ ${b} = □`,(+a/b).toFixed(2),'소수의 나눗셈',null,'소수 ÷ 자연수:\n자연수 나눗셈처럼 계산 후\n소수점 위치 그대로!\n'+a+' ÷ '+b+' = '+(+a/b).toFixed(2))},
     ],
     '비례식과 비례배분':[
-      ()=>{const a=ri(2,8),b=ri(2,8),c=ri(2,8);const d=a*c/b;if(!Number.isInteger(d)){return P(`2:3 = □:6`,4,'비례식과 비례배분',null,'비례식 풀기:\n외항의 곱 = 내항의 곱\n2 × 6 = 3 × □\n12 = 3 × □\n□ = 12 ÷ 3 = 4')}return P(`${a}:${b} = ${c}:□`,d,'비례식과 비례배분',null,'외항의 곱 = 내항의 곱\n'+a+' × □ = '+b+' × '+c+'\n'+a+' × □ = '+(b*c)+'\n□ = '+(b*c)+' ÷ '+a+' = '+d)},
+      ()=>{const a=ri(2,8),b=ri(2,8),c=ri(2,8);const d=a*c/b;if(!Number.isInteger(d)){return P(`2:3 = □:6`,4,'비례식과 비례배분',null,'비례식 풀기:\n외항의 곱 = 내항의 곱\n2 × 6 = 3 × □\n12 = 3 × □\n□ = 12 ÷ 3 = ?')}return P(`${a}:${b} = ${c}:□`,d,'비례식과 비례배분',null,'외항의 곱 = 내항의 곱\n'+a+' × □ = '+b+' × '+c+'\n'+a+' × □ = '+(b*c)+'\n□ = '+(b*c)+' ÷ '+a+' = '+d)},
       ()=>{const total=pick([20,30,40,50,60]),a=ri(1,4),b=ri(1,4);const partA=Math.round(total*a/(a+b));return P(`${total}을 ${a}:${b}로 비례배분하면 앞의 양은?`,partA,'비례식과 비례배분',null,'비례배분:\n전체 × (앞 비율)\n= '+total+' × '+a+'/('+a+'+'+b+')\n= '+total+' × '+a+'/'+(a+b)+'\n= '+partA,true)},
     ],
     '원의 넓이':[
