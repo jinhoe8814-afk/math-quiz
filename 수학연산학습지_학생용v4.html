@@ -640,7 +640,7 @@ const GEN={
    Google Sheets API 유틸
    ════════════════════ */
 const SETTINGS_URL='https://script.google.com/macros/s/AKfycbwpSfZT_ksZ-vHzokn7_bJii07pLbter47tb8-2COCI_Vwj4TP4-3qnfW6Xk3xeR9nzjQ/exec';
-const RECORDS_URL='https://script.google.com/macros/s/AKfycbz03GP2bGSa0eACax-djr-zniNepbm1Uy8dXDuowG0pK3V6juyVxGPjTtdlm_d-Urd6/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbxHI_B5-AtSVa2guhx7IOQCUzAQvKAsTvCfCFNrYFtyaaFaM9uX9woWPv6WB-jtSVzx/exec';
 
 // JSONP 공통 함수
 function jsonpRequest(url, timeout=10000){
@@ -942,19 +942,19 @@ async function submitQuiz(){
   const pct=Math.round(correct/problems.length*100);
   renderProb();
   showResult(correct,pct);
-  // 기록 저장
+  // 기록 저장 (record 하나만 추가 - URL 길이 최소화)
   try{
-    const rec=await binGet('records');
-    const list=Array.isArray(rec.records)?rec.records:[];
-    list.push({
+    const newRecord={
       date:new Date().toISOString().split('T')[0],
       time:new Date().toLocaleTimeString('ko-KR'),
       name:studentName,
       grade:studentCfg.grade+'학년',
       domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
       correct,total:problems.length,pct,details
-    });
-    await binPut('records',{records:list});
+    };
+    const encoded=encodeURIComponent(JSON.stringify(newRecord));
+    await jsonpRequest(RECORDS_URL+'?record='+encoded);
+    console.log('기록 저장 완료');
   }catch(e){console.warn('기록 저장 실패',e)}
 }
 
