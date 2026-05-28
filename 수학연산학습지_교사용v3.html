@@ -367,12 +367,25 @@ async function binGet(id){
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  const form=new FormData();
-  form.append('data',JSON.stringify(data));
-  try{
-    await fetch(url,{method:'POST',body:form,mode:'no-cors'});
-    return {status:'ok'};
-  }catch(e){return {status:'ok'}}
+  return new Promise((resolve,reject)=>{
+    const cbName='_cbp'+Date.now();
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{
+      delete window[cbName];script.remove();
+      reject(new Error('timeout'));
+    },8000);
+    window[cbName]=(res)=>{
+      clearTimeout(timer);delete window[cbName];script.remove();
+      resolve(res);
+    };
+    const encoded=encodeURIComponent(JSON.stringify(data));
+    script.src=url+'?callback='+cbName+'&data='+encoded;
+    script.onerror=()=>{
+      clearTimeout(timer);delete window[cbName];script.remove();
+      reject(new Error('script error'));
+    };
+    document.head.appendChild(script);
+  });
 }
 
 /* ════════════════
