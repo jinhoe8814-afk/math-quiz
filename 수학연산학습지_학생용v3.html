@@ -639,48 +639,33 @@ const GEN={
 /* ════════════════════
    Google Sheets API 유틸
    ════════════════════ */
-const SETTINGS_URL='https://script.google.com/macros/s/AKfycbxKeVmI7-_AL3VgtPIDqSY-DNDVyKllOVc-wvgFmc1gM21Wu0zlzXA6Fss6MyAw92Rx/exec';
-const RECORDS_URL='https://script.google.com/macros/s/AKfycby2CEB4UMkifzu3YecrWvtrGp_0NZSc1LjODSSkGNgQ7uu5aJ2sYLsk5fxwj9f4mmDAMQ/exec';
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbzW4ZBGeXGyzMXx_n_CRwUyTyGjIJKq6pYaGZxI6pJy-T40muXURcEQucoYd_HfkLr6DA/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbxqw9dWn7CWzt2PNIGD1iT0-w_T5DeQwYTZtdVa4A4HvMYxdgnzmOSXWSjIcQH_dt0D/exec';
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  // JSONP 방식으로 CORS 완전 우회
-  return new Promise((resolve,reject)=>{
-    const cbName='_cb'+Date.now();
-    const script=document.createElement('script');
-    const timer=setTimeout(()=>{
-      delete window[cbName];
-      script.remove();
-      reject(new Error('timeout'));
-    },8000);
-    window[cbName]=(data)=>{
-      clearTimeout(timer);
-      delete window[cbName];
-      script.remove();
-      resolve(data);
-    };
-    script.src=url+'?callback='+cbName;
-    script.onerror=()=>{
-      clearTimeout(timer);
-      delete window[cbName];
-      script.remove();
-      reject(new Error('script error'));
-    };
-    document.head.appendChild(script);
-  });
+  try{
+    const r=await fetch(url,{redirect:'follow'});
+    const text=await r.text();
+    const data=JSON.parse(text);
+    try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
+    return data;
+  }catch(e){
+    try{
+      const cached=localStorage.getItem('mathCache_'+id);
+      if(cached)return JSON.parse(cached);
+    }catch(e2){}
+    throw new Error('연결 실패');
+  }
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  // POST로 전송 (CORS 우회: no-cors + form data)
-  const form=new FormData();
-  form.append('data',JSON.stringify(data));
+  try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
   try{
-    await fetch(url,{method:'POST',body:form,mode:'no-cors'});
-    return {status:'ok'};
-  }catch(e){
-    // no-cors는 응답을 읽을 수 없지만 전송은 됨
-    return {status:'ok'};
-  }
+    const encoded=encodeURIComponent(JSON.stringify(data));
+    await fetch(url+'?data='+encoded,{redirect:'follow'});
+  }catch(e){}
+  return {status:'ok'};
 }
 
 /* ════════════════════

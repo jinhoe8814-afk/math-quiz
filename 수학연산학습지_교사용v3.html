@@ -341,36 +341,32 @@ const TEACHER_PW_KEY='mathTeacherPw2024';
 /* ════════════════
    Google Sheets API
    ════════════════ */
-const SETTINGS_URL='https://script.google.com/macros/s/AKfycbxKeVmI7-_AL3VgtPIDqSY-DNDVyKllOVc-wvgFmc1gM21Wu0zlzXA6Fss6MyAw92Rx/exec';
-const RECORDS_URL='https://script.google.com/macros/s/AKfycby2CEB4UMkifzu3YecrWvtrGp_0NZSc1LjODSSkGNgQ7uu5aJ2sYLsk5fxwj9f4mmDAMQ/exec';
+const SETTINGS_URL='https://script.google.com/macros/s/AKfycbzW4ZBGeXGyzMXx_n_CRwUyTyGjIJKq6pYaGZxI6pJy-T40muXURcEQucoYd_HfkLr6DA/exec';
+const RECORDS_URL='https://script.google.com/macros/s/AKfycbxqw9dWn7CWzt2PNIGD1iT0-w_T5DeQwYTZtdVa4A4HvMYxdgnzmOSXWSjIcQH_dt0D/exec';
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
   try{
-    const r=await fetch(url,{redirect:'follow',mode:'cors'});
-    const data=await r.json();
+    const r=await fetch(url,{redirect:'follow'});
+    const text=await r.text();
+    const data=JSON.parse(text);
     try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
     return data;
   }catch(e){
-    // CORS 실패 시 로컬 캐시 사용
     try{
       const cached=localStorage.getItem('mathCache_'+id);
       if(cached)return JSON.parse(cached);
     }catch(e2){}
-    throw e;
+    throw new Error('연결 실패');
   }
 }
 async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
-  // 로컬 캐시에 먼저 저장
   try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
-  // fetch로 서버 저장 (redirect follow)
   try{
     const encoded=encodeURIComponent(JSON.stringify(data));
-    await fetch(url+'?data='+encoded,{redirect:'follow',mode:'cors'});
-  }catch(e){
-    // CORS 실패해도 로컬엔 저장됨 - 무시
-  }
+    await fetch(url+'?data='+encoded,{redirect:'follow'});
+  }catch(e){}
   return {status:'ok'};
 }
 
