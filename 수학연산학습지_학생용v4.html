@@ -850,9 +850,11 @@ function renderProb(){
   const tipBox=document.getElementById('tipBox');
   if(p.tip){
     tipBtn.style.display='inline-flex';
-    tipBox.innerHTML=fracHTML(p.tip);
+    tipBox.textContent=p.tip;  // textContent로 안전하게 표시
+    tipBox.style.whiteSpace='pre-line';
     // 문제 바뀔 때 팁 닫기
-    if(!tipBox.classList.contains('keep'))tipBox.classList.remove('show');
+    tipBox.classList.remove('show');
+    tipBtn.textContent='💡 팁 보기';
   } else {
     tipBtn.style.display='none';
     tipBox.classList.remove('show');
