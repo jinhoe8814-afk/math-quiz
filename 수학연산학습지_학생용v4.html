@@ -564,8 +564,50 @@ const GEN={
       ()=>{const a=pick([12,18,24,30,36]);const b=pick([6,9,12,15]);const g=gcd(a,b);return P(`${a}와 ${b}의 최대공약수는?`,g,'약수와 배수',null,a+'의 약수: '+Array.from({length:a},(_,i)=>i+1).filter(i=>a%i===0).join(', ')+'\n'+b+'의 약수: '+Array.from({length:b},(_,i)=>i+1).filter(i=>b%i===0).join(', ')+'\n공통약수 중 가장 큰 수 = '+g)},
     ],
     '약분과 통분':[
-      ()=>{const d=pick([4,6,8,10,12]),n=ri(1,d/2-1);const g2=gcd(n*2,d);return P(`${n*2}/${d}를 약분하면?`,`${n*2/g2}/${d/g2}`,'약분과 통분',null,'약분 = 분자·분모를 공약수로 나누기\n'+n*2+'와 '+d+'의 최대공약수 = '+g2+'\n분자: '+(n*2)+'÷'+g2+' = '+(n*2/g2)+'\n분모: '+d+'÷'+g2+' = '+(d/g2)+'\n정답: '+(n*2/g2)+'/'+(d/g2))},
-      ()=>{const a=pick([2,3,4]),b=pick([3,4,5]);const l=a*b/gcd(a,b);return P(`${a}와 ${b}의 최소공배수(공통분모)는?`,l,'약분과 통분',null,a+'의 배수: '+Array.from({length:5},(_,i)=>a*(i+1)).join(', ')+'...\n'+b+'의 배수: '+Array.from({length:5},(_,i)=>b*(i+1)).join(', ')+'...\n처음 만나는 공통 = '+l+'\n→ '+a+'/'+b+'를 통분할 때 공통분모!')},
+      // 약분 문제
+      ()=>{
+        const fracs=[{n:2,d:4},{n:3,d:6},{n:4,d:8},{n:2,d:6},{n:3,d:9},{n:4,d:10},{n:6,d:8},{n:4,d:12},{n:6,d:10},{n:8,d:12}];
+        const f=pick(fracs);
+        const g2=gcd(f.n,f.d);
+        const rn=f.n/g2,rd=f.d/g2;
+        const wrong=[`${f.n-1}/${f.d-1}`,`${f.n}/${f.d-1}`,`${f.n+1}/${rd}`];
+        return P(`${f.n}/${f.d}를 기약분수로 나타내면?`,`${rn}/${rd}`,'약분과 통분',wrong,
+          '약분 방법:\n① 분자('+f.n+')와 분모('+f.d+')의 최대공약수 찾기\n② 분자·분모를 최대공약수로 나누기\n\n'+f.n+'와 '+f.d+'의 최대공약수 = '+g2+'\n→ 분자: '+f.n+' ÷ '+g2+'\n→ 분모: '+f.d+' ÷ '+g2+'\n\n더 이상 약분이 안 되면 기약분수!');
+      },
+      ()=>{
+        const fracs=[{n:4,d:6},{n:6,d:9},{n:8,d:12},{n:6,d:15},{n:10,d:15},{n:9,d:12}];
+        const f=pick(fracs);
+        const g2=gcd(f.n,f.d);
+        const rn=f.n/g2,rd=f.d/g2;
+        return P(`${f.n}/${f.d}를 약분하면?`,`${rn}/${rd}`,'약분과 통분',
+          [`${f.n/2}/${f.d}`,`${rn+1}/${rd}`,`${f.n}/${f.d/2}`],
+          '약분 = 분자와 분모를 같은 수로 나누기\n\n'+f.n+'/'+f.d+'에서\n'+f.n+'와 '+f.d+'의 공약수: '+
+          Array.from({length:Math.min(f.n,f.d)},(_,i)=>i+1).filter(i=>f.n%i===0&&f.d%i===0).join(', ')+'\n최대공약수 = '+g2+'\n\n'+f.n+' ÷ '+g2+' = '+rn+'\n'+f.d+' ÷ '+g2+' = '+rd);
+      },
+      ()=>{
+        const pairs=[{n1:1,d1:2,n2:1,d2:3},{n1:1,d1:3,n2:1,d2:4},{n1:2,d1:3,n2:1,d2:4},{n1:1,d1:2,n2:2,d2:5}];
+        const p=pick(pairs);
+        const l=p.d1*p.d2/gcd(p.d1,p.d2);
+        return P(`${p.n1}/${p.d1}과 ${p.n2}/${p.d2}을 통분하면? (공통분모: ${l})`,
+          `${p.n1*(l/p.d1)}/${l}, ${p.n2*(l/p.d2)}/${l}`,'약분과 통분',
+          [`${p.n1}/${l}, ${p.n2}/${l}`,`${p.n1*(l/p.d1)}/${l+1}, ${p.n2*(l/p.d2)}/${l+1}`,`${p.n1}/${p.d1*2}, ${p.n2}/${p.d2*2}`],
+          '통분 방법:\n공통분모('+l+')에 맞게 분자·분모를 같은 수로 곱해요\n\n'+p.n1+'/'+p.d1+': 분모를 '+l+'로 만들려면 ×'+(l/p.d1)+'\n→ '+p.n1+'×'+(l/p.d1)+' / '+p.d1+'×'+(l/p.d1)+' = '+(p.n1*(l/p.d1))+'/'+l+'\n\n'+p.n2+'/'+p.d2+': 분모를 '+l+'로 만들려면 ×'+(l/p.d2)+'\n→ '+p.n2+'×'+(l/p.d2)+' / '+p.d2+'×'+(l/p.d2)+' = '+(p.n2*(l/p.d2))+'/'+l);
+      },
+      ()=>{
+        const a=pick([2,3,4,6]),b=pick([3,4,5,6]).valueOf();
+        if(a===b)return null;
+        const l=a*b/gcd(a,b);
+        return P(`${a}와 ${b}의 최소공배수(공통분모)는?`,l,'약분과 통분',
+          [l+a,l+b,l*2],
+          '최소공배수 = 두 수의 공통 배수 중 가장 작은 수\n\n'+a+'의 배수: '+Array.from({length:6},(_,i)=>a*(i+1)).join(', ')+'...\n'+b+'의 배수: '+Array.from({length:6},(_,i)=>b*(i+1)).join(', ')+'...\n\n처음 만나는 공통 배수 = '+l+'\n→ 통분할 때 공통분모로 사용!');
+      },
+      ()=>{
+        const fracs=[{n:1,d:4,equiv:'2/8'},{n:2,d:3,equiv:'4/6'},{n:1,d:2,equiv:'3/6'},{n:3,d:4,equiv:'6/8'}];
+        const f=pick(fracs);
+        return P(`${f.n}/${f.d}와 크기가 같은 분수는?`,f.equiv,'약분과 통분',
+          [`${f.n+1}/${f.d+1}`,`${f.n*3}/${f.d*3+1}`,`${f.n}/${f.d+1}`],
+          '크기가 같은 분수 만들기:\n분자·분모에 같은 수를 곱하거나 나눠요\n\n'+f.n+'/'+f.d+' = '+f.n+'×2 / '+f.d+'×2 = '+f.equiv+'\n분자와 분모에 같은 수를 곱하면\n크기는 변하지 않아요!');
+      },
     ],
     '분수의 덧셈과 뺄셈':[
       ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(1,d1-1),n2=ri(1,d2-1);const sum=n1*(l/d1)+n2*(l/d2);const g=gcd(sum,l);return P(`${n1}/${d1} + ${n2}/${d2} = □`,`${sum/g}/${l/g}`,'분수의 덧셈과 뺄셈',null,'분모가 다르면 통분 먼저!\n공통분모 = '+l+'\n'+n1+'/'+d1+' → '+(n1*(l/d1))+'/'+l+'\n'+n2+'/'+d2+' → '+(n2*(l/d2))+'/'+l+'\n합 = '+(n1*(l/d1)+n2*(l/d2))+'/'+l+(g>1?' = '+(sum/g)+'/'+(l/g)+' (약분)':''))},
@@ -845,8 +887,15 @@ function renderProb(){
   const tipBox=document.getElementById('tipBox');
   if(p.tip){
     tipBtn.style.display='inline-flex';
-    tipBox.textContent=p.tip;  // textContent로 안전하게 표시
-    tipBox.style.whiteSpace='pre-line';
+    // 팁 안의 분수 표기(n/d)를 HTML 분수로 변환
+    const tipLines = p.tip.split('\n');
+    tipBox.innerHTML = tipLines.map(line => {
+      // 숫자/숫자 패턴을 분수 HTML로 변환 (÷ 기호는 제외)
+      return line.replace(/(\d+)\/(\d+)/g, (_,n,d) =>
+        `<span class="frac"><span>${n}</span><span>${d}</span></span>`
+      );
+    }).join('<br>');
+    tipBox.style.whiteSpace='normal';
     // 문제 바뀔 때 팁 닫기
     tipBox.classList.remove('show');
     tipBtn.textContent='💡 팁 보기';
