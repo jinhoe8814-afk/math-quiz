@@ -1035,7 +1035,8 @@ async function submitQuiz(){
       domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
       correct,total:problems.length,pct,details
     };
-    const encoded=encodeURIComponent(JSON.stringify(newRecord));
+        const recordToSend={...newRecord,details:[]};
+        const encoded=encodeURIComponent(JSON.stringify(recordToSend));
     await jsonpRequest(RECORDS_URL+'?record='+encoded);
     console.log('기록 저장 완료');
   }catch(e){console.warn('기록 저장 실패',e)}
