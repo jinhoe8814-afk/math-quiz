@@ -11,7 +11,7 @@
   --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
   --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
   --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;h
-  --gray:#6B7280;--gray-lt:#F9FAFB;--gray-bd:#E5E7EB;
+  --gray:#6B7280;--gray-lt:#F9FAFB;--gray-bd:#E5E7EB;hh
   --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
   --bg:#F3F4F6;--card:#FFFFFF;--radius:12px;--rsm:8px;
 }
@@ -386,8 +386,7 @@ async function binPut(id,data){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
   try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
   try{
-    const encoded=encodeURIComponent(JSON.stringify(data));
-    await jsonpRequest(url+'?data='+encoded);
+          await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id,data})});
   }catch(e){
     console.warn('서버 저장 실패(로컬엔 저장됨):', e.message);
   }
