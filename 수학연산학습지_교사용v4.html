@@ -10,7 +10,7 @@
   --blue:#2563EB;--blue-lt:#EFF6FF;--blue-bd:#BFDBFE;
   --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
   --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
-  --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;h
   --gray:#6B7280;--gray-lt:#F9FAFB;--gray-bd:#E5E7EB;
   --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
   --bg:#F3F4F6;--card:#FFFFFF;--radius:12px;--rsm:8px;
@@ -454,6 +454,7 @@ async function syncAll(){
     records=Array.isArray(r?.records)?r.records:[];
     // 로컬 캐시 갱신
     try{localStorage.setItem('mathCache_settings',JSON.stringify(settings));}catch(e){}
+        try{localStorage.setItem('mathCache_records',JSON.stringify({records}));}catch(e){}
     hideLoad();
     document.getElementById('lastSync').textContent=`동기화: ${new Date().toLocaleTimeString('ko-KR')}`;
     renderAll();
