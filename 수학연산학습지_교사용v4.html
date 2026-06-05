@@ -10,7 +10,7 @@
   --blue:#2563EB;--blue-lt:#EFF6FF;--blue-bd:#BFDBFE;
   --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
   --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
-  --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;h
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;hh
   --gray:#6B7280;--gray-lt:#F9FAFB;--gray-bd:#E5E7EB;hh
   --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
   --bg:#F3F4F6;--card:#FFFFFF;--radius:12px;--rsm:8px;
@@ -370,14 +370,20 @@ function jsonpRequest(url, timeout=10000){
 
 async function binGet(id){
   const url=id==='settings'?SETTINGS_URL:RECORDS_URL;
+  function unwrap(obj){return(obj&&obj.students!==undefined)?obj:(obj&&obj.data?unwrap(obj.data):obj);}
   try{
-    const data=await jsonpRequest(url);
+    let data=await jsonpRequest(url);
+    if(id==='settings')data=unwrap(data)||{students:{},pw:''};
     try{localStorage.setItem('mathCache_'+id,JSON.stringify(data));}catch(e){}
     return data;
   }catch(e){
     try{
       const cached=localStorage.getItem('mathCache_'+id);
-      if(cached)return JSON.parse(cached);
+      if(cached){
+        let d=JSON.parse(cached);
+        if(id==='settings')d=unwrap(d)||{students:{},pw:''};
+        return d;
+      }
     }catch(e2){}
     throw new Error('연결 실패: '+e.message);
   }
