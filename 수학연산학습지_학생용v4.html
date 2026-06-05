@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ìí ì°ì° íìµ â íìì©</title>
+<title>수학 연산 학습 — 학생용</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -15,21 +15,21 @@
   --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
   --bg:#F3F4F6;--card:#FFFFFF;--radius:12px;--rsm:8px;
 }
-/* ë¶ì íê¸° */
+/* 분수 표기 */
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.1}
 .frac span:first-child{border-bottom:2px solid currentColor;padding:0 3px;font-size:.9em;text-align:center}
 .frac span:last-child{padding:0 3px;font-size:.9em;text-align:center}
-/* í ë²í¼ */
+/* 팁 버튼 */
 .tip-btn{display:inline-flex;align-items:center;gap:5px;margin-bottom:12px;padding:7px 14px;border:1.5px solid var(--amber);border-radius:var(--rsm);background:var(--amber-lt);color:var(--amber);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
 .tip-btn:hover{background:#FDE68A}
 .tip-box{background:var(--amber-lt);border-left:4px solid var(--amber);border-radius:0 var(--rsm) var(--rsm) 0;padding:12px 14px;font-size:13px;color:#92400E;line-height:1.85;display:none;margin-bottom:12px;white-space:pre-line}
 .tip-box.show{display:block}
-/* ìì©ë¬¸ì  ë°°ê²½ ê°ì¡° */
+/* 응용문제 배경 강조 */
 .pcard.applied{border-left:4px solid var(--purple);background:linear-gradient(135deg,#fff 90%,var(--purple-lt) 100%)}
 .applied-tag{font-size:10px;background:var(--purple-lt);color:var(--purple);border-radius:10px;padding:2px 7px;font-weight:700;margin-left:6px;vertical-align:middle}
 body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-height:100vh}
 
-/* ì¤ì  ì¤ë²ë ì´ */
+/* 설정 오버레이 */
 #setupOverlay{position:fixed;inset:0;background:rgba(17,24,39,.65);display:flex;align-items:center;justify-content:center;z-index:100}
 .sc{background:var(--card);border-radius:20px;padding:2.5rem 2rem;width:min(360px,92vw);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.15)}
 .sc-icon{font-size:52px;margin-bottom:.75rem}
@@ -43,7 +43,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .start-btn:disabled{opacity:.4;cursor:default}
 .err-txt{margin-top:.65rem;font-size:12px;color:var(--red);min-height:18px}
 
-/* êµ¬êµ¬ë¨ ê´ë¬¸ */
+/* 구구단 관문 */
 #gateOverlay{position:fixed;inset:0;background:rgba(17,24,39,.75);display:none;align-items:center;justify-content:center;z-index:90}
 #gateOverlay.show{display:flex}
 .gate-card{background:var(--card);border-radius:20px;padding:2rem 1.75rem;width:min(380px,92vw);text-align:center}
@@ -59,12 +59,12 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .gate-prog{font-size:12px;color:var(--text3);margin-top:.5rem}
 .gate-status{font-size:13px;font-weight:600;min-height:20px;margin-bottom:.5rem}
 
-/* ì¤ëµ ìì  ë²í¼ */
+/* 오답 수정 버튼 */
 .fix-btn{display:none;margin-top:8px;padding:7px 16px;border:1.5px solid var(--amber);border-radius:var(--rsm);background:var(--amber-lt);color:var(--amber);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 .fix-btn.show{display:inline-block}
 .fix-btn:hover{background:var(--amber-bd)}
 
-/* í¤ ì¤ì  íì */
+/* 키 설정 팝업 */
 .key-setup{background:var(--card);border-radius:20px;padding:2rem 1.75rem;width:min(400px,94vw);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .key-setup-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:.4rem}
 .key-setup-sub{font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.6}
@@ -74,7 +74,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .key-save-btn:hover{opacity:.88}
 .key-note{font-size:11px;color:var(--text3);margin-top:.75rem;line-height:1.6}
 
-/* ìë¨ ë° */
+/* 상단 바 */
 .topbar{background:var(--card);border-bottom:1px solid var(--gray-bd);padding:.8rem 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
 .tbl{font-size:20px}
 .tb-info{flex:1}
@@ -85,7 +85,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .new-btn{padding:7px 13px;border:1.5px solid var(--gray-bd);border-radius:var(--rsm);background:transparent;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit}
 .new-btn:hover{background:var(--gray-lt)}
 
-/* ì§í */
+/* 진행 */
 .prog-section{background:var(--card);border-bottom:1px solid var(--gray-bd);padding:.8rem 1.25rem}
 .prog-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
 .prog-label{color:var(--text2)}
@@ -99,7 +99,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .dot.ok{background:var(--green-lt);color:var(--green)}
 .dot.ng{background:var(--red-lt);color:var(--red)}
 
-/* ë¬¸ì  ì¹´ë */
+/* 문제 카드 */
 .content{padding:1.1rem;max-width:620px;margin:0 auto}
 .pcard{background:var(--card);border-radius:var(--radius);padding:1.5rem;border:1px solid var(--gray-bd)}
 .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
@@ -117,7 +117,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .explain{margin-top:10px;padding:.75rem 1rem;background:var(--amber-lt);border-left:3px solid var(--amber);border-radius:0 var(--rsm) var(--rsm) 0;font-size:13px;color:#92400E;line-height:1.7;display:none}
 .explain.show{display:block}
 
-/* ë¤ë¹ */
+/* 네비 */
 .navbar{background:var(--card);border-top:1px solid var(--gray-bd);padding:.8rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0}
 .nprev,.nnext{padding:10px 18px;border:1.5px solid var(--gray-bd);border-radius:var(--rsm);background:transparent;font-size:14px;color:var(--text2);cursor:pointer;font-family:inherit}
 .nprev:hover,.nnext:hover{background:var(--gray-lt)}
@@ -126,7 +126,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .subbtn:hover{opacity:.88}
 .subbtn:disabled{opacity:.35;cursor:default}
 
-/* ê²°ê³¼ */
+/* 결과 */
 #resultOverlay{position:fixed;inset:0;background:rgba(17,24,39,.75);display:none;align-items:center;justify-content:center;z-index:50}
 #resultOverlay.show{display:flex}
 .rc{background:var(--card);border-radius:20px;padding:2.5rem 2rem;width:min(380px,92vw);text-align:center}
@@ -144,7 +144,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .ra-p{background:var(--blue);color:#fff}
 .ra-s{background:var(--gray-lt);color:var(--text2);border:1.5px solid var(--gray-bd)!important}
 
-/* ì ì íì¤í ë¦¬ */
+/* 점수 히스토리 */
 .hist-wrap{margin-top:1rem;background:var(--gray-lt);border-radius:var(--rsm);padding:1rem}
 .hist-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
 .hist-chart{display:flex;align-items:flex-end;gap:5px;height:70px}
@@ -161,7 +161,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 .trend-eq{color:var(--text2)}
 .no-hist{font-size:12px;color:var(--text3);text-align:center;padding:.5rem 0}
 
-/* ë¡ë© */
+/* 로딩 */
 #loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:200}
 #loading.show{display:flex}
 .spin{width:36px;height:36px;border:3px solid var(--gray-bd);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
@@ -177,13 +177,13 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 </head>
 <body>
 
-<!-- â  ì´ë¦ ìë ¥ ì¤ë²ë ì´ -->
-<!-- êµ¬êµ¬ë¨ ê´ë¬¸ -->
+<!-- ① 이름 입력 오버레이 -->
+<!-- 구구단 관문 -->
 <div id="gateOverlay">
   <div class="gate-card">
-    <div class="gate-icon">ð¢</div>
-    <div class="gate-title">êµ¬êµ¬ë¨ íµê³¼ ê´ë¬¸</div>
-    <div class="gate-sub">ë¬¸ì ë¥¼ ììíê¸° ì ì<br>êµ¬êµ¬ë¨ 3ë¬¸ì ë¥¼ ëª¨ë ë§íì¼ í©ëë¤!</div>
+    <div class="gate-icon">🔢</div>
+    <div class="gate-title">구구단 통과 관문</div>
+    <div class="gate-sub">문제를 시작하기 전에<br>구구단 3문제를 모두 맞혀야 합니다!</div>
     <div class="gate-q" id="gateQ"></div>
     <div class="gate-choices" id="gateChoices"></div>
     <div class="gate-status" id="gateStatus"></div>
@@ -193,21 +193,21 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
 
 <div id="setupOverlay">
   <div class="sc">
-    <div class="sc-icon">âï¸</div>
-    <div class="sc-title">ìí ì°ì° íìµ</div>
-    <div class="sc-sub">ì´ë¦ì ìë ¥íë©´ ì ìëì´ ì¤ì í<br>íëê³¼ ìì­ì ë¬¸ì ê° ì¶ì ë©ëë¤.<br><small style="font-size:12px;color:#9CA3AF">ì´ë¦ì ë¤ì ë°©ë¬¸ ì ìëì¼ë¡ ìë ¥ë©ëë¤.</small></div>
-    <input class="name-inp" id="nameInp" type="text" placeholder="ì´ë¦ ìë ¥" maxlength="10"
+    <div class="sc-icon">✏️</div>
+    <div class="sc-title">수학 연산 학습</div>
+    <div class="sc-sub">이름을 입력하면 선생님이 설정한<br>학년과 영역의 문제가 출제됩니다.<br><small style="font-size:12px;color:#9CA3AF">이름은 다음 방문 시 자동으로 입력됩니다.</small></div>
+    <input class="name-inp" id="nameInp" type="text" placeholder="이름 입력" maxlength="10"
       oninput="onNameInput()" onkeydown="if(event.key==='Enter')tryStart()"/>
     <div class="cfg-preview" id="cfgPreview"></div>
-    <button class="start-btn" id="startBtn" onclick="tryStart()" disabled>ë¬¸ì  ììíê¸° â</button>
+    <button class="start-btn" id="startBtn" onclick="tryStart()" disabled>문제 시작하기 →</button>
     <div class="err-txt" id="setupErr"></div>
   </div>
 </div>
 
-<!-- ë¡ë© -->
-<div id="loading"><div class="spin"></div><div class="ld-msg" id="ldMsg">ë¶ë¬ì¤ë ì¤...</div></div>
+<!-- 로딩 -->
+<div id="loading"><div class="spin"></div><div class="ld-msg" id="ldMsg">불러오는 중...</div></div>
 
-<!-- ê²°ê³¼ ì¤ë²ë ì´ -->
+<!-- 결과 오버레이 -->
 <div id="resultOverlay">
   <div class="rc">
     <div class="r-emoji" id="rEmoji"></div>
@@ -217,28 +217,28 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
     <div class="r-msg" id="rMsg"></div>
     <div class="hist-wrap" id="histWrap"></div>
     <div class="r-acts">
-      <button class="ra ra-p" onclick="retryQuiz()">âº ë¤ì íê¸° (ì ë¬¸ì )</button>
-      <button class="ra ra-s" onclick="location.reload()">ì´ë¦ ë¤ì ìë ¥</button>
+      <button class="ra ra-p" onclick="retryQuiz()">↺ 다시 풀기 (새 문제)</button>
+      <button class="ra ra-s" onclick="location.reload()">이름 다시 입력</button>
     </div>
   </div>
 </div>
 
-<!-- ë©ì¸ UI -->
+<!-- 메인 UI -->
 <div id="mainUI" style="display:none">
   <div class="topbar">
-    <span class="tbl">ð</span>
+    <span class="tbl">📐</span>
     <div class="tb-info">
-      <div class="tb-title">ìí ì°ì° íìµ</div>
+      <div class="tb-title">수학 연산 학습</div>
       <div class="tb-sub" id="topSub"></div>
     </div>
     <div class="tb-right">
       <span class="nbadge" id="nameBadge"></span>
-      <button class="new-btn" onclick="retryQuiz()">âº ì ë¬¸ì </button>
+      <button class="new-btn" onclick="retryQuiz()">↺ 새 문제</button>
     </div>
   </div>
 
   <div class="prog-section">
-    <div class="prog-row"><span class="prog-label">íì´ ì§í</span><span class="prog-cnt" id="progCnt">0 / 20</span></div>
+    <div class="prog-row"><span class="prog-label">풀이 진행</span><span class="prog-cnt" id="progCnt">0 / 20</span></div>
     <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
     <div class="dot-row" id="dotRow"></div>
   </div>
@@ -250,7 +250,7 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
         <span class="ptag" id="pTag"></span>
       </div>
       <div class="pq" id="pQ"></div>
-      <button class="tip-btn" id="tipBtn" onclick="toggleTip()" style="display:none">ð¡ í ë³´ê¸°</button>
+      <button class="tip-btn" id="tipBtn" onclick="toggleTip()" style="display:none">💡 팁 보기</button>
       <div class="tip-box" id="tipBox"></div>
       <div class="choices" id="choices"></div>
       <div class="explain" id="explain"></div>
@@ -258,28 +258,28 @@ body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);min-he
   </div>
 
   <div class="navbar">
-    <button class="nprev" id="prevBtn" onclick="nav(-1)" disabled>â ì´ì </button>
+    <button class="nprev" id="prevBtn" onclick="nav(-1)" disabled>← 이전</button>
     <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-      <button class="subbtn" id="subBtn" onclick="submitQuiz()" disabled>ì±ì íê¸°</button>
-      <button class="fix-btn" id="fixBtn" onclick="fixAnswer()">âï¸ ì´ ë¬¸ì  ìì íê¸°</button>
+      <button class="subbtn" id="subBtn" onclick="submitQuiz()" disabled>채점하기</button>
+      <button class="fix-btn" id="fixBtn" onclick="fixAnswer()">✏️ 이 문제 수정하기</button>
     </div>
-    <button class="nnext" id="nextBtn" onclick="nav(1)">ë¤ì â</button>
+    <button class="nnext" id="nextBtn" onclick="nav(1)">다음 →</button>
   </div>
 </div>
 
 <script>
-/* ââââââââââââââââââââââââââââââââââââââââââââ
-   â Google Sheets API ì¬ì© â í¤ ë¶íì
-   ââââââââââââââââââââââââââââââââââââââââââââ */
+/* ════════════════════════════════════════════
+   ★ Google Sheets API 사용 — 키 불필요
+   ════════════════════════════════════════════ */
 
-/* ââââââââââââââââââââââââââââââââââââââââ
-   2022 ê°ì êµì¡ê³¼ì  íëë³ ì°ì° ë¬¸ì  ìì±
-   ââââââââââââââââââââââââââââââââââââââââ */
+/* ════════════════════════════════════════
+   2022 개정교육과정 학년별 연산 문제 생성
+   ════════════════════════════════════════ */
 const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 
-// ë¶ì íê¸°: "3/4" â <span class="frac"><span>3</span><span>4</span></span>
+// 분수 표기: "3/4" → <span class="frac"><span>3</span><span>4</span></span>
 function fracHTML(str){
-  // n/d í¨í´ì ì°¾ì HTML ë¶ìë¡ ë³í (ììì  ìë ì«ìë ì ì¸)
+  // n/d 패턴을 찾아 HTML 분수로 변환 (소수점 있는 숫자는 제외)
   return String(str).replace(/(\d+)\/(\d+)/g,(_,n,d)=>
     `<span class="frac"><span>${n}</span><span>${d}</span></span>`);
 }
@@ -287,17 +287,17 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
 function gcd(a,b){return b===0?a:gcd(b,a%b)}
 
-// ìì¤ë³ ë¬¸ì  ëì´ë ì¡°ì 
+// 수준별 문제 난이도 조정
 function adjustLevel(p,level){
-  /* ââ í: ê¸°ë³¸ ê·¸ëë¡ (ì¬ì´ ì«ì, ëì ì¤ëµ ë²ì) ââ */
-  if(level==='í') return p;
+  /* ── 하: 기본 그대로 (쉬운 숫자, 넓은 오답 범위) ── */
+  if(level==='하') return p;
 
-  /* ââ ì¤: ì«ì ë²ì íì¥ + ì¤ëµì ì ëµì ê°ê¹ê² ââ */
-  if(level==='ì¤'){
+  /* ── 중: 숫자 범위 확장 + 오답을 정답에 가깝게 ── */
+  if(level==='중'){
     const q={...p,choices:[...p.choices]};
     const ansNum=parseFloat(q.ans);
     if(!isNaN(ansNum)&&Number.isInteger(ansNum)&&!q.ans.includes('/')){
-      // ì¤ëµ: ì ëµì Â±5~15% ë²ìë¡ í¼ë ì ë
+      // 오답: 정답의 ±5~15% 범위로 혼동 유도
       const spread=Math.max(3,Math.round(ansNum*0.12)||5);
       const wrongs=new Set();let t=0;
       while(wrongs.size<3&&t++<60){
@@ -309,10 +309,10 @@ function adjustLevel(p,level){
     return q;
   }
 
-  /* ââ ì: ë¬¸ì  ìì²´ë¥¼ ë ì´ë µê² ì¬ìì± ââ */
-  if(level==='ì'){
+  /* ── 상: 문제 자체를 더 어렵게 재생성 ── */
+  if(level==='상'){
     const grade=studentCfg?studentCfg.grade:3;
-    // ì«ì ë²ì í¬ê² íì¥ + ì¤ëµì ë§¤ì° ê°ê¹ê²
+    // 숫자 범위 크게 확장 + 오답을 매우 가깝게
     const hard=buildHardProblem(p,grade);
     return hard;
   }
@@ -320,17 +320,17 @@ function adjustLevel(p,level){
   return p;
 }
 
-/* ì ëì´ë: ë¬¸ì  ì«ì ë²ì í ë¨ê³ ì íë ìì¤ì¼ë¡ ìí¥ */
+/* 상 난이도: 문제 숫자 범위 한 단계 위 학년 수준으로 상향 */
 function buildHardProblem(p,grade){
   const q={...p,choices:[...p.choices]};
 
-  // ë¶ì/íì¤í¸/í¹ì ìì­ì ì«ì ë³í ìì´ ì¤ëµë§ ì¡°ì 
+  // 분수/텍스트/특수 영역은 숫자 변환 없이 오답만 조정
   const isFrac=q.ans.includes('/');
   const isText=isNaN(parseFloat(q.ans));
-  const specialDomains=['ì½ë¶ê³¼ íµë¶','ë¶ì','ë¶ìì ë§ìê³¼ ëºì','ë¶ìì ê³±ì','ë¶ìì ëëì',
-    'ëí(íë©´)','íë©´ëí','í©ëê³¼ ëì¹­','ì§ì¡ë©´ì²´','ê°ê¸°ë¥ê³¼ ê°ë¿','ê²ëì´ì ë¶í¼',
-    'ìê°ê³¼ ìê°','ë§ëê·¸ëí','ë§ëÂ·êº¾ìì  ê·¸ëí','íê· ê³¼ ê°ë¥ì±','ìë£ì ê°ë¥ì±',
-    'ë¹ì ë¹ì¨','ë¹ë¡ìê³¼ ë¹ë¡ë°°ë¶','ê·ì¹ ì°¾ê¸°','ê·ì¹ê³¼ ëì','íë©´ëíì ì´ë'];
+  const specialDomains=['약분과 통분','분수','분수의 덧셈과 뺄셈','분수의 곱셈','분수의 나눗셈',
+    '도형(평면)','평면도형','합동과 대칭','직육면체','각기둥과 각뿔','겉넓이와 부피',
+    '시각과 시간','막대그래프','막대·꺾은선 그래프','평균과 가능성','자료와 가능성',
+    '비와 비율','비례식과 비례배분','규칙 찾기','규칙과 대응','평면도형의 이동'];
   const isSpecial=specialDomains.includes(q.domain);
 
   if(isFrac||isText||isSpecial){
@@ -347,32 +347,32 @@ function buildHardProblem(p,grade){
     return q;
   }
 
-  // ìì ì°ì° ë¬¸ì : ì«ì ë²ì íì¥
+  // 순수 연산 문제: 숫자 범위 확장
   let newQ=q.q,newAns=q.ans;
   const addMatch=q.q.match(/^(\d+)\s*\+\s*(\d+)/);
   const subMatch=q.q.match(/^(\d+)\s*-\s*(\d+)/);
-  const mulMatch=q.q.match(/^(\d+)\s*Ã\s*(\d+)/);
-  const divMatch=q.q.match(/^(\d+)\s*Ã·\s*(\d+)/);
+  const mulMatch=q.q.match(/^(\d+)\s*×\s*(\d+)/);
+  const divMatch=q.q.match(/^(\d+)\s*÷\s*(\d+)/);
 
   if(addMatch){
     const mul=grade<=2?3:grade<=4?2:1.5;
     const na=Math.round(parseInt(addMatch[1])*mul)+ri(1,10);
     const nb=Math.round(parseInt(addMatch[2])*mul)+ri(1,10);
-    newQ=`${na} + ${nb} = â¡`;newAns=String(na+nb);
+    newQ=`${na} + ${nb} = □`;newAns=String(na+nb);
   }else if(subMatch){
     const mul=grade<=2?3:grade<=4?2:1.5;
     const na=Math.round(parseInt(subMatch[1])*mul)+ri(1,20);
     const nb=Math.min(na-1,Math.round(parseInt(subMatch[2])*mul)+ri(1,10));
-    newQ=`${na} - ${nb} = â¡`;newAns=String(na-nb);
+    newQ=`${na} - ${nb} = □`;newAns=String(na-nb);
   }else if(mulMatch){
     const na=grade<=3?ri(10,30):grade<=4?ri(20,99):ri(50,200);
     const nb=grade<=3?ri(6,9):ri(11,25);
-    newQ=`${na} Ã ${nb} = â¡`;newAns=String(na*nb);
+    newQ=`${na} × ${nb} = □`;newAns=String(na*nb);
   }else if(divMatch){
     const nb=grade<=3?ri(2,9):ri(6,15);
     const quotient=ri(10,grade<=3?30:99);
     const na=nb*quotient;
-    newQ=`${na} Ã· ${nb} = â¡`;newAns=String(quotient);
+    newQ=`${na} ÷ ${nb} = □`;newAns=String(quotient);
   }
 
   const newAnsNum=parseFloat(newAns);
@@ -387,7 +387,7 @@ function buildHardProblem(p,grade){
     tip:q.tip};
 }
 
-// ì«ì ì ëµ ì¤ëµ ìë ìì±
+// 숫자 정답 오답 자동 생성
 function numWrong(ans,spread){
   const s=spread||Math.max(2,Math.round(Math.abs(ans)*0.2)||3);
   const st=new Set();let t=0;
@@ -396,7 +396,7 @@ function numWrong(ans,spread){
   return[...st];
 }
 
-// ë¬¸ì  ê°ì²´ ìì± í¬í¼
+// 문제 객체 생성 헬퍼
 function P(q,ans,domain,wrong,tip,applied){
   const a=String(ans);
   const w=wrong?wrong.map(String):numWrong(parseFloat(a)||0).map(String);
@@ -404,295 +404,295 @@ function P(q,ans,domain,wrong,tip,applied){
   return{q,ans:a,domain,choices,tip:tip||'',applied:!!applied};
 }
 
-/* ââ íëë³Â·ë¨ìë³ ì°ì° ë¬¸ì  ìì±ê¸° ââ */
+/* ── 학년별·단원별 연산 문제 생성기 ── */
 
 const GEN={
   1:{
-    'ë§ì':[
-      ()=>{const a=ri(1,9),b=ri(1,Math.min(9,10-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ì',null,'ë ìë¥¼ í©ì¹ë©´ ë¼ì.\nì ë§ëë ìê°ë½ì¼ë¡ ì¸ì´ë³´ì¸ì!')},
-      ()=>{const a=ri(1,9),b=ri(1,9);return P(`â¡ + ${b} = ${a+b}`,a,'ë§ì',[a+1,a+2,Math.max(1,a-1)],'â¡ = ì ì²´ - ëíë ì\ní©ìì í ìë¥¼ ë¹¼ë©´ ëë¨¸ì§ ìê° ëìì.')},
-      ()=>{const a=ri(10,50),b=ri(1,9);return P(`${a} + ${b} = â¡`,a+b,'ë§ì',null,'ì¼ì ìë¦¬ë¼ë¦¬ ë¨¼ì  ëí´ì.\ní©ì´ 10 ì´ìì´ë©´ ì­ì ìë¦¬ì 1ì ì¬ë ¤ì.(ë°ìì¬ë¦¼)')},
-      ()=>{const a=ri(10,40),b=ri(10,Math.min(50,90-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ì',null,'ì­ì ìë¦¬ë¼ë¦¬, ì¼ì ìë¦¬ë¼ë¦¬ ê°ê° ëí´ì.\në°ìì¬ë¦¼ì´ ìì¼ë©´ ì­ì ìë¦¬ì 1ì ëí´ì.')},
-      ()=>{const a=ri(1,5),b=ri(1,5);return P(`ì¬í ${a}ê°ì ${b}ê°ë¥¼ í©ì¹ë©´?`,a+b,'ë§ì',null,'ì ì²´ ê°ì = ì²« ë²ì§¸ + ë ë²ì§¸\në ë¬¶ìì í©ì¹ë©´ ë¼ì.',true)},
-      ()=>{const a=ri(1,4),b=ri(1,4),c=ri(1,4);return P(`${a} + ${b} + ${c} = â¡`,a+b+c,'ë§ì',null,'ìììë¶í° ì°¨ë¡ë¡ ë ìì© ëí´ì.\n(ì ë ìë¥¼ ë¨¼ì  ëí ë¤ì, ëë¨¸ì§ ìë¥¼ ëí´ì)')},
+    '덧셈':[
+      ()=>{const a=ri(1,9),b=ri(1,Math.min(9,10-a));return P(`${a} + ${b} = □`,a+b,'덧셈',null,'두 수를 합치면 돼요.\n수 막대나 손가락으로 세어보세요!')},
+      ()=>{const a=ri(1,9),b=ri(1,9);return P(`□ + ${b} = ${a+b}`,a,'덧셈',[a+1,a+2,Math.max(1,a-1)],'□ = 전체 - 더하는 수\n합에서 한 수를 빼면 나머지 수가 나와요.')},
+      ()=>{const a=ri(10,50),b=ri(1,9);return P(`${a} + ${b} = □`,a+b,'덧셈',null,'일의 자리끼리 먼저 더해요.\n합이 10 이상이면 십의 자리에 1을 올려요.(받아올림)')},
+      ()=>{const a=ri(10,40),b=ri(10,Math.min(50,90-a));return P(`${a} + ${b} = □`,a+b,'덧셈',null,'십의 자리끼리, 일의 자리끼리 각각 더해요.\n받아올림이 있으면 십의 자리에 1을 더해요.')},
+      ()=>{const a=ri(1,5),b=ri(1,5);return P(`사탕 ${a}개와 ${b}개를 합치면?`,a+b,'덧셈',null,'전체 개수 = 첫 번째 + 두 번째\n두 묶음을 합치면 돼요.',true)},
+      ()=>{const a=ri(1,4),b=ri(1,4),c=ri(1,4);return P(`${a} + ${b} + ${c} = □`,a+b+c,'덧셈',null,'앞에서부터 차례로 두 수씩 더해요.\n(앞 두 수를 먼저 더한 다음, 나머지 수를 더해요)')},
     ],
-    'ëºì':[
-      ()=>{const a=ri(2,10),b=ri(1,a);return P(`${a} - ${b} = â¡`,a-b,'ëºì',null,'ì ì²´ìì ì¼ë¶ë¥¼ ìì ë©´ ëë¨¸ì§ê° ë¨ìì.\ní° ììì ìì ìë¥¼ ë¹¼ì.')},
-      ()=>{const a=ri(11,50),b=ri(1,9);return P(`${a} - ${b} = â¡`,a-b,'ëºì',null,'ì¼ì ìë¦¬ë¼ë¦¬ ë¨¼ì  ë¹¼ì.\nëº ì ìì¼ë©´ ì­ì ìë¦¬ìì 10ì ë¹ë ¤ìì.(ë°ìë´ë¦¼)')},
-      ()=>{const a=ri(20,90),b=ri(10,Math.max(10,a-10));return P(`${a} - ${b} = â¡`,a-b,'ëºì',null,'ì­ì ìë¦¬ë¼ë¦¬, ì¼ì ìë¦¬ë¼ë¦¬ ê°ê° ë¹¼ì.\në°ìë´ë¦¼ì´ íìíë©´ ììë¦¬ìì 10ì ë¹ë ¤ì.')},
-      ()=>{const a=ri(3,9),b=ri(1,a-1);return P(`${a} - â¡ = ${a-b}`,b,'ëºì',[b+1,b+2,Math.max(1,b-1)],'â¡ = ì ì²´ - ëë¨¸ì§\ní° ììì ê²°ê³¼ë¥¼ ë¹¼ë©´ â¡ë¥¼ êµ¬í  ì ìì´ì.')},
-      ()=>{const a=ri(5,10),b=ri(1,a-1);return P(`ì¬í ${a}ê° ì¤ ${b}ê°ë¥¼ ë¨¹ì¼ë©´ ë¨ì ê±´?`,a-b,'ëºì',null,'ë¨ì ê² = ì²ì ì - ìì´ì§ ì',true)},
+    '뺄셈':[
+      ()=>{const a=ri(2,10),b=ri(1,a);return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'전체에서 일부를 없애면 나머지가 남아요.\n큰 수에서 작은 수를 빼요.')},
+      ()=>{const a=ri(11,50),b=ri(1,9);return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'일의 자리끼리 먼저 빼요.\n뺄 수 없으면 십의 자리에서 10을 빌려와요.(받아내림)')},
+      ()=>{const a=ri(20,90),b=ri(10,Math.max(10,a-10));return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'십의 자리끼리, 일의 자리끼리 각각 빼요.\n받아내림이 필요하면 윗자리에서 10을 빌려요.')},
+      ()=>{const a=ri(3,9),b=ri(1,a-1);return P(`${a} - □ = ${a-b}`,b,'뺄셈',[b+1,b+2,Math.max(1,b-1)],'□ = 전체 - 나머지\n큰 수에서 결과를 빼면 □를 구할 수 있어요.')},
+      ()=>{const a=ri(5,10),b=ri(1,a-1);return P(`사탕 ${a}개 중 ${b}개를 먹으면 남은 건?`,a-b,'뺄셈',null,'남은 것 = 처음 수 - 없어진 수',true)},
     ],
-    'ê·ì¹ ì°¾ê¸°':[
-      ()=>{const a=ri(1,5),d=ri(1,3);const s=[a,a+d,a+2*d,a+3*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, â¡`,a+4*d,'ê·ì¹ ì°¾ê¸°',null,'ì´ìí ë ìì ì°¨ì´ê° ì¼ë§ì© ë³íëì§ ì°¾ìë´ì.\nê·ì¹ì ì°¾ì¼ë©´ ë¤ì ìë¥¼ ì½ê² êµ¬í  ì ìì´ì!')},
-      ()=>{const a=ri(10,30),d=ri(2,5);const s=[a,a+d,a+2*d,a+3*d];return P(`${s[0]}, ${s[1]}, â¡, ${s[3]}ìì â¡ë?`,s[2],'ê·ì¹ ì°¾ê¸°',null,'ìë¤ ìì ì°¨ì´ë¥¼ íì¸í´ì.\nâ¡ ìì ìì ê·ì¹ë§í¼ ëíë©´ â¡ë¥¼ êµ¬í  ì ìì´ì.')},
-      ()=>{const a=ri(3,8),b=ri(2,6);return P(`â¡ + ${b} = ${a+b}ìì â¡ë?`,a,'ê·ì¹ ì°¾ê¸°',null,'ë±í¸(=) ììª½ì ê°ì ê°ìì¼ í´ì.\nì ì²´ìì í ìë¥¼ ë¹¼ë©´ â¡ë¥¼ êµ¬í  ì ìì´ì.')},
+    '규칙 찾기':[
+      ()=>{const a=ri(1,5),d=ri(1,3);const s=[a,a+d,a+2*d,a+3*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, □`,a+4*d,'규칙 찾기',null,'이웃한 두 수의 차이가 얼마씩 변하는지 찾아봐요.\n규칙을 찾으면 다음 수를 쉽게 구할 수 있어요!')},
+      ()=>{const a=ri(10,30),d=ri(2,5);const s=[a,a+d,a+2*d,a+3*d];return P(`${s[0]}, ${s[1]}, □, ${s[3]}에서 □는?`,s[2],'규칙 찾기',null,'앞뒤 수의 차이를 확인해요.\n□ 앞의 수에 규칙만큼 더하면 □를 구할 수 있어요.')},
+      ()=>{const a=ri(3,8),b=ri(2,6);return P(`□ + ${b} = ${a+b}에서 □는?`,a,'규칙 찾기',null,'등호(=) 양쪽의 값은 같아야 해요.\n전체에서 한 수를 빼면 □를 구할 수 있어요.')},
     ],
-    'ëí(íë©´)':[
-      ()=>{const items=[{q:'ê¼­ì§ì ì´ 3ê°ì¸ ëíì?',a:'ì¼ê°í',w:['ì¬ê°í','ì','ì¤ê°í'],t:'ê¼­ì§ì  ì = ë³ì ì\nì¼ê°í:3ê°, ì¬ê°í:4ê°, ì¤ê°í:5ê°\nê¼­ì§ì ì´ 3ê° â ?'},
-        {q:'ë³ì´ 4ê°ì¸ ëíì?',a:'ì¬ê°í',w:['ì¼ê°í','ì','ì¤ê°í'],t:'ë³ì ìë¡ ëí ì´ë¦ì ì ì ìì´ì.\nì¼(3)ê°í, ì¬(4)ê°í, ì¤(5)ê°í\në³ì´ 4ê° â ?'},
-        {q:'ê¼­ì§ì ì´ ìë ëíì?',a:'ì',w:['ì¼ê°í','ì¬ê°í','ì¤ê°í'],t:'ìì ë¾°ì¡±í ê¼­ì§ì ì´ ìë ë¥ê·¼ ëíì´ìì.\nëë¨¸ì§ ëíë¤ì ëª¨ë ê¼­ì§ì ì´ ìì´ì.'},
-        {q:'ì¼ê°íì ë³ì ëª ê°?',a:'3ê°',w:['2ê°','4ê°','5ê°'],t:'ì¼ê°í = ì¼(3) + ê° + í\nì´ë¦ ìì ë³ì ìê° ì¨ì´ ìì´ì!'},
-        {q:'ì¬ê°íì ê¼­ì§ì ì ëª ê°?',a:'4ê°',w:['3ê°','5ê°','6ê°'],t:'ì¬ê°í = ì¬(4) + ê° + í\nê¼­ì§ì  ì = ë³ì ì = 4ê°'}];
-        const q=pick(items);return P(q.q,q.a,'ëí(íë©´)',q.w,q.t)},
+    '도형(평면)':[
+      ()=>{const items=[{q:'꼭짓점이 3개인 도형은?',a:'삼각형',w:['사각형','원','오각형'],t:'꼭짓점 수 = 변의 수\n삼각형:3개, 사각형:4개, 오각형:5개\n꼭짓점이 3개 → ?'},
+        {q:'변이 4개인 도형은?',a:'사각형',w:['삼각형','원','오각형'],t:'변의 수로 도형 이름을 알 수 있어요.\n삼(3)각형, 사(4)각형, 오(5)각형\n변이 4개 → ?'},
+        {q:'꼭짓점이 없는 도형은?',a:'원',w:['삼각형','사각형','오각형'],t:'원은 뾰족한 꼭짓점이 없는 둥근 도형이에요.\n나머지 도형들은 모두 꼭짓점이 있어요.'},
+        {q:'삼각형의 변은 몇 개?',a:'3개',w:['2개','4개','5개'],t:'삼각형 = 삼(3) + 각 + 형\n이름 속에 변의 수가 숨어 있어요!'},
+        {q:'사각형의 꼭짓점은 몇 개?',a:'4개',w:['3개','5개','6개'],t:'사각형 = 사(4) + 각 + 형\n꼭짓점 수 = 변의 수 = 4개'}];
+        const q=pick(items);return P(q.q,q.a,'도형(평면)',q.w,q.t)},
     ],
-    'ìê°ê³¼ ìê°':[
-      ()=>{const h=ri(1,12),m=pick([0,30]);const ms=m===0?'ì ê°':`${m}ë¶`;const nh=h===12?1:h+1;return P(`${h}ì ${ms}ìì 1ìê° íë?`,`${nh}ì ${ms}`,'ìê°ê³¼ ìê°',null,'1ìê°ì´ ì§ëë©´ ìì¹¨(ì§§ì ë°ë)ì´ í ì¹¸ ìì¼ë¡ ì´ëí´ì.\në¶ì ê·¸ëë¡, ìë§ 1 ëì´ëì.')},
-      ()=>{const items=[{q:'1ìê°ì ëª ë¶?',a:'60ë¶',w:['30ë¶','100ë¶','120ë¶'],t:'ìê³ìì ë¶ì¹¨ì´ í ë°í´ ëë©´ 1ìê° = 60ë¶ì´ìì.'},
-        {q:'1ì¼ì ëª ìê°?',a:'24ìê°',w:['12ìê°','48ìê°','60ìê°'],t:'íë£¨ë ë® 12ìê° + ë°¤ 12ìê° = 24ìê°ì´ìì.'},
-        {q:'1ì£¼ì¼ì ë©°ì¹ ?',a:'7ì¼',w:['5ì¼','6ì¼','10ì¼'],t:'ìÂ·íÂ·ìÂ·ëª©Â·ê¸Â·í Â·ì¼ â 7ì¼ì´ìì.'}];
-        const q=pick(items);return P(q.q,q.a,'ìê°ê³¼ ìê°',q.w,q.t)},
+    '시각과 시간':[
+      ()=>{const h=ri(1,12),m=pick([0,30]);const ms=m===0?'정각':`${m}분`;const nh=h===12?1:h+1;return P(`${h}시 ${ms}에서 1시간 후는?`,`${nh}시 ${ms}`,'시각과 시간',null,'1시간이 지나면 시침(짧은 바늘)이 한 칸 앞으로 이동해요.\n분은 그대로, 시만 1 늘어나요.')},
+      ()=>{const items=[{q:'1시간은 몇 분?',a:'60분',w:['30분','100분','120분'],t:'시계에서 분침이 한 바퀴 돌면 1시간 = 60분이에요.'},
+        {q:'1일은 몇 시간?',a:'24시간',w:['12시간','48시간','60시간'],t:'하루는 낮 12시간 + 밤 12시간 = 24시간이에요.'},
+        {q:'1주일은 며칠?',a:'7일',w:['5일','6일','10일'],t:'월·화·수·목·금·토·일 → 7일이에요.'}];
+        const q=pick(items);return P(q.q,q.a,'시각과 시간',q.w,q.t)},
     ],
-    'ê¸¸ì´':[
-      ()=>{const a=ri(10,50),b=ri(1,a-1);return P(`${a}cmìì ${b}cmë¥¼ ìë¥´ë©´?`,a-b,'ê¸¸ì´',null,'ë¨ì ê¸¸ì´ = ì ì²´ - ìë¼ë¸ ê¸¸ì´\nëºìì¼ë¡ êµ¬í´ì.')},
-      ()=>{const items=[{q:'1më ëª cm?',a:'100cm',w:['10cm','1000cm','50cm'],t:'1m = 100cm\n100cmë¥¼ ì´ì´ë¶ì´ë©´ 1mê° ë¼ì.'},
-        {q:'1m 50cmë ëª cm?',a:'150cm',w:['105cm','15cm','1050cm'],t:'1m = 100cmì´ë¯ë¡\n1m 50cm = 100cm + 50cm'}];
-        const q=pick(items);return P(q.q,q.a,'ê¸¸ì´',q.w,q.t)},
+    '길이':[
+      ()=>{const a=ri(10,50),b=ri(1,a-1);return P(`${a}cm에서 ${b}cm를 자르면?`,a-b,'길이',null,'남은 길이 = 전체 - 잘라낸 길이\n뺄셈으로 구해요.')},
+      ()=>{const items=[{q:'1m는 몇 cm?',a:'100cm',w:['10cm','1000cm','50cm'],t:'1m = 100cm\n100cm를 이어붙이면 1m가 돼요.'},
+        {q:'1m 50cm는 몇 cm?',a:'150cm',w:['105cm','15cm','1050cm'],t:'1m = 100cm이므로\n1m 50cm = 100cm + 50cm'}];
+        const q=pick(items);return P(q.q,q.a,'길이',q.w,q.t)},
     ],
   },
   2:{
-    'ë§ì':[
-      ()=>{const a=ri(10,89),b=ri(10,Math.min(89,99-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ì',null,'ì¼ì ìë¦¬ë¼ë¦¬, ì­ì ìë¦¬ë¼ë¦¬ ëí´ì.\n10ì´ ëì¼ë©´ ììë¦¬ë¡ ë°ìì¬ë¦¼í´ì.')},
-      ()=>{const a=ri(100,499),b=ri(100,Math.min(499,999-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ì',null,'ì¼âì­âë°± ìë¦¬ ììë¡ ëí´ì.\në°ìì¬ë¦¼ì´ ìì¼ë©´ ë¤ì ìë¦¬ì 1ì ëí´ì.')},
-      ()=>{const a=ri(50,200),b=ri(50,200);return P(`${a}ì + ${b}ì = â¡ì`,a+b,'ë§ì',null,'ë ê¸ì¡ì ëíë©´ ì ì²´ ê¸ì¡ì´ ëìì.',true)},
+    '덧셈':[
+      ()=>{const a=ri(10,89),b=ri(10,Math.min(89,99-a));return P(`${a} + ${b} = □`,a+b,'덧셈',null,'일의 자리끼리, 십의 자리끼리 더해요.\n10이 넘으면 윗자리로 받아올림해요.')},
+      ()=>{const a=ri(100,499),b=ri(100,Math.min(499,999-a));return P(`${a} + ${b} = □`,a+b,'덧셈',null,'일→십→백 자리 순서로 더해요.\n받아올림이 있으면 다음 자리에 1을 더해요.')},
+      ()=>{const a=ri(50,200),b=ri(50,200);return P(`${a}원 + ${b}원 = □원`,a+b,'덧셈',null,'두 금액을 더하면 전체 금액이 나와요.',true)},
     ],
-    'ëºì':[
-      ()=>{const a=ri(20,99),b=ri(10,a-10);return P(`${a} - ${b} = â¡`,a-b,'ëºì',null,'ì¼ì ìë¦¬ë¼ë¦¬ ëº ì ìì¼ë©´\nì­ì ìë¦¬ìì 10ì ë¹ë ¤ìì.(ë°ìë´ë¦¼)')},
-      ()=>{const a=ri(200,999),b=ri(100,a-100);return P(`${a} - ${b} = â¡`,a-b,'ëºì',null,'ì¼âì­âë°± ìë¦¬ ììë¡ ë¹¼ì.\në°ìë´ë¦¼ì´ ìì¼ë©´ ììë¦¬ìì 10ì ë¹ë ¤ì.')},
-      ()=>{const a=ri(100,300),b=ri(50,a-50);return P(`${a}ììì ${b}ìì ì°ë©´ ë¨ì ëì?`,a-b,'ëºì',null,'ë¨ì ë = ê°ì§ ë - ì´ ë',true)},
+    '뺄셈':[
+      ()=>{const a=ri(20,99),b=ri(10,a-10);return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'일의 자리끼리 뺄 수 없으면\n십의 자리에서 10을 빌려와요.(받아내림)')},
+      ()=>{const a=ri(200,999),b=ri(100,a-100);return P(`${a} - ${b} = □`,a-b,'뺄셈',null,'일→십→백 자리 순서로 빼요.\n받아내림이 있으면 윗자리에서 10을 빌려요.')},
+      ()=>{const a=ri(100,300),b=ri(50,a-50);return P(`${a}원에서 ${b}원을 쓰면 남은 돈은?`,a-b,'뺄셈',null,'남은 돈 = 가진 돈 - 쓴 돈',true)},
     ],
-    'ê³±ì':[
-      ()=>{const a=ri(2,9),b=ri(1,9);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,a+'ë¨ ê³±ìêµ¬êµ¬ë¥¼ ì¸ìë´ì.\n'+a+'Ã'+b+' = '+a+'ë¥¼ '+b+'ë² ëí ê°ì´ìì.')},
-      ()=>{const a=ri(2,9),b=ri(1,9);return P(`â¡ Ã ${b} = ${a*b}`,a,'ê³±ì',[a+1,a+2,Math.max(1,a-1)],b+'ë¨ ê³±ìêµ¬êµ¬ìì '+( a*b)+'ê° ëì¤ë ê³³ì ì°¾ìë´ì.\nâ¡Ã'+b+' = '+(a*b))},
-      ()=>{const a=ri(2,5),b=ri(2,9);return P(`${a}ê°ì© ${b}ë¬¶ìì´ë©´ ëª¨ë?`,a*b,'ê³±ì',null,'ë¬¶ì ë¬¸ì ë ê³±ì!\n(í ë¬¶ìì ì) Ã (ë¬¶ì ì) = ì ì²´',true)},
-      ()=>{const a=ri(2,9),b=ri(1,9);return P(`${a} Ã ${b}ì ${b} Ã ${a}ì í©ì?`,a*b*2,'ê³±ì',null,'ê³±ììì ë ìë¥¼ ë°ê¿ë ê²°ê³¼ê° ê°ìì.(êµíë²ì¹)\n'+a+'Ã'+b+' = '+b+'Ã'+a+' ì´ë¯ë¡ í©ì ê°ì ê°ì 2ë°°ìì.')},
+    '곱셈':[
+      ()=>{const a=ri(2,9),b=ri(1,9);return P(`${a} × ${b} = □`,a*b,'곱셈',null,a+'단 곱셈구구를 외워봐요.\n'+a+'×'+b+' = '+a+'를 '+b+'번 더한 값이에요.')},
+      ()=>{const a=ri(2,9),b=ri(1,9);return P(`□ × ${b} = ${a*b}`,a,'곱셈',[a+1,a+2,Math.max(1,a-1)],b+'단 곱셈구구에서 '+( a*b)+'가 나오는 곳을 찾아봐요.\n□×'+b+' = '+(a*b))},
+      ()=>{const a=ri(2,5),b=ri(2,9);return P(`${a}개씩 ${b}묶음이면 모두?`,a*b,'곱셈',null,'묶음 문제는 곱셈!\n(한 묶음의 수) × (묶음 수) = 전체',true)},
+      ()=>{const a=ri(2,9),b=ri(1,9);return P(`${a} × ${b}와 ${b} × ${a}의 합은?`,a*b*2,'곱셈',null,'곱셈에서 두 수를 바꿔도 결과가 같아요.(교환법칙)\n'+a+'×'+b+' = '+b+'×'+a+' 이므로 합은 같은 값의 2배예요.')},
     ],
-    'ê·ì¹ê³¼ ëì':[
-      ()=>{const a=ri(2,8),d=ri(2,5);const s=[a,a+d,a+2*d,a+3*d,a+4*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, â¡`,s[4],'ê·ì¹ê³¼ ëì',null,'ì´ìí ë ìì ì°¨ì´ë¥¼ íì¸í´ì.\nê·¸ ì°¨ì´ë§í¼ ê³ì ëíê±°ë ë¹¼ë ê·ì¹ì´ìì.')},
-      ()=>{const a=ri(3,8),b=ri(2,6),c=a*b;return P(`â¡ Ã ${b} = ${c}ìì â¡ë?`,a,'ê·ì¹ê³¼ ëì',null,'â¡ë¥¼ êµ¬íë ¤ë©´ ëëìì ì¨ì.\nâ¡ = ê²°ê³¼ Ã· ê³±íë ì')},
+    '규칙과 대응':[
+      ()=>{const a=ri(2,8),d=ri(2,5);const s=[a,a+d,a+2*d,a+3*d,a+4*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, □`,s[4],'규칙과 대응',null,'이웃한 두 수의 차이를 확인해요.\n그 차이만큼 계속 더하거나 빼는 규칙이에요.')},
+      ()=>{const a=ri(3,8),b=ri(2,6),c=a*b;return P(`□ × ${b} = ${c}에서 □는?`,a,'규칙과 대응',null,'□를 구하려면 나눗셈을 써요.\n□ = 결과 ÷ 곱하는 수')},
     ],
-    'ëí(íë©´)':[
-      ()=>{const items=[{q:'ì§ê°ì¼ê°íì ì§ê°ì ëª ê°?',a:'1ê°',w:['2ê°','3ê°','0ê°'],t:'ì§ê°(90Â°)ì ã± ëª¨ìì ê°ì´ìì.\nì§ê°ì¼ê°íìë ì§ê°ì´ ë± 1ê° ìì´ì.'},
-        {q:'ì ì¬ê°í ë¤ ë³ì ê¸¸ì´ë?',a:'ëª¨ë ê°ë¤',w:['ëª¨ë ë¤ë¥´ë¤','2ê°ì© ê°ë¤','ì ì ìë¤'],t:'ì ì¬ê°íì í¹ì§: ë¤ ë³ì ê¸¸ì´ê° ëª¨ë ê°ê³ \në¤ ê°ì´ ëª¨ë ì§ê°(90Â°)ì´ìì.'},
-        {q:'ì§ì¬ê°í ë§ì£¼ ë³´ë ë³ì ê¸¸ì´ë?',a:'ìë¡ ê°ë¤',w:['ìë¡ ë¤ë¥´ë¤','2ë°° ì°¨ì´','ìë¤'],t:'ì§ì¬ê°í: ë§ì£¼ ë³´ë ë ë³ì ê¸¸ì´ê° ê°ìì.\nê°ë¡ 2ê°, ì¸ë¡ 2ê°ê° ê°ì ê¸¸ì´ìì.'},
-        {q:'ìì ì¤ì¬ìì ì ìê¹ì§ ê±°ë¦¬ë?',a:'ë°ì§ë¦',w:['ì§ë¦','ëë ','ëì´'],t:'ë°ì§ë¦: ìì ì¤ì¬ â ì ìì í ì \nì§ë¦: ìì í ìª½ â ì¤ì¬ â ë°ëìª½ (ë°ì§ë¦Ã2)'}];
-        const q=pick(items);return P(q.q,q.a,'ëí(íë©´)',q.w,q.t)},
-      ()=>{const r=ri(2,10);return P(`ë°ì§ë¦ ${r}cmì¸ ìì ì§ë¦ì?`,r*2,'ëí(íë©´)',[r,r*3,r+2],'ì§ë¦ = ë°ì§ë¦ Ã 2\nìì ì¤ì¬ì ì§ëë ê°ì¥ ê¸´ ì ë¶ì´ ì§ë¦ì´ìì.')},
+    '도형(평면)':[
+      ()=>{const items=[{q:'직각삼각형의 직각은 몇 개?',a:'1개',w:['2개','3개','0개'],t:'직각(90°)은 ㄱ 모양의 각이에요.\n직각삼각형에는 직각이 딱 1개 있어요.'},
+        {q:'정사각형 네 변의 길이는?',a:'모두 같다',w:['모두 다르다','2개씩 같다','알 수 없다'],t:'정사각형의 특징: 네 변의 길이가 모두 같고\n네 각이 모두 직각(90°)이에요.'},
+        {q:'직사각형 마주 보는 변의 길이는?',a:'서로 같다',w:['서로 다르다','2배 차이','없다'],t:'직사각형: 마주 보는 두 변의 길이가 같아요.\n가로 2개, 세로 2개가 같은 길이예요.'},
+        {q:'원의 중심에서 원 위까지 거리는?',a:'반지름',w:['지름','둘레','넓이'],t:'반지름: 원의 중심 → 원 위의 한 점\n지름: 원의 한 쪽 → 중심 → 반대쪽 (반지름×2)'}];
+        const q=pick(items);return P(q.q,q.a,'도형(평면)',q.w,q.t)},
+      ()=>{const r=ri(2,10);return P(`반지름 ${r}cm인 원의 지름은?`,r*2,'도형(평면)',[r,r*3,r+2],'지름 = 반지름 × 2\n원의 중심을 지나는 가장 긴 선분이 지름이에요.')},
     ],
-    'ìê°ê³¼ ìê°':[
-      ()=>{const items=[{q:'1ìê°ì ëª ë¶?',a:'60ë¶',w:['30ë¶','100ë¶','120ë¶'],t:'ë¶ì¹¨ì´ í ë°í´ ëë©´ = 60ë¶ = 1ìê°'},
-        {q:'1ë¶ì ëª ì´?',a:'60ì´',w:['100ì´','30ì´','120ì´'],t:'ì´ì¹¨ì´ í ë°í´ ëë©´ = 60ì´ = 1ë¶'},
-        {q:'1ëì ëª ê°ì?',a:'12ê°ì',w:['6ê°ì','10ê°ì','24ê°ì'],t:'1ìë¶í° 12ìê¹ì§ = 12ê°ì = 1ë'},
-        {q:'1ì£¼ì¼ì ë©°ì¹ ?',a:'7ì¼',w:['5ì¼','6ì¼','10ì¼'],t:'ìíìëª©ê¸í ì¼ = 7ì¼ = 1ì£¼ì¼'}];
-        const q=pick(items);return P(q.q,q.a,'ìê°ê³¼ ìê°',q.w,q.t)},
+    '시각과 시간':[
+      ()=>{const items=[{q:'1시간은 몇 분?',a:'60분',w:['30분','100분','120분'],t:'분침이 한 바퀴 돌면 = 60분 = 1시간'},
+        {q:'1분은 몇 초?',a:'60초',w:['100초','30초','120초'],t:'초침이 한 바퀴 돌면 = 60초 = 1분'},
+        {q:'1년은 몇 개월?',a:'12개월',w:['6개월','10개월','24개월'],t:'1월부터 12월까지 = 12개월 = 1년'},
+        {q:'1주일은 며칠?',a:'7일',w:['5일','6일','10일'],t:'월화수목금토일 = 7일 = 1주일'}];
+        const q=pick(items);return P(q.q,q.a,'시각과 시간',q.w,q.t)},
     ],
-    'ê¸¸ì´ì ë¤ì´':[
-      ()=>{const km=ri(2,9);return P(`${km}km = â¡m`,km*1000,'ê¸¸ì´ì ë¤ì´',[km*100,km*10000,km*1000+100],'1km = 1000m\nkmë¥¼ më¡ ë°ê¾¸ë ¤ë©´ Ã 1000')},
-      ()=>{const l=ri(2,9);return P(`${l}L = â¡mL`,l*1000,'ê¸¸ì´ì ë¤ì´',[l*100,l*10000,l*1000+100],'1L = 1000mL\nLë¥¼ mLë¡ ë°ê¾¸ë ¤ë©´ Ã 1000')},
+    '길이와 들이':[
+      ()=>{const km=ri(2,9);return P(`${km}km = □m`,km*1000,'길이와 들이',[km*100,km*10000,km*1000+100],'1km = 1000m\nkm를 m로 바꾸려면 × 1000')},
+      ()=>{const l=ri(2,9);return P(`${l}L = □mL`,l*1000,'길이와 들이',[l*100,l*10000,l*1000+100],'1L = 1000mL\nL를 mL로 바꾸려면 × 1000')},
     ],
-    'ë¬´ê²':[
-      ()=>{const kg=ri(2,9);return P(`${kg}kg = â¡g`,kg*1000,'ë¬´ê²',[kg*100,kg*10000,kg*1000+100],'1kg = 1000g\nkgì gì¼ë¡ ë°ê¾¸ë ¤ë©´ Ã 1000')},
-      ()=>{const a=ri(1,5),b=ri(1,9)*100;return P(`${a}kg ${b}g = â¡g`,a*1000+b,'ë¬´ê²',null,'kgì gì¼ë¡ ë°ê¾¼ ë¤ ëí´ì.\n1kg = 1000g')},
+    '무게':[
+      ()=>{const kg=ri(2,9);return P(`${kg}kg = □g`,kg*1000,'무게',[kg*100,kg*10000,kg*1000+100],'1kg = 1000g\nkg을 g으로 바꾸려면 × 1000')},
+      ()=>{const a=ri(1,5),b=ri(1,9)*100;return P(`${a}kg ${b}g = □g`,a*1000+b,'무게',null,'kg을 g으로 바꾼 뒤 더해요.\n1kg = 1000g')},
     ],
   },
   3:{
-    'ë§ìê³¼ ëºì':[
-      ()=>{const a=ri(100,499),b=ri(100,Math.min(499,999-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ìê³¼ ëºì',null,'ì¼âì­âë°± ìë¦¬ ììë¡ ëí´ì.\nê° ìë¦¬ìì ë°ìì¬ë¦¼ì ì£¼ìíì¸ì.')},
-      ()=>{const a=ri(1000,4999),b=ri(1000,Math.min(4999,9999-a));return P(`${a} + ${b} = â¡`,a+b,'ë§ìê³¼ ëºì',null,'ì¼âì­âë°±âì² ìë¦¬ ììë¡ ëí´ì.\në°ìì¬ë¦¼ì´ ì°ìëë©´ ì°¨ë¡ë¡ ì¬ë ¤ì.')},
-      ()=>{const a=ri(300,999),b=ri(100,a-100);return P(`${a} - ${b} = â¡`,a-b,'ë§ìê³¼ ëºì',null,'ì¼âì­âë°± ìë¦¬ ììë¡ ë¹¼ì.\në°ìë´ë¦¼ì´ ìì¼ë©´ ììë¦¬ìì 10ì ë¹ë ¤ì.')},
-      ()=>{const a=ri(1000,9999),b=ri(100,a-100);return P(`${a} - ${b} = â¡`,a-b,'ë§ìê³¼ ëºì',null,'ìë¦¬ë¥¼ ë§ì¶° ì¸ë¡ë¡ ì´ ë¤\nì¼âì­âë°±âì² ììë¡ ë¹¼ì.')},
+    '덧셈과 뺄셈':[
+      ()=>{const a=ri(100,499),b=ri(100,Math.min(499,999-a));return P(`${a} + ${b} = □`,a+b,'덧셈과 뺄셈',null,'일→십→백 자리 순서로 더해요.\n각 자리에서 받아올림에 주의하세요.')},
+      ()=>{const a=ri(1000,4999),b=ri(1000,Math.min(4999,9999-a));return P(`${a} + ${b} = □`,a+b,'덧셈과 뺄셈',null,'일→십→백→천 자리 순서로 더해요.\n받아올림이 연속되면 차례로 올려요.')},
+      ()=>{const a=ri(300,999),b=ri(100,a-100);return P(`${a} - ${b} = □`,a-b,'덧셈과 뺄셈',null,'일→십→백 자리 순서로 빼요.\n받아내림이 있으면 윗자리에서 10을 빌려요.')},
+      ()=>{const a=ri(1000,9999),b=ri(100,a-100);return P(`${a} - ${b} = □`,a-b,'덧셈과 뺄셈',null,'자리를 맞춰 세로로 쓴 뒤\n일→십→백→천 순서로 빼요.')},
     ],
-    'ê³±ì':[
-      ()=>{const a=ri(2,9),b=ri(2,9);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,a+'ë¨ ê³±ìêµ¬êµ¬!\n'+a+'ë¨ì ì¸ì°ë©´ ë¹ ë¥´ê² êµ¬í  ì ìì´ì.')},
-      ()=>{const a=ri(10,99),b=ri(2,9);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,'ì¼ì ìë¦¬ë¶í° ì°¨ë¡ë¡ ê³±í´ì.\në°ìì¬ë¦¼ì´ ìì¼ë©´ ë¤ì ìë¦¬ì ëí´ì.')},
-      ()=>{const a=ri(100,999),b=ri(2,9);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,'ì¼âì­âë°± ìë¦¬ ììë¡ ê°ê° ê³±í´ì.\në°ìì¬ë¦¼ì ë¹ ë¨ë¦¬ì§ ìëë¡ ì£¼ìí´ì.')},
-      ()=>{const a=ri(10,50),b=ri(10,30);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,'(ë ìë¦¬)Ã(ë ìë¦¬)ë ë¶ë¶ê³±ì êµ¬í´ ëí´ì.\n'+a+'Ã'+Math.floor(b/10)+'0 ê³¼ '+a+'Ã'+b%10+' ì ê°ê° êµ¬í ë¤ ëí´ì.')},
+    '곱셈':[
+      ()=>{const a=ri(2,9),b=ri(2,9);return P(`${a} × ${b} = □`,a*b,'곱셈',null,a+'단 곱셈구구!\n'+a+'단을 외우면 빠르게 구할 수 있어요.')},
+      ()=>{const a=ri(10,99),b=ri(2,9);return P(`${a} × ${b} = □`,a*b,'곱셈',null,'일의 자리부터 차례로 곱해요.\n받아올림이 있으면 다음 자리에 더해요.')},
+      ()=>{const a=ri(100,999),b=ri(2,9);return P(`${a} × ${b} = □`,a*b,'곱셈',null,'일→십→백 자리 순서로 각각 곱해요.\n받아올림을 빠뜨리지 않도록 주의해요.')},
+      ()=>{const a=ri(10,50),b=ri(10,30);return P(`${a} × ${b} = □`,a*b,'곱셈',null,'(두 자리)×(두 자리)는 부분곱을 구해 더해요.\n'+a+'×'+Math.floor(b/10)+'0 과 '+a+'×'+b%10+' 을 각각 구한 뒤 더해요.')},
     ],
-    'ëëì':[
-      ()=>{const b=ri(2,9),a=b*ri(1,9);return P(`${a} Ã· ${b} = â¡`,a/b,'ëëì',null,b+'ë¨ ê³±ìêµ¬êµ¬ìì\n'+b+'Ãâ¡ = '+a+' ê° ëë â¡ë¥¼ ì°¾ìì.')},
-      ()=>{const b=ri(2,9),q=ri(10,20),r=ri(1,b-1),a=b*q+r;return P(`${a} Ã· ${b} = â¡ ëë¨¸ì§ â¡`,`${q} ëë¨¸ì§ ${r}`,'ëëì',[`${q+1} ëë¨¸ì§ ${r}`,`${q} ëë¨¸ì§ ${r+1}`,`${q-1} ëë¨¸ì§ ${r}`],'ëë¨¸ì§ë ë°ëì ëëë ì('+b+')ë³´ë¤ ììì¼ í´ì.\níì¸: (ëª«Ãëëë ì)+ëë¨¸ì§ = ëëë ì')},
-      ()=>{const b=ri(2,5),a=b*ri(2,8);return P(`${a}ê°ë¥¼ ${b}ëªì´ ëê°ì´ ëëë©´?`,a/b,'ëëì',null,'ì ì²´ Ã· ëëë ì = í ëª«\nëëìì ëê°ì´ ëëë ê²ì´ìì.',true)},
+    '나눗셈':[
+      ()=>{const b=ri(2,9),a=b*ri(1,9);return P(`${a} ÷ ${b} = □`,a/b,'나눗셈',null,b+'단 곱셈구구에서\n'+b+'×□ = '+a+' 가 되는 □를 찾아요.')},
+      ()=>{const b=ri(2,9),q=ri(10,20),r=ri(1,b-1),a=b*q+r;return P(`${a} ÷ ${b} = □ 나머지 □`,`${q} 나머지 ${r}`,'나눗셈',[`${q+1} 나머지 ${r}`,`${q} 나머지 ${r+1}`,`${q-1} 나머지 ${r}`],'나머지는 반드시 나누는 수('+b+')보다 작아야 해요.\n확인: (몫×나누는 수)+나머지 = 나뉘는 수')},
+      ()=>{const b=ri(2,5),a=b*ri(2,8);return P(`${a}개를 ${b}명이 똑같이 나누면?`,a/b,'나눗셈',null,'전체 ÷ 나누는 수 = 한 몫\n나눗셈은 똑같이 나누는 것이에요.',true)},
     ],
-    'ë¶ì':[
-      ()=>{const d=pick([3,4,5,6,8]),n1=ri(1,d-2),n2=ri(1,d-n1-1);return P(`${n1}/${d} + ${n2}/${d} = â¡`,`${n1+n2}/${d}`,'ë¶ì',[`${n1+1}/${d}`,`${n1+n2+1}/${d}`,`${n1+n2}/${d+1}`],'ë¶ëª¨ê° ê°ì¼ë©´ ë¶ìë¼ë¦¬ë§ ëí´ì!\në¶ëª¨ë ì ë ëíì§ ììì.')},
-      ()=>{const d=pick([3,4,5,6,8]),n=ri(2,d-1),n2=ri(1,n-1);return P(`${n}/${d} - ${n2}/${d} = â¡`,`${n-n2}/${d}`,'ë¶ì',[`${n}/${d}`,`${n-n2+1}/${d}`,`${n2}/${d}`],'ë¶ëª¨ê° ê°ì¼ë©´ ë¶ìë¼ë¦¬ë§ ë¹¼ì!\në¶ëª¨ë ì ë ë¹¼ì§ ììì.')},
-      ()=>{const d=pick([4,6,8,10]),n=ri(1,d/2);return P(`${n*2}/${d}ë¥¼ ì½ë¶íë©´?`,`${n}/${d/2}`,'ë¶ì',null,'ë¶ìì ë¶ëª¨ë¥¼ ê°ì ìë¡ ëë ì.\në ì´ì ëë ì ìì ëê¹ì§ í´ì.')},
+    '분수':[
+      ()=>{const d=pick([3,4,5,6,8]),n1=ri(1,d-2),n2=ri(1,d-n1-1);return P(`${n1}/${d} + ${n2}/${d} = □`,`${n1+n2}/${d}`,'분수',[`${n1+1}/${d}`,`${n1+n2+1}/${d}`,`${n1+n2}/${d+1}`],'분모가 같으면 분자끼리만 더해요!\n분모는 절대 더하지 않아요.')},
+      ()=>{const d=pick([3,4,5,6,8]),n=ri(2,d-1),n2=ri(1,n-1);return P(`${n}/${d} - ${n2}/${d} = □`,`${n-n2}/${d}`,'분수',[`${n}/${d}`,`${n-n2+1}/${d}`,`${n2}/${d}`],'분모가 같으면 분자끼리만 빼요!\n분모는 절대 빼지 않아요.')},
+      ()=>{const d=pick([4,6,8,10]),n=ri(1,d/2);return P(`${n*2}/${d}를 약분하면?`,`${n}/${d/2}`,'분수',null,'분자와 분모를 같은 수로 나눠요.\n더 이상 나눌 수 없을 때까지 해요.')},
     ],
-    'ìì':[
-      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} + ${b} = â¡`,(+a+ +b).toFixed(1),'ìì',null,'ììì  ìë¦¬ë¥¼ ë§ì¶° ì¸ë¡ë¡ ì´ ë¤\nìì°ì ë§ìì²ë¼ ê³ì°íê³  ììì ì ë´ë ¤ì.')},
-      ()=>{let a=(ri(2,9)/10).toFixed(1);let b=(ri(1,Math.round(+a*10)-1)/10).toFixed(1);return P(`${a} - ${b} = â¡`,(+a- +b).toFixed(1),'ìì',null,'ììì  ìë¦¬ë¥¼ ë§ì¶° ì¸ë¡ë¡ ì´ ë¤\nìì°ì ëºìì²ë¼ ê³ì°íê³  ììì ì ë´ë ¤ì.')},
-      ()=>{const a=ri(1,5);return P(`${a}.0ê³¼ í¬ê¸°ê° ê°ì ë¶ìë?`,`${a*10}/10`,'ìì',[`${a}/10`,`${a}/100`,`${a*100}/100`],'0.1 = 1/10, 0.01 = 1/100\nìì í ìë¦¬ â ë¶ëª¨ê° 10ì¸ ë¶ì')},
+    '소수':[
+      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} + ${b} = □`,(+a+ +b).toFixed(1),'소수',null,'소수점 자리를 맞춰 세로로 쓴 뒤\n자연수 덧셈처럼 계산하고 소수점을 내려요.')},
+      ()=>{let a=(ri(2,9)/10).toFixed(1);let b=(ri(1,Math.round(+a*10)-1)/10).toFixed(1);return P(`${a} - ${b} = □`,(+a- +b).toFixed(1),'소수',null,'소수점 자리를 맞춰 세로로 쓴 뒤\n자연수 뺄셈처럼 계산하고 소수점을 내려요.')},
+      ()=>{const a=ri(1,5);return P(`${a}.0과 크기가 같은 분수는?`,`${a*10}/10`,'소수',[`${a}/10`,`${a}/100`,`${a*100}/100`],'0.1 = 1/10, 0.01 = 1/100\n소수 한 자리 → 분모가 10인 분수')},
     ],
-    'íë©´ëí':[
-      ()=>{const items=[{q:'ì§ê°ë³´ë¤ ìì ê°?',a:'ìê°',w:['ëê°','ì§ê°','íê°'],t:'ìê°: 0Â°~90Â° ë¯¸ë§ (ë ì¹´ë¡ì´ ê°)\nì§ê°: 90Â° (ã± ëª¨ì)\nëê°: 90Â°~180Â° ë¯¸ë§ (ë¬´ë ê°)'},
-        {q:'ì§ê°ë³´ë¤ í° ê°?',a:'ëê°',w:['ìê°','ì§ê°','íê°'],t:'ìê° < ì§ê°(90Â°) < ëê° < íê°(180Â°)\nì§ê°ë³´ë¤ í¬ê³  ì¼ì§ì ë³´ë¤ ìì ê°ì´ ëê°ì´ìì.'},
-        {q:'ì§ê°ì ëª ë?',a:'90Â°',w:['45Â°','180Â°','60Â°'],t:'ì§ê° = 90Â°\nìì§ì¼ë¡ ë§ëë ê°, ã± ëª¨ìì´ìì.'},
-        {q:'ì¼ê°í ì¸ ê°ëì í©?',a:'180Â°',w:['90Â°','360Â°','270Â°'],t:'ì¼ê°í ì¸ ê°ì í©ì í­ì 180Â°ìì.\nì´ë¤ ì¼ê°íì´ë  ë§ì°¬ê°ì§ìì!'}];
-        const q=pick(items);return P(q.q,q.a,'íë©´ëí',q.w,q.t)},
-      ()=>{const a=ri(3,8),b=ri(3,8);return P(`ê°ë¡ ${a}cm, ì¸ë¡ ${b}cm ì§ì¬ê°íì ëë ë?`,(a+b)*2,'íë©´ëí',null,'ì§ì¬ê°í ëë  = (ê°ë¡+ì¸ë¡)Ã2\në§ì£¼ ë³´ë ë³ë¼ë¦¬ ê¸¸ì´ê° ê°ì¼ë¯ë¡ 2ë¥¼ ê³±í´ì.')},
+    '평면도형':[
+      ()=>{const items=[{q:'직각보다 작은 각?',a:'예각',w:['둔각','직각','평각'],t:'예각: 0°~90° 미만 (날카로운 각)\n직각: 90° (ㄱ 모양)\n둔각: 90°~180° 미만 (무딘 각)'},
+        {q:'직각보다 큰 각?',a:'둔각',w:['예각','직각','평각'],t:'예각 < 직각(90°) < 둔각 < 평각(180°)\n직각보다 크고 일직선보다 작은 각이 둔각이에요.'},
+        {q:'직각은 몇 도?',a:'90°',w:['45°','180°','60°'],t:'직각 = 90°\n수직으로 만나는 각, ㄱ 모양이에요.'},
+        {q:'삼각형 세 각도의 합?',a:'180°',w:['90°','360°','270°'],t:'삼각형 세 각의 합은 항상 180°예요.\n어떤 삼각형이든 마찬가지예요!'}];
+        const q=pick(items);return P(q.q,q.a,'평면도형',q.w,q.t)},
+      ()=>{const a=ri(3,8),b=ri(3,8);return P(`가로 ${a}cm, 세로 ${b}cm 직사각형의 둘레는?`,(a+b)*2,'평면도형',null,'직사각형 둘레 = (가로+세로)×2\n마주 보는 변끼리 길이가 같으므로 2를 곱해요.')},
     ],
-    'ë§ëê·¸ëí':[
-      ()=>{const data=[ri(10,50),ri(10,50),ri(10,50),ri(10,50)];const labels=['ë´','ì¬ë¦','ê°ì','ê²¨ì¸'];const maxI=data.indexOf(Math.max(...data));return P(`ë´:${data[0]}, ì¬ë¦:${data[1]}, ê°ì:${data[2]}, ê²¨ì¸:${data[3]}ëª. ê°ì¥ ë§ì ê³ì ?`,labels[maxI],'ë§ëê·¸ëí',labels.filter((_,i)=>i!==maxI).slice(0,3),'ê°ì¥ í° ìë¥¼ ê°ì§ í­ëª©ì´ ê°ì¥ ë§ìì.\nì«ìë¥¼ ì§ì  ë¹êµí´ ì°¾ìë´ì.')},
-      ()=>{const a=ri(10,30),b=ri(10,30),c=ri(10,30);return P(`1ë°:${a}ëª, 2ë°:${b}ëª, 3ë°:${c}ëªì í©ê³ë?`,a+b+c,'ë§ëê·¸ëí',null,'ì ì²´ í©ê³ = ê° í­ëª©ì ëª¨ë ëí´ì.',true)},
+    '막대그래프':[
+      ()=>{const data=[ri(10,50),ri(10,50),ri(10,50),ri(10,50)];const labels=['봄','여름','가을','겨울'];const maxI=data.indexOf(Math.max(...data));return P(`봄:${data[0]}, 여름:${data[1]}, 가을:${data[2]}, 겨울:${data[3]}명. 가장 많은 계절?`,labels[maxI],'막대그래프',labels.filter((_,i)=>i!==maxI).slice(0,3),'가장 큰 수를 가진 항목이 가장 많아요.\n숫자를 직접 비교해 찾아봐요.')},
+      ()=>{const a=ri(10,30),b=ri(10,30),c=ri(10,30);return P(`1반:${a}명, 2반:${b}명, 3반:${c}명의 합계는?`,a+b+c,'막대그래프',null,'전체 합계 = 각 항목을 모두 더해요.',true)},
     ],
   },
   4:{
-    'í° ì':[
-      ()=>{const a=ri(10000,99999);return P(`${a.toLocaleString()}ìì ë§ì ìë¦¬ ì«ìë?`,Math.floor(a/10000),'í° ì',null,'ë¤ì¯ ìë¦¬ ì: ë§Â·ì²Â·ë°±Â·ì­Â·ì¼\në§¨ ì(ì¼ìª½) ì«ìê° ë§ì ìë¦¬ìì.')},
-      ()=>{const a=ri(1,9)*10000,b=ri(1,9)*1000;return P(`${a.toLocaleString()} + ${b.toLocaleString()} = â¡`,(a+b).toLocaleString(),'í° ì',null,'ë§ ë¨ìë¼ë¦¬, ì² ë¨ìë¼ë¦¬ ëí´ì.\n1ë§=10000, 1ì²=1000')},
+    '큰 수':[
+      ()=>{const a=ri(10000,99999);return P(`${a.toLocaleString()}에서 만의 자리 숫자는?`,Math.floor(a/10000),'큰 수',null,'다섯 자리 수: 만·천·백·십·일\n맨 앞(왼쪽) 숫자가 만의 자리예요.')},
+      ()=>{const a=ri(1,9)*10000,b=ri(1,9)*1000;return P(`${a.toLocaleString()} + ${b.toLocaleString()} = □`,(a+b).toLocaleString(),'큰 수',null,'만 단위끼리, 천 단위끼리 더해요.\n1만=10000, 1천=1000')},
     ],
-    'ê³±ì':[
-      ()=>{const a=ri(10,99),b=ri(10,99);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,'(ë ìë¦¬)Ã(ë ìë¦¬):\n'+a+'Ã'+Math.floor(b/10)+'0 ê³¼ '+a+'Ã'+b%10+' ì ê°ê° êµ¬í ë¤ ëí´ì.')},
-      ()=>{const a=ri(100,999),b=ri(10,99);return P(`${a} Ã ${b} = â¡`,a*b,'ê³±ì',null,'(ì¸ ìë¦¬)Ã(ë ìë¦¬):\nê° ìë¦¬ë¥¼ ì°¨ë¡ë¡ ê³±íê³  ë°ìì¬ë¦¼ì ì£¼ìí´ì.')},
+    '곱셈':[
+      ()=>{const a=ri(10,99),b=ri(10,99);return P(`${a} × ${b} = □`,a*b,'곱셈',null,'(두 자리)×(두 자리):\n'+a+'×'+Math.floor(b/10)+'0 과 '+a+'×'+b%10+' 을 각각 구한 뒤 더해요.')},
+      ()=>{const a=ri(100,999),b=ri(10,99);return P(`${a} × ${b} = □`,a*b,'곱셈',null,'(세 자리)×(두 자리):\n각 자리를 차례로 곱하고 받아올림에 주의해요.')},
     ],
-    'ëëì':[
-      ()=>{const b=ri(10,30),q=ri(3,9),a=b*q;return P(`${a} Ã· ${b} = â¡`,q,'ëëì',null,'(ë ìë¦¬)Ã·(ë ìë¦¬):\n'+b+'Ãâ¡ = '+a+' ê° ëë â¡ë¥¼ ì°¾ìì.')},
-      ()=>{const b=ri(10,20),q=ri(3,9),r=ri(1,b-1),a=b*q+r;return P(`${a} Ã· ${b} = â¡ ëë¨¸ì§ â¡`,`${q} ëë¨¸ì§ ${r}`,'ëëì',null,'ëë¨¸ì§ë ë°ëì ëëë ìë³´ë¤ ììì¼ í´ì.\n(ëª«Ãëëë ì)+ëë¨¸ì§ = ëëë ìì¸ì§ íì¸í´ì.')},
+    '나눗셈':[
+      ()=>{const b=ri(10,30),q=ri(3,9),a=b*q;return P(`${a} ÷ ${b} = □`,q,'나눗셈',null,'(두 자리)÷(두 자리):\n'+b+'×□ = '+a+' 가 되는 □를 찾아요.')},
+      ()=>{const b=ri(10,20),q=ri(3,9),r=ri(1,b-1),a=b*q+r;return P(`${a} ÷ ${b} = □ 나머지 □`,`${q} 나머지 ${r}`,'나눗셈',null,'나머지는 반드시 나누는 수보다 작아야 해요.\n(몫×나누는 수)+나머지 = 나뉘는 수인지 확인해요.')},
     ],
-    'ë¶ìì ë§ìê³¼ ëºì':[
-      ()=>{const d=pick([3,4,5,6,8]),n1=ri(1,d-2),n2=ri(1,d-n1-1);return P(`${n1}/${d} + ${n2}/${d} = â¡`,`${n1+n2}/${d}`,'ë¶ìì ë§ìê³¼ ëºì',null,'ë¶ëª¨ê° ê°ì¼ë©´ ë¶ìë¼ë¦¬ë§ ëí´ì.\në¶ëª¨ë ê·¸ëë¡ ì ì§í´ì!')},
-      ()=>{const d=pick([3,4,5,6,8]),n=ri(2,d-1),n2=ri(1,n-1);return P(`${n}/${d} - ${n2}/${d} = â¡`,`${n-n2}/${d}`,'ë¶ìì ë§ìê³¼ ëºì',null,'ë¶ëª¨ê° ê°ì¼ë©´ ë¶ìë¼ë¦¬ë§ ë¹¼ì.\në¶ëª¨ë ê·¸ëë¡ ì ì§í´ì!')},
-      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(1,d1-1),n2=ri(1,d2-1);const sum=n1*(l/d1)+n2*(l/d2);const g=gcd(sum,l);return P(`${n1}/${d1} + ${n2}/${d2} = â¡`,`${sum/g}/${l/g}`,'ë¶ìì ë§ìê³¼ ëºì',null,'ë¶ëª¨ê° ë¤ë¥´ë©´ íµë¶ ë¨¼ì !\nê³µíµë¶ëª¨ë¥¼ êµ¬í ë¤ ê° ë¶ìë¥¼ ë°ê¾¸ê³  ëí´ì.')},
+    '분수의 덧셈과 뺄셈':[
+      ()=>{const d=pick([3,4,5,6,8]),n1=ri(1,d-2),n2=ri(1,d-n1-1);return P(`${n1}/${d} + ${n2}/${d} = □`,`${n1+n2}/${d}`,'분수의 덧셈과 뺄셈',null,'분모가 같으면 분자끼리만 더해요.\n분모는 그대로 유지해요!')},
+      ()=>{const d=pick([3,4,5,6,8]),n=ri(2,d-1),n2=ri(1,n-1);return P(`${n}/${d} - ${n2}/${d} = □`,`${n-n2}/${d}`,'분수의 덧셈과 뺄셈',null,'분모가 같으면 분자끼리만 빼요.\n분모는 그대로 유지해요!')},
+      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(1,d1-1),n2=ri(1,d2-1);const sum=n1*(l/d1)+n2*(l/d2);const g=gcd(sum,l);return P(`${n1}/${d1} + ${n2}/${d2} = □`,`${sum/g}/${l/g}`,'분수의 덧셈과 뺄셈',null,'분모가 다르면 통분 먼저!\n공통분모를 구한 뒤 각 분수를 바꾸고 더해요.')},
     ],
-    'ììì ë§ìê³¼ ëºì':[
-      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} + ${b} = â¡`,(+a+ +b).toFixed(1),'ììì ë§ìê³¼ ëºì',null,'ììì  ìë¦¬ë¥¼ ë§ì¶° ê³ì°í´ì.\nììì ì ê·¸ëë¡ ë´ë ¤ì ì°ì´ì.')},
-      ()=>{const a=(ri(10,99)/100).toFixed(2),b=(ri(1,99)/100).toFixed(2);return P(`${a} + ${b} = â¡`,(+a+ +b).toFixed(2),'ììì ë§ìê³¼ ëºì',null,'ìì ë ìë¦¬ë¼ë¦¬ ëí  ëë\nììì  ìë¦¬ë¥¼ ë§ì¶ê³  ìì°ìì²ë¼ ê³ì°í´ì.')},
-      ()=>{let a=(ri(11,99)/10).toFixed(1);let b=(ri(1,Math.round(+a*10)-1)/10).toFixed(1);return P(`${a} - ${b} = â¡`,(+a- +b).toFixed(1),'ììì ë§ìê³¼ ëºì',null,'ììì  ìë¦¬ë¥¼ ë§ì¶° ì¸ë¡ë¡ ì´ ë¤\nìì°ì ëºìì²ë¼ ê³ì°í´ì.')},
+    '소수의 덧셈과 뺄셈':[
+      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} + ${b} = □`,(+a+ +b).toFixed(1),'소수의 덧셈과 뺄셈',null,'소수점 자리를 맞춰 계산해요.\n소수점은 그대로 내려서 찍어요.')},
+      ()=>{const a=(ri(10,99)/100).toFixed(2),b=(ri(1,99)/100).toFixed(2);return P(`${a} + ${b} = □`,(+a+ +b).toFixed(2),'소수의 덧셈과 뺄셈',null,'소수 두 자리끼리 더할 때도\n소수점 자리를 맞추고 자연수처럼 계산해요.')},
+      ()=>{let a=(ri(11,99)/10).toFixed(1);let b=(ri(1,Math.round(+a*10)-1)/10).toFixed(1);return P(`${a} - ${b} = □`,(+a- +b).toFixed(1),'소수의 덧셈과 뺄셈',null,'소수점 자리를 맞춰 세로로 쓴 뒤\n자연수 뺄셈처럼 계산해요.')},
     ],
-    'ê°ë':[
-      ()=>{const a=pick([30,45,60,120,135,150]);const label=a<90?'ìê°':a===90?'ì§ê°':a<180?'ëê°':'íê°';const others=['ìê°','ì§ê°','ëê°','íê°'].filter(x=>x!==label);return P(`${a}Â°ë ì´ë¤ ê°?`,label,'ê°ë',others.slice(0,3),'ìê°: 0Â°~90Â° ë¯¸ë§\nì§ê°: 90Â°\nëê°: 90Â°~180Â° ë¯¸ë§\níê°: 180Â°')},
-      ()=>{const a=ri(40,70),b=ri(40,70);return P(`ì¼ê°íì ë ê°ì´ ${a}Â°, ${b}Â°ì¼ ë ëë¨¸ì§ í ê°ì?`,180-a-b,'ê°ë',null,'ì¼ê°í ì¸ ë´ê°ì í© = í­ì 180Â°\nëë¨¸ì§ ê° = 180Â° - ë ê°ì í©')},
+    '각도':[
+      ()=>{const a=pick([30,45,60,120,135,150]);const label=a<90?'예각':a===90?'직각':a<180?'둔각':'평각';const others=['예각','직각','둔각','평각'].filter(x=>x!==label);return P(`${a}°는 어떤 각?`,label,'각도',others.slice(0,3),'예각: 0°~90° 미만\n직각: 90°\n둔각: 90°~180° 미만\n평각: 180°')},
+      ()=>{const a=ri(40,70),b=ri(40,70);return P(`삼각형의 두 각이 ${a}°, ${b}°일 때 나머지 한 각은?`,180-a-b,'각도',null,'삼각형 세 내각의 합 = 항상 180°\n나머지 각 = 180° - 두 각의 합')},
     ],
-    'ê·ì¹ ì°¾ê¸°':[
-      ()=>{const a=ri(2,8),d=ri(3,7);const s=[a,a+d,a+2*d,a+3*d,a+4*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, â¡`,s[4],'ê·ì¹ ì°¾ê¸°',null,'ì´ìí ë ìì ì°¨ì´ê° ì¼ë§ì©ì¸ì§ íì¸í´ì.\nê°ì ê·ì¹ì¼ë¡ ë¤ì ìë¥¼ êµ¬í´ì.')},
-      ()=>{const a=ri(2,5),d=ri(2,4);const s=[a,a*d,a*d*d,a*d*d*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, â¡`,s[3],'ê·ì¹ ì°¾ê¸°',null,'ìì ìì ëª ë°°ë¥¼ íëì§ íì¸í´ì.\nê°ì ë°°ìë¡ ë¤ì ìë¥¼ êµ¬í´ì.')},
+    '규칙 찾기':[
+      ()=>{const a=ri(2,8),d=ri(3,7);const s=[a,a+d,a+2*d,a+3*d,a+4*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, ${s[3]}, □`,s[4],'규칙 찾기',null,'이웃한 두 수의 차이가 얼마씩인지 확인해요.\n같은 규칙으로 다음 수를 구해요.')},
+      ()=>{const a=ri(2,5),d=ri(2,4);const s=[a,a*d,a*d*d,a*d*d*d];return P(`${s[0]}, ${s[1]}, ${s[2]}, □`,s[3],'규칙 찾기',null,'앞의 수에 몇 배를 했는지 확인해요.\n같은 배수로 다음 수를 구해요.')},
     ],
-    'ë§ëÂ·êº¾ìì  ê·¸ëí':[
-      ()=>{const data=[ri(50,100),ri(50,100),ri(50,100),ri(50,100)];const labels=['1ì','2ì','3ì','4ì'];const maxI=data.indexOf(Math.max(...data));return P(`1ì:${data[0]}, 2ì:${data[1]}, 3ì:${data[2]}, 4ì:${data[3]}. ê°ì¥ ë§ì ë¬?`,labels[maxI],'ë§ëÂ·êº¾ìì  ê·¸ëí',labels.filter((_,i)=>i!==maxI).slice(0,3),'ë§ëê·¸ëíìì ë§ëê° ê°ì¥ ëì ê² = ê°ì¥ í° ê°\nì«ìë¥¼ ì§ì  ë¹êµí´ë ë¼ì.')},
-      ()=>{const items=[{q:'ìê°ì ë°ë¥¸ ë³íë¥¼ ëíë´ê¸° ìë§ì ê·¸ëíë?',a:'êº¾ìì ê·¸ëí',w:['ë§ëê·¸ëí','ë ê·¸ëí','ìê·¸ëí'],t:'êº¾ìì ê·¸ëí: ìê°ì ë°ë¥¸ ë³í íí\në§ëê·¸ëí: ìì ë§ê³  ì ì ë¹êµ'},
-        {q:'ìì ë§ê³  ì ìì ë¹êµíê¸° ìë§ì ê·¸ëíë?',a:'ë§ëê·¸ëí',w:['êº¾ìì ê·¸ëí','ë ê·¸ëí','ìê·¸ëí'],t:'ë§ëê·¸ëí: ë§ë ëì´ë¡ ìì ë¹êµ\nêº¾ìì ê·¸ëí: ìê°ì ë°ë¥¸ ë³í íí'}];
-        const q=pick(items);return P(q.q,q.a,'ë§ëÂ·êº¾ìì  ê·¸ëí',q.w,q.t)},
+    '막대·꺾은선 그래프':[
+      ()=>{const data=[ri(50,100),ri(50,100),ri(50,100),ri(50,100)];const labels=['1월','2월','3월','4월'];const maxI=data.indexOf(Math.max(...data));return P(`1월:${data[0]}, 2월:${data[1]}, 3월:${data[2]}, 4월:${data[3]}. 가장 많은 달?`,labels[maxI],'막대·꺾은선 그래프',labels.filter((_,i)=>i!==maxI).slice(0,3),'막대그래프에서 막대가 가장 높은 것 = 가장 큰 값\n숫자를 직접 비교해도 돼요.')},
+      ()=>{const items=[{q:'시간에 따른 변화를 나타내기 알맞은 그래프는?',a:'꺾은선그래프',w:['막대그래프','띠그래프','원그래프'],t:'꺾은선그래프: 시간에 따른 변화 표현\n막대그래프: 양의 많고 적음 비교'},
+        {q:'양의 많고 적음을 비교하기 알맞은 그래프는?',a:'막대그래프',w:['꺾은선그래프','띠그래프','원그래프'],t:'막대그래프: 막대 높이로 양을 비교\n꺾은선그래프: 시간에 따른 변화 표현'}];
+        const q=pick(items);return P(q.q,q.a,'막대·꺾은선 그래프',q.w,q.t)},
     ],
-    'íë©´ëíì ì´ë':[
-      ()=>{const items=[{q:'ëíì ë°ê¸°(ííì´ë)íë©´?',a:'ëª¨ìÂ·í¬ê¸° ë³íì§ ìì',w:['ëª¨ìë§ ë³í¨','í¬ê¸°ë§ ë³í¨','ë ë¤ ë³í¨'],t:'ë°ê¸°Â·ë¤ì§ê¸°Â·ëë¦¬ê¸° ëª¨ë\nëíì ëª¨ìê³¼ í¬ê¸°ë ë³íì§ ììì.\nìì¹ë ë°©í¥ë§ ë¬ë¼ì ¸ì.'},
-        {q:'ëíì ë¤ì§ê¸°(ëì¹­ì´ë)íë©´?',a:'ë°©í¥ë§ ë°ëë¡',w:['í¬ê¸°ê° ë³í¨','ëª¨ìì´ ë³í¨','ìì¹ë§ ë°ë'],t:'ë¤ì§ê¸°: ëª¨ìê³¼ í¬ê¸°ë ê·¸ëë¡\në°©í¥ë§ ì¢ì° ëë ìíë¡ ë°ëê° ë¼ì.'}];
-        const q=pick(items);return P(q.q,q.a,'íë©´ëíì ì´ë',q.w,q.t)},
+    '평면도형의 이동':[
+      ()=>{const items=[{q:'도형을 밀기(평행이동)하면?',a:'모양·크기 변하지 않음',w:['모양만 변함','크기만 변함','둘 다 변함'],t:'밀기·뒤집기·돌리기 모두\n도형의 모양과 크기는 변하지 않아요.\n위치나 방향만 달라져요.'},
+        {q:'도형을 뒤집기(대칭이동)하면?',a:'방향만 반대로',w:['크기가 변함','모양이 변함','위치만 바뀜'],t:'뒤집기: 모양과 크기는 그대로\n방향만 좌우 또는 상하로 반대가 돼요.'}];
+        const q=pick(items);return P(q.q,q.a,'평면도형의 이동',q.w,q.t)},
     ],
   },
   5:{
-    'ìì°ìì í¼í©ê³ì°':[
-      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`(${a}+${b})Ã${c} = â¡`,(a+b)*c,'ìì°ìì í¼í©ê³ì°',null,'ê³ì° ìì: â  ê´í¸ â¡ ê³±ìÂ·ëëì â¢ ë§ìÂ·ëºì\nê´í¸ ìì ê°ì¥ ë¨¼ì  ê³ì°í´ì!')},
-      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`${a}Ã${c}+${b}Ã${c} = â¡`,a*c+b*c,'ìì°ìì í¼í©ê³ì°',null,'ê³±ìì ë§ìë³´ë¤ ë¨¼ì  ê³ì°í´ì.\nê°ê°ì ê³±ìì ë¨¼ì  í ë¤ ëí´ì.')},
-      ()=>{const a=ri(10,50),b=ri(2,5),c=ri(2,9);return P(`${a}Ã·${b}+${c} = â¡`,Math.floor(a/b)+c,'ìì°ìì í¼í©ê³ì°',null,'ëëìì ë§ìë³´ë¤ ë¨¼ì  ê³ì°í´ì.\nëëì ê²°ê³¼ì ëë¨¸ì§ ìë¥¼ ëí´ì.')},
-      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`${a}Ã${c}-${b}Ã${c} = â¡`,(a-b)*c,'ìì°ìì í¼í©ê³ì°',null,'ê³±ìì ëºìë³´ë¤ ë¨¼ì  ê³ì°í´ì.\nê°ê°ì ê³±ìì ë¨¼ì  í ë¤ ë¹¼ì.')},
+    '자연수의 혼합계산':[
+      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`(${a}+${b})×${c} = □`,(a+b)*c,'자연수의 혼합계산',null,'계산 순서: ① 괄호 ② 곱셈·나눗셈 ③ 덧셈·뺄셈\n괄호 안을 가장 먼저 계산해요!')},
+      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`${a}×${c}+${b}×${c} = □`,a*c+b*c,'자연수의 혼합계산',null,'곱셈을 덧셈보다 먼저 계산해요.\n각각의 곱셈을 먼저 한 뒤 더해요.')},
+      ()=>{const a=ri(10,50),b=ri(2,5),c=ri(2,9);return P(`${a}÷${b}+${c} = □`,Math.floor(a/b)+c,'자연수의 혼합계산',null,'나눗셈을 덧셈보다 먼저 계산해요.\n나눗셈 결과에 나머지 수를 더해요.')},
+      ()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,5);return P(`${a}×${c}-${b}×${c} = □`,(a-b)*c,'자연수의 혼합계산',null,'곱셈을 뺄셈보다 먼저 계산해요.\n각각의 곱셈을 먼저 한 뒤 빼요.')},
     ],
-    'ì½ìì ë°°ì':[
-      ()=>{const n=pick([6,8,10,12,15,18,20,24]);const f=[];for(let i=1;i<=n;i++)if(n%i===0)f.push(i);return P(`${n}ì ì½ìì ê°ìë?`,f.length,'ì½ìì ë°°ì',null,n+'ì ëëì´ ë¨ì´ì§ê² íë ìë¥¼ ëª¨ë ì°¾ìì.\n1ê³¼ ìê¸° ìì ë ì½ììì!')},
-      ()=>{const a=ri(2,5),b=ri(2,5);const g=gcd(a,b),l=a*b/g;return P(`${a}ì ${b}ì ìµìê³µë°°ìë?`,l,'ì½ìì ë°°ì',null,'ë ìì ë°°ìë¥¼ ê°ê° ëì´í ë¤\nì²ìì¼ë¡ ê°ìì§ë ìë¥¼ ì°¾ìì.')},
-      ()=>{const a=pick([12,18,24,30,36]);const b=pick([6,9,12,15]);const g=gcd(a,b);return P(`${a}ì ${b}ì ìµëê³µì½ìë?`,g,'ì½ìì ë°°ì',null,'ë ìì ì½ìë¥¼ ê°ê° êµ¬í ë¤\nê³µíµ ì½ì ì¤ ê°ì¥ í° ìë¥¼ ì°¾ìì.')},
+    '약수와 배수':[
+      ()=>{const n=pick([6,8,10,12,15,18,20,24]);const f=[];for(let i=1;i<=n;i++)if(n%i===0)f.push(i);return P(`${n}의 약수의 개수는?`,f.length,'약수와 배수',null,n+'을 나누어 떨어지게 하는 수를 모두 찾아요.\n1과 자기 자신도 약수예요!')},
+      ()=>{const a=ri(2,5),b=ri(2,5);const g=gcd(a,b),l=a*b/g;return P(`${a}와 ${b}의 최소공배수는?`,l,'약수와 배수',null,'두 수의 배수를 각각 나열한 뒤\n처음으로 같아지는 수를 찾아요.')},
+      ()=>{const a=pick([12,18,24,30,36]);const b=pick([6,9,12,15]);const g=gcd(a,b);return P(`${a}와 ${b}의 최대공약수는?`,g,'약수와 배수',null,'두 수의 약수를 각각 구한 뒤\n공통 약수 중 가장 큰 수를 찾아요.')},
     ],
-    'ì½ë¶ê³¼ íµë¶':[
+    '약분과 통분':[
       ()=>{const fracs=[{n:2,d:4},{n:3,d:6},{n:4,d:8},{n:2,d:6},{n:3,d:9},{n:4,d:10},{n:6,d:8},{n:4,d:12},{n:6,d:10},{n:8,d:12}];
         const f=pick(fracs);const g2=gcd(f.n,f.d);const rn=f.n/g2,rd=f.d/g2;
-        return P(`${f.n}/${f.d}ë¥¼ ê¸°ì½ë¶ìë¡ ëíë´ë©´?`,`${rn}/${rd}`,'ì½ë¶ê³¼ íµë¶',
+        return P(`${f.n}/${f.d}를 기약분수로 나타내면?`,`${rn}/${rd}`,'약분과 통분',
           [`${f.n-1}/${f.d-1}`,`${f.n}/${f.d-1}`,`${rn+1}/${rd}`],
-          'ê¸°ì½ë¶ì: ë ì´ì ì½ë¶ì´ ì ëë ë¶ì\në¶ìì ë¶ëª¨ì ìµëê³µì½ìë¡ ëë ì.')},
+          '기약분수: 더 이상 약분이 안 되는 분수\n분자와 분모의 최대공약수로 나눠요.')},
       ()=>{const fracs=[{n:4,d:6},{n:6,d:9},{n:8,d:12},{n:6,d:15},{n:10,d:15},{n:9,d:12}];
         const f=pick(fracs);const g2=gcd(f.n,f.d);const rn=f.n/g2,rd=f.d/g2;
-        return P(`${f.n}/${f.d}ë¥¼ ì½ë¶íë©´?`,`${rn}/${rd}`,'ì½ë¶ê³¼ íµë¶',
+        return P(`${f.n}/${f.d}를 약분하면?`,`${rn}/${rd}`,'약분과 통분',
           [`${f.n/2}/${f.d}`,`${rn+1}/${rd}`,`${f.n}/${f.d/2}`],
-          'ì½ë¶: ë¶ìì ë¶ëª¨ë¥¼ ê°ì ìë¡ ëëê¸°\nê³µì½ìë¡ ëëë©´ ë¼ì.')},
+          '약분: 분자와 분모를 같은 수로 나누기\n공약수로 나누면 돼요.')},
       ()=>{const pairs=[{n1:1,d1:2,n2:1,d2:3},{n1:1,d1:3,n2:1,d2:4},{n1:2,d1:3,n2:1,d2:4},{n1:1,d1:2,n2:2,d2:5}];
         const p=pick(pairs);const l=p.d1*p.d2/gcd(p.d1,p.d2);
-        return P(`${p.n1}/${p.d1}ê³¼ ${p.n2}/${p.d2}ì íµë¶íë©´? (ê³µíµë¶ëª¨: ${l})`,
-          `${p.n1*(l/p.d1)}/${l}, ${p.n2*(l/p.d2)}/${l}`,'ì½ë¶ê³¼ íµë¶',
+        return P(`${p.n1}/${p.d1}과 ${p.n2}/${p.d2}을 통분하면? (공통분모: ${l})`,
+          `${p.n1*(l/p.d1)}/${l}, ${p.n2*(l/p.d2)}/${l}`,'약분과 통분',
           [`${p.n1}/${l}, ${p.n2}/${l}`,`${p.n1*(l/p.d1)}/${l+1}, ${p.n2*(l/p.d2)}/${l+1}`,`${p.n1}/${p.d1*2}, ${p.n2}/${p.d2*2}`],
-          'íµë¶: ë¶ëª¨ë¥¼ ê°ê² ë§ì¶ë ê²\nê³µíµë¶ëª¨ì ë§ê² ë¶ìÂ·ë¶ëª¨ë¥¼ ê°ì ìë¡ ê³±í´ì.')},
+          '통분: 분모를 같게 맞추는 것\n공통분모에 맞게 분자·분모를 같은 수로 곱해요.')},
       ()=>{const a=pick([2,3,4,6]);const b=a===4?3:a===6?4:a+1;const l=a*b/gcd(a,b);
-        return P(`${a}ì ${b}ì ìµìê³µë°°ì(ê³µíµë¶ëª¨)ë?`,l,'ì½ë¶ê³¼ íµë¶',
+        return P(`${a}와 ${b}의 최소공배수(공통분모)는?`,l,'약분과 통분',
           [l+a,l+b,l*2],
-          'ìµìê³µë°°ì = ë ìì ê³µíµ ë°°ì ì¤ ê°ì¥ ìì ì\níµë¶í  ë ê³µíµë¶ëª¨ë¡ ì¬ì©í´ì.')},
+          '최소공배수 = 두 수의 공통 배수 중 가장 작은 수\n통분할 때 공통분모로 사용해요.')},
       ()=>{const fracs=[{n:1,d:4,equiv:'2/8'},{n:2,d:3,equiv:'4/6'},{n:1,d:2,equiv:'3/6'},{n:3,d:4,equiv:'6/8'}];
         const f=pick(fracs);
-        return P(`${f.n}/${f.d}ì í¬ê¸°ê° ê°ì ë¶ìë?`,f.equiv,'ì½ë¶ê³¼ íµë¶',
+        return P(`${f.n}/${f.d}와 크기가 같은 분수는?`,f.equiv,'약분과 통분',
           [`${f.n+1}/${f.d+1}`,`${f.n*3}/${f.d*3+1}`,`${f.n}/${f.d+1}`],
-          'ë¶ìì ë¶ëª¨ì ê°ì ìë¥¼ ê³±íë©´\ní¬ê¸°ê° ê°ì ë¶ìê° ë¼ì.')},
+          '분자와 분모에 같은 수를 곱하면\n크기가 같은 분수가 돼요.')},
     ],
-    'ë¶ìì ë§ìê³¼ ëºì':[
-      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(1,d1-1),n2=ri(1,d2-1);const sum=n1*(l/d1)+n2*(l/d2);const g=gcd(sum,l);return P(`${n1}/${d1} + ${n2}/${d2} = â¡`,`${sum/g}/${l/g}`,'ë¶ìì ë§ìê³¼ ëºì',null,'ë¶ëª¨ê° ë¤ë¥´ë©´ íµë¶ ë¨¼ì !\nê°ì ë¶ëª¨ë¡ ë§ë  ë¤ ë¶ìë¼ë¦¬ ëí´ì.')},
-      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(2,d1),n2=ri(1,d2-1);const diff=n1*(l/d1)-n2*(l/d2);const g=gcd(Math.abs(diff)||1,l);const ans=diff>0?`${diff/g}/${l/g}`:'0';return P(`${n1}/${d1} - ${n2}/${d2} = â¡`,ans,'ë¶ìì ë§ìê³¼ ëºì',null,'ë¶ëª¨ê° ë¤ë¥´ë©´ íµë¶ ë¨¼ì !\nê°ì ë¶ëª¨ë¡ ë§ë  ë¤ ë¶ìë¼ë¦¬ ë¹¼ì.')},
+    '분수의 덧셈과 뺄셈':[
+      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(1,d1-1),n2=ri(1,d2-1);const sum=n1*(l/d1)+n2*(l/d2);const g=gcd(sum,l);return P(`${n1}/${d1} + ${n2}/${d2} = □`,`${sum/g}/${l/g}`,'분수의 덧셈과 뺄셈',null,'분모가 다르면 통분 먼저!\n같은 분모로 만든 뒤 분자끼리 더해요.')},
+      ()=>{const d1=pick([2,3,4]),d2=pick([3,4,5]);const l=d1*d2/gcd(d1,d2),n1=ri(2,d1),n2=ri(1,d2-1);const diff=n1*(l/d1)-n2*(l/d2);const g=gcd(Math.abs(diff)||1,l);const ans=diff>0?`${diff/g}/${l/g}`:'0';return P(`${n1}/${d1} - ${n2}/${d2} = □`,ans,'분수의 덧셈과 뺄셈',null,'분모가 다르면 통분 먼저!\n같은 분모로 만든 뒤 분자끼리 빼요.')},
     ],
-    'ë¶ìì ê³±ì':[
-      ()=>{const n1=ri(1,5),d1=pick([2,3,4,5]),n2=ri(1,5),d2=pick([2,3,4,5]);const r=n1*n2,rd=d1*d2;const g=gcd(r,rd);return P(`${n1}/${d1} Ã ${n2}/${d2} = â¡`,`${r/g}/${rd/g}`,'ë¶ìì ê³±ì',null,'ë¶ìë¼ë¦¬ ê³±íê³  ë¶ëª¨ë¼ë¦¬ ê³±í´ì.\nê²°ê³¼ë ì½ë¶í  ì ìì¼ë©´ ì½ë¶í´ì.')},
-      ()=>{const n=ri(1,5),d=pick([2,3,4,5]),w=ri(2,5);const r=n*w,g=gcd(r,d);return P(`${n}/${d} Ã ${w} = â¡`,`${r/g}/${d/g}`,'ë¶ìì ê³±ì',null,'ë¶ìÃìì°ì: ë¶ììë§ ìì°ìë¥¼ ê³±í´ì.\në¶ëª¨ë ê·¸ëë¡!')},
+    '분수의 곱셈':[
+      ()=>{const n1=ri(1,5),d1=pick([2,3,4,5]),n2=ri(1,5),d2=pick([2,3,4,5]);const r=n1*n2,rd=d1*d2;const g=gcd(r,rd);return P(`${n1}/${d1} × ${n2}/${d2} = □`,`${r/g}/${rd/g}`,'분수의 곱셈',null,'분자끼리 곱하고 분모끼리 곱해요.\n결과는 약분할 수 있으면 약분해요.')},
+      ()=>{const n=ri(1,5),d=pick([2,3,4,5]),w=ri(2,5);const r=n*w,g=gcd(r,d);return P(`${n}/${d} × ${w} = □`,`${r/g}/${d/g}`,'분수의 곱셈',null,'분수×자연수: 분자에만 자연수를 곱해요.\n분모는 그대로!')},
     ],
-    'ììì ê³±ì':[
-      ()=>{const a=(ri(1,9)/10).toFixed(1),b=ri(2,9);return P(`${a} Ã ${b} = â¡`,(+a*b).toFixed(1),'ììì ê³±ì',null,'ììì ì ë¬´ìíê³  ìì°ìì²ë¼ ê³±í ë¤\nììì  ìë ìë¦¬ ìë§í¼ ììì ì ì°ì´ì.')},
-      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} Ã ${b} = â¡`,(+a* +b).toFixed(2),'ììì ê³±ì',null,'ììì  ìë ìë¦¬ ìë¥¼ ì¸ì´ì.\në ìì ìë¦¬ ìì í©ë§í¼ ììì ì ì°ì´ì.')},
+    '소수의 곱셈':[
+      ()=>{const a=(ri(1,9)/10).toFixed(1),b=ri(2,9);return P(`${a} × ${b} = □`,(+a*b).toFixed(1),'소수의 곱셈',null,'소수점을 무시하고 자연수처럼 곱한 뒤\n소수점 아래 자리 수만큼 소수점을 찍어요.')},
+      ()=>{const a=(ri(1,9)/10).toFixed(1),b=(ri(1,9)/10).toFixed(1);return P(`${a} × ${b} = □`,(+a* +b).toFixed(2),'소수의 곱셈',null,'소수점 아래 자리 수를 세어요.\n두 수의 자리 수의 합만큼 소수점을 찍어요.')},
     ],
-    'í©ëê³¼ ëì¹­':[
-      ()=>{const items=[{q:'í©ëì¸ ë ëíìì ëìë³ì ê¸¸ì´ë?',a:'ê°ë¤',w:['ë¤ë¥´ë¤','2ë°°ì´ë¤','ì ë°ì´ë¤'],t:'í©ë: ëª¨ìê³¼ í¬ê¸°ê° ìì í ê°ì ë ëí\nëìë³Â·ëìê°ì í¬ê¸°ê° ëª¨ë ê°ìì.'},
-        {q:'ì ëì¹­ëíìì ëì¹­ì¶ì¼ë¡ ì ì¼ë©´?',a:'ìì í ê²¹ì¹ë¤',w:['ì ë°ë§ ê²¹ì¹ë¤','ê²¹ì¹ì§ ìëë¤','ì ì ìë¤'],t:'ì ëì¹­ëí: ëì¹­ì¶ì ê¸°ì¤ì¼ë¡ ì ì¼ë©´\nììª½ì´ ìì í ê²¹ì³ì§ë ëíì´ìì.'},
-        {q:'ì ëì¹­ëíì ëì¹­ì ì¤ì¬ì¼ë¡ ëª Â°íì íë©´ ê²¹ì¹ë?',a:'180Â°',w:['90Â°','360Â°','270Â°'],t:'ì ëì¹­ëí: ì´ë¤ ì ì ì¤ì¬ì¼ë¡\n180Â° ëë ¸ì ë ì²ìê³¼ ìì í ê²¹ì¹ë ëí'}];
-        const q=pick(items);return P(q.q,q.a,'í©ëê³¼ ëì¹­',q.w,q.t)},
+    '합동과 대칭':[
+      ()=>{const items=[{q:'합동인 두 도형에서 대응변의 길이는?',a:'같다',w:['다르다','2배이다','절반이다'],t:'합동: 모양과 크기가 완전히 같은 두 도형\n대응변·대응각의 크기가 모두 같아요.'},
+        {q:'선대칭도형에서 대칭축으로 접으면?',a:'완전히 겹친다',w:['절반만 겹친다','겹치지 않는다','알 수 없다'],t:'선대칭도형: 대칭축을 기준으로 접으면\n양쪽이 완전히 겹쳐지는 도형이에요.'},
+        {q:'점대칭도형은 대칭의 중심으로 몇 °회전하면 겹치나?',a:'180°',w:['90°','360°','270°'],t:'점대칭도형: 어떤 점을 중심으로\n180° 돌렸을 때 처음과 완전히 겹치는 도형'}];
+        const q=pick(items);return P(q.q,q.a,'합동과 대칭',q.w,q.t)},
     ],
-    'ì§ì¡ë©´ì²´':[
-      ()=>{const items=[{q:'ì§ì¡ë©´ì²´ì ë©´ ìë?',a:'6ê°',w:['4ê°','8ê°','12ê°'],t:'ì§ì¡ë©´ì²´ì ë©´: ìÂ·ë¤Â·ì¢Â·ì°Â·ìÂ·ìë = 6ê°'},
-        {q:'ì§ì¡ë©´ì²´ì ê¼­ì§ì  ìë?',a:'8ê°',w:['6ê°','4ê°','12ê°'],t:'ì§ì¡ë©´ì²´ ê¼­ì§ì : ëª¨ìë¦¬ê° 3ê°ì© ë§ëë ì  = 8ê°'},
-        {q:'ì§ì¡ë©´ì²´ì ëª¨ìë¦¬ ìë?',a:'12ê°',w:['8ê°','6ê°','10ê°'],t:'ì§ì¡ë©´ì²´ ëª¨ìë¦¬: ê°ë¡4+ì¸ë¡4+ëì´4 = 12ê°'},
-        {q:'ì ì¡ë©´ì²´ ëª¨ë  ë©´ì ëª¨ìì?',a:'ì ì¬ê°í',w:['ì§ì¬ê°í','ì¼ê°í','ë§ë¦ëª¨'],t:'ì ì¡ë©´ì²´: 6ê°ì ë©´ì´ ëª¨ë í©ëì¸ ì ì¬ê°í'}];
-        const q=pick(items);return P(q.q,q.a,'ì§ì¡ë©´ì²´',q.w,q.t)},
-      ()=>{const l=ri(2,6),w=ri(2,6),h=ri(2,6);return P(`ê°ë¡${l}, ì¸ë¡${w}, ëì´${h}cm ì§ì¡ë©´ì²´ì ë¶í¼?`,l*w*h,'ì§ì¡ë©´ì²´',null,'ì§ì¡ë©´ì²´ ë¶í¼ = ê°ë¡ Ã ì¸ë¡ Ã ëì´')},
+    '직육면체':[
+      ()=>{const items=[{q:'직육면체의 면 수는?',a:'6개',w:['4개','8개','12개'],t:'직육면체의 면: 앞·뒤·좌·우·위·아래 = 6개'},
+        {q:'직육면체의 꼭짓점 수는?',a:'8개',w:['6개','4개','12개'],t:'직육면체 꼭짓점: 모서리가 3개씩 만나는 점 = 8개'},
+        {q:'직육면체의 모서리 수는?',a:'12개',w:['8개','6개','10개'],t:'직육면체 모서리: 가로4+세로4+높이4 = 12개'},
+        {q:'정육면체 모든 면의 모양은?',a:'정사각형',w:['직사각형','삼각형','마름모'],t:'정육면체: 6개의 면이 모두 합동인 정사각형'}];
+        const q=pick(items);return P(q.q,q.a,'직육면체',q.w,q.t)},
+      ()=>{const l=ri(2,6),w=ri(2,6),h=ri(2,6);return P(`가로${l}, 세로${w}, 높이${h}cm 직육면체의 부피?`,l*w*h,'직육면체',null,'직육면체 부피 = 가로 × 세로 × 높이')},
     ],
-    'ë¤ê°íì ëë ì ëì´':[
-      ()=>{const a=ri(3,9),b=ri(3,9);return P(`ê°ë¡ ${a}cm, ì¸ë¡ ${b}cm ì§ì¬ê°íì ëì´?`,a*b,'ë¤ê°íì ëë ì ëì´',null,'ì§ì¬ê°í ëì´ = ê°ë¡ Ã ì¸ë¡')},
-      ()=>{const a=ri(4,10),h=ri(3,8);return P(`ë°ë³ ${a}cm, ëì´ ${h}cm ì¼ê°íì ëì´?`,a*h/2,'ë¤ê°íì ëë ì ëì´',null,'ì¼ê°í ëì´ = ë°ë³ Ã ëì´ Ã· 2\nì§ì¬ê°í ëì´ì ì ë°ì´ìì!')},
-      ()=>{const a=ri(3,8),b=ri(3,8);return P(`ê°ë¡ ${a}cm, ì¸ë¡ ${b}cm ì§ì¬ê°íì ëë ?`,(a+b)*2,'ë¤ê°íì ëë ì ëì´',null,'ì§ì¬ê°í ëë  = (ê°ë¡+ì¸ë¡) Ã 2\në§ì£¼ ë³´ë ë³ë¼ë¦¬ ê°ì¼ë¯ë¡ 2ë°°í´ì.')},
+    '다각형의 둘레와 넓이':[
+      ()=>{const a=ri(3,9),b=ri(3,9);return P(`가로 ${a}cm, 세로 ${b}cm 직사각형의 넓이?`,a*b,'다각형의 둘레와 넓이',null,'직사각형 넓이 = 가로 × 세로')},
+      ()=>{const a=ri(4,10),h=ri(3,8);return P(`밑변 ${a}cm, 높이 ${h}cm 삼각형의 넓이?`,a*h/2,'다각형의 둘레와 넓이',null,'삼각형 넓이 = 밑변 × 높이 ÷ 2\n직사각형 넓이의 절반이에요!')},
+      ()=>{const a=ri(3,8),b=ri(3,8);return P(`가로 ${a}cm, 세로 ${b}cm 직사각형의 둘레?`,(a+b)*2,'다각형의 둘레와 넓이',null,'직사각형 둘레 = (가로+세로) × 2\n마주 보는 변끼리 같으므로 2배해요.')},
     ],
-    'íê· ê³¼ ê°ë¥ì±':[
-      ()=>{const d=[ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100)];const avg=Math.round(d.reduce((s,x)=>s+x,0)/d.length);return P(`${d.join(', ')}ì ì íê· ì?`,avg,'íê· ê³¼ ê°ë¥ì±',null,'íê·  = ì ì²´ í©ê³ Ã· ê°ì\nëª¨ë ëí ë¤ ìì ê°ìë¡ ëë ì.',true)},
-      ()=>{const items=[{q:'ëì  ëì§ê¸°ìì ìë©´ì´ ëì¬ ê°ë¥ì±?',a:'1/2',w:['1','0','1/4'],t:'ëì ì ìë©´ ëë ë·ë©´ â 2ê°ì§\nìë©´ì ê·¸ ì¤ 1ê°ì§ â 1/2'},
-        {q:'ì£¼ì¬ììì 6ì´ ëì¬ ê°ë¥ì±?',a:'1/6',w:['1/2','1/3','1/4'],t:'ì£¼ì¬ìë 1~6 â 6ê°ì§\n6ì ê·¸ ì¤ 1ê°ì§ â 1/6'},
-        {q:'ë°ëì ì¼ì´ëë ì¬ê±´ì ê°ë¥ì±?',a:'1',w:['0','1/2','2'],t:'ê°ë¥ì±: 0(ì ë ì ë¨) ~ 1(ë°ëì ë¨)\në°ëì ì¼ì´ë¨ = 1'}];
-        const q=pick(items);return P(q.q,q.a,'íê· ê³¼ ê°ë¥ì±',q.w,q.t)},
+    '평균과 가능성':[
+      ()=>{const d=[ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100)];const avg=Math.round(d.reduce((s,x)=>s+x,0)/d.length);return P(`${d.join(', ')}점의 평균은?`,avg,'평균과 가능성',null,'평균 = 전체 합계 ÷ 개수\n모두 더한 뒤 수의 개수로 나눠요.',true)},
+      ()=>{const items=[{q:'동전 던지기에서 앞면이 나올 가능성?',a:'1/2',w:['1','0','1/4'],t:'동전은 앞면 또는 뒷면 → 2가지\n앞면은 그 중 1가지 → 1/2'},
+        {q:'주사위에서 6이 나올 가능성?',a:'1/6',w:['1/2','1/3','1/4'],t:'주사위는 1~6 → 6가지\n6은 그 중 1가지 → 1/6'},
+        {q:'반드시 일어나는 사건의 가능성?',a:'1',w:['0','1/2','2'],t:'가능성: 0(절대 안 됨) ~ 1(반드시 됨)\n반드시 일어남 = 1'}];
+        const q=pick(items);return P(q.q,q.a,'평균과 가능성',q.w,q.t)},
     ],
   },
   6:{
-    'ë¶ìì ëëì':[
-      ()=>{const n1=ri(1,6),d1=pick([2,3,4,5,6]),n2=ri(1,6),d2=pick([2,3,4,5,6]);const r=n1*d2,rd=d1*n2;const g=gcd(r,rd);return P(`${n1}/${d1} Ã· ${n2}/${d2} = â¡`,`${r/g}/${rd/g}`,'ë¶ìì ëëì',null,'ë¶ì ëëì = ë¤ ë¶ìì ì­ì(ë¤ì§ê¸°)ë¥¼ ê³±í´ì.\nÃ·(ëëê¸°) â Ã(ê³±íê¸°)ë¡ ë°ê¾¸ê³  ë¶ìë¥¼ ë¤ì§ì´ì.')},
-      ()=>{const n=ri(1,5),d=pick([2,3,4,5]),w=ri(2,5);const r=n,rd=d*w;const g=gcd(r,rd);return P(`${n}/${d} Ã· ${w} = â¡`,`${r/g}/${rd/g}`,'ë¶ìì ëëì',null,'ë¶ì Ã· ìì°ì: ë¶ëª¨ì ìì°ìë¥¼ ê³±í´ì.\në¶ìë ê·¸ëë¡!')},
+    '분수의 나눗셈':[
+      ()=>{const n1=ri(1,6),d1=pick([2,3,4,5,6]),n2=ri(1,6),d2=pick([2,3,4,5,6]);const r=n1*d2,rd=d1*n2;const g=gcd(r,rd);return P(`${n1}/${d1} ÷ ${n2}/${d2} = □`,`${r/g}/${rd/g}`,'분수의 나눗셈',null,'분수 나눗셈 = 뒤 분수의 역수(뒤집기)를 곱해요.\n÷(나누기) → ×(곱하기)로 바꾸고 분수를 뒤집어요.')},
+      ()=>{const n=ri(1,5),d=pick([2,3,4,5]),w=ri(2,5);const r=n,rd=d*w;const g=gcd(r,rd);return P(`${n}/${d} ÷ ${w} = □`,`${r/g}/${rd/g}`,'분수의 나눗셈',null,'분수 ÷ 자연수: 분모에 자연수를 곱해요.\n분자는 그대로!')},
     ],
-    'ììì ëëì':[
-      ()=>{const b=pick([0.2,0.4,0.5,2,4,5]);const q=ri(2,9);const a=+(b*q).toFixed(2);return P(`${a} Ã· ${b} = â¡`,q,'ììì ëëì',null,'ëëë ìë¥¼ ìì°ìë¡ ë§ë¤ê¸°!\në ìì ê°ì ìë¥¼ ê³±í´ ëëë ìë¥¼ ìì°ìë¡ ë°ê¿ì.')},
-      ()=>{const a=(ri(10,99)/10).toFixed(1),b=ri(2,5);return P(`${a} Ã· ${b} = â¡`,(+a/b).toFixed(2),'ììì ëëì',null,'ìì°ìë¡ ëë ë: ìì°ì ëëìì²ë¼ ê³ì°íê³ \nììì  ìì¹ë§ ë§ì¶°ì ë´ë ¤ì.')},
+    '소수의 나눗셈':[
+      ()=>{const b=pick([0.2,0.4,0.5,2,4,5]);const q=ri(2,9);const a=+(b*q).toFixed(2);return P(`${a} ÷ ${b} = □`,q,'소수의 나눗셈',null,'나누는 수를 자연수로 만들기!\n두 수에 같은 수를 곱해 나누는 수를 자연수로 바꿔요.')},
+      ()=>{const a=(ri(10,99)/10).toFixed(1),b=ri(2,5);return P(`${a} ÷ ${b} = □`,(+a/b).toFixed(2),'소수의 나눗셈',null,'자연수로 나눌 때: 자연수 나눗셈처럼 계산하고\n소수점 위치만 맞춰서 내려요.')},
     ],
-    'ë¹ë¡ìê³¼ ë¹ë¡ë°°ë¶':[
-      ()=>{const a=ri(2,8),b=ri(2,8),c=ri(2,8);const d=a*c/b;if(!Number.isInteger(d)){return P(`2:3 = â¡:6`,4,'ë¹ë¡ìê³¼ ë¹ë¡ë°°ë¶',null,'ë¹ë¡ì: ì¸í­ì ê³± = ë´í­ì ê³±\n2Ã6 = 3Ãâ¡ â â¡ë¥¼ êµ¬í´ì.');}return P(`${a}:${b} = ${c}:â¡`,d,'ë¹ë¡ìê³¼ ë¹ë¡ë°°ë¶',null,'ì¸í­ì ê³± = ë´í­ì ê³±\n'+a+'Ãâ¡ = '+b+'Ã'+c+' â â¡ë¥¼ êµ¬í´ì.')},
-      ()=>{const total=pick([20,30,40,50,60]),a=ri(1,4),b=ri(1,4);const partA=Math.round(total*a/(a+b));return P(`${total}ì ${a}:${b}ë¡ ë¹ë¡ë°°ë¶íë©´ ìì ìì?`,partA,'ë¹ë¡ìê³¼ ë¹ë¡ë°°ë¶',null,'ì ì²´ Ã (ìì ë¹ì¨)\n= ì ì²´ Ã (ì ì Ã· ë ìì í©)',true)},
+    '비례식과 비례배분':[
+      ()=>{const a=ri(2,8),b=ri(2,8),c=ri(2,8);const d=a*c/b;if(!Number.isInteger(d)){return P(`2:3 = □:6`,4,'비례식과 비례배분',null,'비례식: 외항의 곱 = 내항의 곱\n2×6 = 3×□ → □를 구해요.');}return P(`${a}:${b} = ${c}:□`,d,'비례식과 비례배분',null,'외항의 곱 = 내항의 곱\n'+a+'×□ = '+b+'×'+c+' → □를 구해요.')},
+      ()=>{const total=pick([20,30,40,50,60]),a=ri(1,4),b=ri(1,4);const partA=Math.round(total*a/(a+b));return P(`${total}을 ${a}:${b}로 비례배분하면 앞의 양은?`,partA,'비례식과 비례배분',null,'전체 × (앞의 비율)\n= 전체 × (앞 수 ÷ 두 수의 합)',true)},
     ],
-    'ìì ëì´':[
-      ()=>{const r=ri(2,8);return P(`ë°ì§ë¦ ${r}cmì¸ ìì ëì´? (Ï=3.14)`,+(r*r*3.14).toFixed(2),'ìì ëì´',null,'ìì ëì´ = ë°ì§ë¦ Ã ë°ì§ë¦ Ã ìì£¼ì¨(Ï)\në°ì§ë¦ì ë ë² ê³±í ë¤ 3.14ë¥¼ ê³±í´ì.')},
-      ()=>{const r=ri(2,8);return P(`ë°ì§ë¦ ${r}cmì¸ ìì ìì£¼? (Ï=3.14)`,+(2*r*3.14).toFixed(2),'ìì ëì´',null,'ìì£¼(ìì ëë ) = ì§ë¦ Ã Ï\nì§ë¦ = ë°ì§ë¦ Ã 2')},
+    '원의 넓이':[
+      ()=>{const r=ri(2,8);return P(`반지름 ${r}cm인 원의 넓이? (π=3.14)`,+(r*r*3.14).toFixed(2),'원의 넓이',null,'원의 넓이 = 반지름 × 반지름 × 원주율(π)\n반지름을 두 번 곱한 뒤 3.14를 곱해요.')},
+      ()=>{const r=ri(2,8);return P(`반지름 ${r}cm인 원의 원주? (π=3.14)`,+(2*r*3.14).toFixed(2),'원의 넓이',null,'원주(원의 둘레) = 지름 × π\n지름 = 반지름 × 2')},
     ],
-    'ê°ê¸°ë¥ê³¼ ê°ë¿':[
-      ()=>{const n=pick([3,4,5,6]);const names={3:'ì¼ê°',4:'ì¬ê°',5:'ì¤ê°',6:'ì¡ê°'};return P(`ë°ë©´ì´ ${names[n]}íì¸ ê°ê¸°ë¥ì ë©´ ìë?`,n+2,'ê°ê¸°ë¥ê³¼ ê°ë¿',[n,n+1,n+3],'ê°ê¸°ë¥ ë©´ ì = ë°ë©´ ë³ ì + 2\n(ì ë°ë©´ 1 + ìë ë°ë©´ 1 + ìë©´)')},
-      ()=>{const n=pick([3,4,5,6]);const names={3:'ì¼ê°',4:'ì¬ê°',5:'ì¤ê°',6:'ì¡ê°'};return P(`ë°ë©´ì´ ${names[n]}íì¸ ê°ë¿ì ê¼­ì§ì  ìë?`,n+1,'ê°ê¸°ë¥ê³¼ ê°ë¿',[n,n+2,n+3],'ê°ë¿ ê¼­ì§ì  ì = ë°ë©´ ê¼­ì§ì  ì + 1\n(ê¼­ëê¸° ê¼­ì§ì  1ê° ì¶ê°)')},
+    '각기둥과 각뿔':[
+      ()=>{const n=pick([3,4,5,6]);const names={3:'삼각',4:'사각',5:'오각',6:'육각'};return P(`밑면이 ${names[n]}형인 각기둥의 면 수는?`,n+2,'각기둥과 각뿔',[n,n+1,n+3],'각기둥 면 수 = 밑면 변 수 + 2\n(위 밑면 1 + 아래 밑면 1 + 옆면)')},
+      ()=>{const n=pick([3,4,5,6]);const names={3:'삼각',4:'사각',5:'오각',6:'육각'};return P(`밑면이 ${names[n]}형인 각뿔의 꼭짓점 수는?`,n+1,'각기둥과 각뿔',[n,n+2,n+3],'각뿔 꼭짓점 수 = 밑면 꼭짓점 수 + 1\n(꼭대기 꼭짓점 1개 추가)')},
     ],
-    'ê²ëì´ì ë¶í¼':[
-      ()=>{const l=ri(2,6),w=ri(2,6),h=ri(2,6);return P(`${l}Ã${w}Ã${h}cm ì§ì¡ë©´ì²´ì ë¶í¼?`,l*w*h,'ê²ëì´ì ë¶í¼',null,'ì§ì¡ë©´ì²´ ë¶í¼ = ê°ë¡ Ã ì¸ë¡ Ã ëì´')},
-      ()=>{const a=ri(2,6);return P(`í ë³ì´ ${a}cmì¸ ì ì¡ë©´ì²´ì ë¶í¼?`,a*a*a,'ê²ëì´ì ë¶í¼',null,'ì ì¡ë©´ì²´ ë¶í¼ = í ë³ Ã í ë³ Ã í ë³\nì¸ ë² ê³±í´ì!')},
-      ()=>{const l=ri(2,5),w=ri(2,5),h=ri(2,5);const sa=2*(l*w+w*h+l*h);return P(`${l}Ã${w}Ã${h}cm ì§ì¡ë©´ì²´ì ê²ëì´?`,sa,'ê²ëì´ì ë¶í¼',null,'ê²ëì´ = 6ë©´ì ëì´ í©\n= 2 Ã (ê°ë¡Ãì¸ë¡ + ì¸ë¡Ãëì´ + ê°ë¡Ãëì´)')},
+    '겉넓이와 부피':[
+      ()=>{const l=ri(2,6),w=ri(2,6),h=ri(2,6);return P(`${l}×${w}×${h}cm 직육면체의 부피?`,l*w*h,'겉넓이와 부피',null,'직육면체 부피 = 가로 × 세로 × 높이')},
+      ()=>{const a=ri(2,6);return P(`한 변이 ${a}cm인 정육면체의 부피?`,a*a*a,'겉넓이와 부피',null,'정육면체 부피 = 한 변 × 한 변 × 한 변\n세 번 곱해요!')},
+      ()=>{const l=ri(2,5),w=ri(2,5),h=ri(2,5);const sa=2*(l*w+w*h+l*h);return P(`${l}×${w}×${h}cm 직육면체의 겉넓이?`,sa,'겉넓이와 부피',null,'겉넓이 = 6면의 넓이 합\n= 2 × (가로×세로 + 세로×높이 + 가로×높이)')},
     ],
-    'ë¹ì ë¹ì¨':[
-      ()=>{const a=ri(2,8),b=ri(2,8);return P(`${a}:${b}ìì ë¹ì¨(ë¶ì)ì?`,`${a}/${a+b}`,'ë¹ì ë¹ì¨',[`${a}/${b}`,`${b}/${a+b}`,`${a+b}/${a}`],'ë¹ì¨ = ë¹êµíë ì Ã· ê¸°ì¤ë\na:bìì ì ì²´ë a+bì´ê³  aì ë¹ì¨ì a/(a+b)')},
-      ()=>{const p=pick([10,20,25,50,75]);return P(`${p}%ë¥¼ ììë¡?`,p/100,'ë¹ì ë¹ì¨',[p/10,p*100,p/1000],'% â ìì: Ã·100\n% â ë¶ì: /100')},
-      ()=>{const total=pick([100,200,400,500]),pct=pick([10,20,25,50]);return P(`${total}ìì ${pct}%ë?`,total*pct/100,'ë¹ì ë¹ì¨',null,'(ì ì²´) Ã (ë¹ì¨) = êµ¬íë ì\në¹ì¨ì %ë¥¼ 100ì¼ë¡ ëë ê°ì´ìì.',true)},
+    '비와 비율':[
+      ()=>{const a=ri(2,8),b=ri(2,8);return P(`${a}:${b}에서 비율(분수)은?`,`${a}/${a+b}`,'비와 비율',[`${a}/${b}`,`${b}/${a+b}`,`${a+b}/${a}`],'비율 = 비교하는 양 ÷ 기준량\na:b에서 전체는 a+b이고 a의 비율은 a/(a+b)')},
+      ()=>{const p=pick([10,20,25,50,75]);return P(`${p}%를 소수로?`,p/100,'비와 비율',[p/10,p*100,p/1000],'% → 소수: ÷100\n% → 분수: /100')},
+      ()=>{const total=pick([100,200,400,500]),pct=pick([10,20,25,50]);return P(`${total}원의 ${pct}%는?`,total*pct/100,'비와 비율',null,'(전체) × (비율) = 구하는 양\n비율은 %를 100으로 나눈 값이에요.',true)},
     ],
-    'ìë£ì ê°ë¥ì±':[
-      ()=>{const d=[ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100)];const avg=Math.round(d.reduce((s,x)=>s+x,0)/d.length);return P(`${d.join(', ')}ì ì íê· ì?`,avg,'ìë£ì ê°ë¥ì±',null,'íê·  = í©ê³ Ã· ê°ì\nëª¨ë  ìë¥¼ ëí ë¤ ìì ê°ìë¡ ëë ì.',true)},
-      ()=>{const items=[{q:'ì£¼ì¬ììì ì§ìê° ëì¬ ê°ë¥ì±?',a:'1/2',w:['1/3','1/6','2/3'],t:'ì£¼ì¬ì ì ì²´: 6ê°ì§\nì§ì(2,4,6): 3ê°ì§ â 3/6 = 1/2'},
-        {q:'ëì  2ê° ëª¨ë ìë©´ì´ ëì¬ ê°ë¥ì±?',a:'1/4',w:['1/2','1/3','3/4'],t:'ëì  2ê°ì ê²½ì°: (ìì)(ìë¤)(ë¤ì)(ë¤ë¤) = 4ê°ì§\nëª¨ë ìë©´: 1ê°ì§ â 1/4'}];
-        const q=pick(items);return P(q.q,q.a,'ìë£ì ê°ë¥ì±',q.w,q.t)},
+    '자료와 가능성':[
+      ()=>{const d=[ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100),ri(60,100)];const avg=Math.round(d.reduce((s,x)=>s+x,0)/d.length);return P(`${d.join(', ')}점의 평균은?`,avg,'자료와 가능성',null,'평균 = 합계 ÷ 개수\n모든 수를 더한 뒤 수의 개수로 나눠요.',true)},
+      ()=>{const items=[{q:'주사위에서 짝수가 나올 가능성?',a:'1/2',w:['1/3','1/6','2/3'],t:'주사위 전체: 6가지\n짝수(2,4,6): 3가지 → 3/6 = 1/2'},
+        {q:'동전 2개 모두 앞면이 나올 가능성?',a:'1/4',w:['1/2','1/3','3/4'],t:'동전 2개의 경우: (앞앞)(앞뒤)(뒤앞)(뒤뒤) = 4가지\n모두 앞면: 1가지 → 1/4'}];
+        const q=pick(items);return P(q.q,q.a,'자료와 가능성',q.w,q.t)},
     ],
   },
 };
@@ -700,7 +700,7 @@ const GEN={
 const SETTINGS_URL='https://script.google.com/macros/s/AKfycbwpSfZT_ksZ-vHzokn7_bJii07pLbter47tb8-2COCI_Vwj4TP4-3qnfW6Xk3xeR9nzjQ/exec';
 const RECORDS_URL='https://script.google.com/macros/s/AKfycbxHI_B5-AtSVa2guhx7IOQCUzAQvKAsTvCfCFNrYFtyaaFaM9uX9woWPv6WB-jtSVzx/exec';
 
-// JSONP ê³µíµ í¨ì
+// JSONP 공통 함수
 function jsonpRequest(url, timeout=10000){
   return new Promise((resolve, reject)=>{
     const cbName='_cb'+Date.now()+'_'+Math.random().toString(36).slice(2);
@@ -735,7 +735,7 @@ async function binGet(id){
       const cached=localStorage.getItem('mathCache_'+id);
       if(cached)return JSON.parse(cached);
     }catch(e2){}
-    throw new Error('ì°ê²° ì¤í¨: '+e.message);
+    throw new Error('연결 실패: '+e.message);
   }
 }
 async function binPut(id,data){
@@ -745,21 +745,21 @@ async function binPut(id,data){
     const encoded=encodeURIComponent(JSON.stringify(data));
     await jsonpRequest(url+'?data='+encoded);
   }catch(e){
-    console.warn('ìë² ì ì¥ ì¤í¨(ë¡ì»¬ì ì ì¥ë¨):', e.message);
+    console.warn('서버 저장 실패(로컬엔 저장됨):', e.message);
   }
   return {status:'ok'};
 }
 
-/* ââââââââââââââââââââ
-   ì± ìí
-   ââââââââââââââââââââ */
+/* ════════════════════
+   앱 상태
+   ════════════════════ */
 let studentName='',studentCfg=null;
 let problems=[],curIdx=0,answers={},submitted=false;
 const PROB_COUNT=20;
 
-/* ââââââââ
-   ì´ë¦ ìë ¥
-   ââââââââ */
+/* ════════
+   이름 입력
+   ════════ */
 let nameTimer=null;
 function onNameInput(){
   const v=document.getElementById('nameInp').value.trim();
@@ -773,51 +773,51 @@ function onNameInput(){
 }
 
 async function lookupStudent(name){
-  showLoad('ì¤ì  ë¶ë¬ì¤ë ì¤...');
+  showLoad('설정 불러오는 중...');
   try{
     const settings=await binGet('settings');
     const cfg=settings&&settings.data&&settings.data.students&&settings.data.students[name];
     hideLoad();
     if(cfg){
-      // êµ¬ ë¨ìëª â ì  ë¨ìëª ìë ë³í
+      // 구 단원명 → 신 단원명 자동 변환
       const domainMap={
-        'ì ì¸ê¸°':'ë§ì','ë ìë¦¬ ë§ì':'ë§ì','ë ìë¦¬ ëºì':'ëºì',
-        'ë°ìì¬ë¦¼ ë§ì':'ë§ì','ë°ìë´ë¦¼ ëºì':'ëºì',
-        'ì¸ ìë¦¬ ë§ì':'ë§ìê³¼ ëºì','ì¸ ìë¦¬ ëºì':'ë§ìê³¼ ëºì',
-        'ê³±ìêµ¬êµ¬':'ê³±ì','(ëªì­) ê³±ì':'ê³±ì','ë ìë¦¬Ãí ìë¦¬':'ê³±ì',
-        'ì¸ ìë¦¬Ãí ìë¦¬':'ê³±ì','ë ìë¦¬Ãë ìë¦¬':'ê³±ì',
-        'ëë¨¸ì§ ëëì':'ëëì',
-        'ë¶ì ë§ì':'ë¶ìì ë§ìê³¼ ëºì','ë¶ì ëºì':'ë¶ìì ë§ìê³¼ ëºì',
-        'ë¶ì ê³±ì':'ë¶ìì ê³±ì',
-        'ìì ë§ì':'ììì ë§ìê³¼ ëºì','ìì ëºì':'ììì ë§ìê³¼ ëºì',
-        'ìì ê³±ì':'ììì ê³±ì',
-        'ë¶ì ëëì':'ë¶ìì ëëì','ìì ëëì':'ììì ëëì',
-        'í¼í© ê³ì°':'ìì°ìì í¼í©ê³ì°',
-        'ì½ìÂ·ë°°ì':'ì½ìì ë°°ì',
-        'ë°±ë¶ì¨':'ë¹ì ë¹ì¨',
+        '수 세기':'덧셈','두 자리 덧셈':'덧셈','두 자리 뺄셈':'뺄셈',
+        '받아올림 덧셈':'덧셈','받아내림 뺄셈':'뺄셈',
+        '세 자리 덧셈':'덧셈과 뺄셈','세 자리 뺄셈':'덧셈과 뺄셈',
+        '곱셈구구':'곱셈','(몇십) 곱셈':'곱셈','두 자리×한 자리':'곱셈',
+        '세 자리×한 자리':'곱셈','두 자리×두 자리':'곱셈',
+        '나머지 나눗셈':'나눗셈',
+        '분수 덧셈':'분수의 덧셈과 뺄셈','분수 뺄셈':'분수의 덧셈과 뺄셈',
+        '분수 곱셈':'분수의 곱셈',
+        '소수 덧셈':'소수의 덧셈과 뺄셈','소수 뺄셈':'소수의 덧셈과 뺄셈',
+        '소수 곱셈':'소수의 곱셈',
+        '분수 나눗셈':'분수의 나눗셈','소수 나눗셈':'소수의 나눗셈',
+        '혼합 계산':'자연수의 혼합계산',
+        '약수·배수':'약수와 배수',
+        '백분율':'비와 비율',
       };
       if(domainMap[cfg.domain]) cfg.domain=domainMap[cfg.domain];
       studentCfg=cfg;
       const ginfo=GEN[cfg.grade];
-      const domLabel=cfg.domain==='all'?'ì  ìì­':cfg.domain;
+      const domLabel=cfg.domain==='all'?'전 영역':cfg.domain;
       document.getElementById('cfgPreview').style.display='block';
       document.getElementById('cfgPreview').innerHTML=
-        `<b>ð ${name} íì ì¤ì </b><br>íë: ${cfg.grade}íë&nbsp;&nbsp;|&nbsp;&nbsp;ìì­: ${domLabel}<br>ë¬¸ì  ì: ${PROB_COUNT}ë¬¸ì `;
+        `<b>📋 ${name} 학생 설정</b><br>학년: ${cfg.grade}학년&nbsp;&nbsp;|&nbsp;&nbsp;영역: ${domLabel}<br>문제 수: ${PROB_COUNT}문제`;
       document.getElementById('startBtn').disabled=false;
       document.getElementById('setupErr').textContent='';
     } else {
-      document.getElementById('setupErr').textContent='ì ìëì´ ìì§ ì´ ì´ë¦ì ì¤ì ì ë±ë¡íì§ ìììµëë¤.';
+      document.getElementById('setupErr').textContent='선생님이 아직 이 이름의 설정을 등록하지 않았습니다.';
       document.getElementById('startBtn').disabled=true;
     }
   }catch(e){
     hideLoad();
-    document.getElementById('setupErr').textContent='ìë² ì°ê²°ì ì¤í¨íìµëë¤. ì ì í ë¤ì ìëíì¸ì.';
+    document.getElementById('setupErr').textContent='서버 연결에 실패했습니다. 잠시 후 다시 시도하세요.';
   }
 }
 
 async function tryStart(){
   const name=document.getElementById('nameInp').value.trim();
-  if(!name){document.getElementById('setupErr').textContent='ì´ë¦ì ìë ¥íì¸ì.';return}
+  if(!name){document.getElementById('setupErr').textContent='이름을 입력하세요.';return}
   if(!studentCfg){await lookupStudent(name);return}
   studentName=name;
   try{localStorage.setItem('mathQuizStudentName',name)}catch(e){}
@@ -835,39 +835,39 @@ function loadSavedName(){
   }catch(e){}
 }
 
-// Google Sheets ì¬ì© â í¤ ì¤ì  ë¶íì
+// Google Sheets 사용 — 키 설정 불필요
 
-/* ââââââââââââââââ
-   ë¬¸ì  ìì±
-   ââââââââââââââââ */
+/* ════════════════
+   문제 생성
+   ════════════════ */
 function buildQuiz(){
   const grade=studentCfg.grade;
   const domain=studentCfg.domain;
-  const level=studentCfg.level||'ì¤';
+  const level=studentCfg.level||'중';
   const gradeObj=GEN[grade];
-  if(!gradeObj){showErr('ì¤ì  ì¤ë¥: íë ì ë³´ê° ììµëë¤.');return}
+  if(!gradeObj){showErr('설정 오류: 학년 정보가 없습니다.');return}
 
-  // GEN êµ¬ì¡°: {íë: {ìì­: [ìì±ê¸°ë°°ì´]}}
-  // ëë©ì¸ íí°
+  // GEN 구조: {학년: {영역: [생성기배열]}}
+  // 도메인 필터
   let pool=[];
   if(domain==='all'){
-    // ì  ìì­: ëª¨ë  ìì­ì ìì±ê¸°ë¥¼ í©ì¹¨
+    // 전 영역: 모든 영역의 생성기를 합침
     pool=Object.values(gradeObj).flat();
   } else {
-    // í¹ì  ìì­ë§
+    // 특정 영역만
     pool=gradeObj[domain]||[];
     if(!pool.length){
-      // ìì­ëª ë¶ë¶ ì¼ì¹ ìë
+      // 영역명 부분 일치 시도
       const key=Object.keys(gradeObj).find(k=>k.includes(domain)||domain.includes(k));
       pool=key?gradeObj[key]:Object.values(gradeObj).flat();
     }
   }
   if(!pool.length)pool=Object.values(gradeObj).flat();
 
-  // ìì¤ë³ ëì´ë ì¡°ì : ìì±ë ë¬¸ì  íì²ë¦¬
+  // 수준별 난이도 조정: 생성된 문제 후처리
   window._quizLevel=level;
 
-  // êµ¬êµ¬ë¨ ê´ë¬¸ ë¨¼ì 
+  // 구구단 관문 먼저
   startGate(()=>{
   problems=[];
   const seen=new Set();
@@ -875,7 +875,7 @@ function buildQuiz(){
   while(problems.length<PROB_COUNT&&tries++<300){
     const g=pool[Math.floor(Math.random()*pool.length)];
     const p=g();
-    if(!p||!p.q)continue;  // null ë°©ì´
+    if(!p||!p.q)continue;  // null 방어
     const adj=adjustLevel(p,level);
     if(!adj||!adj.q)continue;
     if(!seen.has(adj.q)){seen.add(adj.q);problems.push(adj)}
@@ -885,50 +885,50 @@ function buildQuiz(){
   document.getElementById('mainUI').style.display='block';
   document.getElementById('nameBadge').textContent=studentName;
   document.getElementById('topSub').textContent=
-    `${domain==='all'?'ì  ìì­':domain} Â· ${new Date().toLocaleDateString('ko-KR')}`;
+    `${domain==='all'?'전 영역':domain} · ${new Date().toLocaleDateString('ko-KR')}`;
   renderProb();
   }); // end gate callback
 }
 
-/* ââââââââââââââââ
-   ë¬¸ì  ë ëë§
-   ââââââââââââââââ */
+/* ════════════════
+   문제 렌더링
+   ════════════════ */
 function renderProb(){
   updateProg();
   updateDots();
   const p=problems[curIdx];
   const selIdx=answers[curIdx];
-  const nums=['â ','â¡','â¢','â£'];
+  const nums=['①','②','③','④'];
   document.getElementById('pNo').textContent=`${curIdx+1} / ${problems.length}`;
   const tag=document.getElementById('pTag');
   tag.textContent=p.domain;
   tag.style.background='#EFF6FF';tag.style.color='#2563EB';
   document.getElementById('pQ').innerHTML=fracHTML(p.q);
 
-  // í ë²í¼ íì/ì¨ê¹
+  // 팁 버튼 표시/숨김
   const tipBtn=document.getElementById('tipBtn');
   const tipBox=document.getElementById('tipBox');
   if(p.tip){
     tipBtn.style.display='inline-flex';
-    // í ìì ë¶ì íê¸°(n/d)ë¥¼ HTML ë¶ìë¡ ë³í
+    // 팁 안의 분수 표기(n/d)를 HTML 분수로 변환
     const tipLines = p.tip.split('\n');
     tipBox.innerHTML = tipLines.map(line => {
-      // ì«ì/ì«ì í¨í´ì ë¶ì HTMLë¡ ë³í (Ã· ê¸°í¸ë ì ì¸)
+      // 숫자/숫자 패턴을 분수 HTML로 변환 (÷ 기호는 제외)
       return line.replace(/(\d+)\/(\d+)/g, (_,n,d) =>
         `<span class="frac"><span>${n}</span><span>${d}</span></span>`
       );
     }).join('<br>');
     tipBox.style.whiteSpace='normal';
-    // ë¬¸ì  ë°ë ë í ë«ê¸°
+    // 문제 바뀔 때 팁 닫기
     tipBox.classList.remove('show');
-    tipBtn.textContent='ð¡ í ë³´ê¸°';
+    tipBtn.textContent='💡 팁 보기';
   } else {
     tipBtn.style.display='none';
     tipBox.classList.remove('show');
   }
 
   const expl=document.getElementById('explain');
-  if(submitted&&p.tip){expl.textContent='ð¡ '+p.tip;expl.classList.add('show')}
+  if(submitted&&p.tip){expl.textContent='💡 '+p.tip;expl.classList.add('show')}
   else{expl.textContent='';expl.classList.remove('show')}
 
   const cb=document.getElementById('choices');
@@ -952,7 +952,7 @@ function renderProb(){
   document.getElementById('nextBtn').disabled=(curIdx===problems.length-1);
   document.getElementById('subBtn').disabled=submitted||Object.keys(answers).length<problems.length;
 
-  // ì±ì  í ì¤ëµ ë¬¸ì ì ìì  ë²í¼ íì
+  // 채점 후 오답 문제에 수정 버튼 표시
   const fixBtn=document.getElementById('fixBtn');
   if(submitted&&answers[curIdx]!==undefined){
     const p2=problems[curIdx];
@@ -967,14 +967,14 @@ function select(i){
   if(submitted)return;
   answers[curIdx]=i;
   renderProb();
-  // ì í ì¦ì ë¤ì ë¬¸ì ë¡ ìë ì´ë (ë§ì§ë§ ë¬¸ì  ì ì¸)
+  // 선택 즉시 다음 문제로 자동 이동 (마지막 문제 제외)
   if(curIdx<problems.length-1){
     setTimeout(()=>{curIdx++;renderProb();},400);
   }
 }
 
 function fixAnswer(){
-  // íì¬ ë¬¸ì  ëµ ì´ê¸°í í ë¤ì íê¸°
+  // 현재 문제 답 초기화 후 다시 풀기
   delete answers[curIdx];
   submitted=false;
   document.getElementById('fixBtn').classList.remove('show');
@@ -1008,11 +1008,11 @@ function updateDots(){
   });
 }
 
-/* ââââââââââââââââ
-   ì±ì  & ì ì¥
-   ââââââââââââââââ */
+/* ════════════════
+   채점 & 저장
+   ════════════════ */
 async function submitQuiz(){
-  if(Object.keys(answers).length<problems.length){alert('ëª¨ë  ë¬¸ì ë¥¼ íì´ì£¼ì¸ì!');return}
+  if(Object.keys(answers).length<problems.length){alert('모든 문제를 풀어주세요!');return}
   submitted=true;
   let correct=0;
   const details=[];
@@ -1025,24 +1025,24 @@ async function submitQuiz(){
   const pct=Math.round(correct/problems.length*100);
   renderProb();
   showResult(correct,pct);
-  // ê¸°ë¡ ì ì¥ (record íëë§ ì¶ê° - URL ê¸¸ì´ ìµìí)
+  // 기록 저장 (record 하나만 추가 - URL 길이 최소화)
   try{
     const newRecord={
       date:new Date().toISOString().split('T')[0],
       time:new Date().toLocaleTimeString('ko-KR'),
       name:studentName,
-      grade:studentCfg.grade+'íë',
-      domain:studentCfg.domain==='all'?'ì  ìì­':studentCfg.domain,
+      grade:studentCfg.grade+'학년',
+      domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
       correct,total:problems.length,pct,details
     };
         const recordToSend={...newRecord,details:[]};
         const encoded=encodeURIComponent(JSON.stringify(recordToSend));
     await jsonpRequest(RECORDS_URL+'?record='+encoded);
-    console.log('ê¸°ë¡ ì ì¥ ìë£');
-  }catch(e){console.warn('ê¸°ë¡ ì ì¥ ì¤í¨',e)}
+    console.log('기록 저장 완료');
+  }catch(e){console.warn('기록 저장 실패',e)}
 }
 
-/* ââ ë¡ì»¬ ì ì ê¸°ë¡ (íì¼ ìì í´ë ì ì§) ââ */
+/* ── 로컬 점수 기록 (파일 수정해도 유지) ── */
 const LOCAL_HIST_KEY='mathQuizHistory_v1';
 function getLocalHist(name){
   try{const d=localStorage.getItem(LOCAL_HIST_KEY);const all=d?JSON.parse(d):{};return all[name]||[];}catch(e){return[]}
@@ -1052,39 +1052,39 @@ function saveLocalHist(name,entry){
     const d=localStorage.getItem(LOCAL_HIST_KEY);const all=d?JSON.parse(d):{};
     if(!all[name])all[name]=[];
     all[name].push(entry);
-    // ìµê·¼ 30ê°ë§ ë³´ê´
+    // 최근 30개만 보관
     if(all[name].length>30)all[name]=all[name].slice(-30);
     localStorage.setItem(LOCAL_HIST_KEY,JSON.stringify(all));
   }catch(e){}
 }
 
 function showResult(correct,pct){
-  // ë¡ì»¬ ê¸°ë¡ ì ì¥
+  // 로컬 기록 저장
   const entry={date:new Date().toISOString().split('T')[0],time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),pct,correct,total:problems.length};
   saveLocalHist(studentName,entry);
 
-  const emoji=pct===100?'ð':pct>=80?'ð':pct>=60?'ð':pct>=40?'ðª':'ð';
-  const msg=pct===100?'ìë²½í´ì!':pct>=80?'ìíì´ì!':pct>=60?'ì¢ìì, ì¡°ê¸ë§ ë!':pct>=40?'ë¤ì ëì í´ë´ì!':'í¬ê¸°íì§ ë§ì¸ì!';
+  const emoji=pct===100?'🏆':pct>=80?'🌟':pct>=60?'👍':pct>=40?'💪':'📚';
+  const msg=pct===100?'완벽해요!':pct>=80?'잘했어요!':pct>=60?'좋아요, 조금만 더!':pct>=40?'다시 도전해봐요!':'포기하지 마세요!';
   const msgColor=pct>=80?'#F0FDF4':pct>=60?'#FFFBEB':'#FEF2F2';
   const msgTxt=pct>=80?'#16A34A':pct>=60?'#D97706':'#DC2626';
   document.getElementById('rEmoji').textContent=emoji;
-  document.getElementById('rScore').innerHTML=`${pct}<span>ì </span>`;
-  document.getElementById('rSub').textContent=`${studentName} Â· ${correct}/${problems.length} ì ëµ`;
+  document.getElementById('rScore').innerHTML=`${pct}<span>점</span>`;
+  document.getElementById('rSub').textContent=`${studentName} · ${correct}/${problems.length} 정답`;
 
-  // ì´ë² ê²°ê³¼ì ì´ì  ì ì ë¹êµ
+  // 이번 결과와 이전 점수 비교
   const hist=getLocalHist(studentName);
   const prev=hist.length>=2?hist[hist.length-2]:null;
   const diff=prev?pct-prev.pct:null;
-  const trendIcon=diff===null?'':diff>0?`<span class="trend-up">â²${diff}ì </span>`:diff<0?`<span class="trend-dn">â¼${Math.abs(diff)}ì </span>`:`<span class="trend-eq">â ì ì§</span>`;
+  const trendIcon=diff===null?'':diff>0?`<span class="trend-up">▲${diff}점</span>`:diff<0?`<span class="trend-dn">▼${Math.abs(diff)}점</span>`:`<span class="trend-eq">→ 유지</span>`;
 
   document.getElementById('rGrid').innerHTML=
-    `<div class="rg"><div class="rg-l">ì ëµ</div><div class="rg-v">${correct}</div></div>
-     <div class="rg"><div class="rg-l">ì¤ëµ</div><div class="rg-v">${problems.length-correct}</div></div>
-     <div class="rg"><div class="rg-l">ì´ì  ëë¹</div><div class="rg-v" style="font-size:13px">${trendIcon||'-'}</div></div>`;
+    `<div class="rg"><div class="rg-l">정답</div><div class="rg-v">${correct}</div></div>
+     <div class="rg"><div class="rg-l">오답</div><div class="rg-v">${problems.length-correct}</div></div>
+     <div class="rg"><div class="rg-l">이전 대비</div><div class="rg-v" style="font-size:13px">${trendIcon||'-'}</div></div>`;
   const rm=document.getElementById('rMsg');
   rm.textContent=msg;rm.style.background=msgColor;rm.style.color=msgTxt;
 
-  // ì ì íì¤í ë¦¬ ì°¨í¸ ë ëë§
+  // 점수 히스토리 차트 렌더링
   renderHistChart(hist);
 
   document.getElementById('resultOverlay').classList.add('show');
@@ -1092,7 +1092,7 @@ function showResult(correct,pct){
 
 function renderHistChart(hist){
   const hw=document.getElementById('histWrap');
-  if(hist.length<2){hw.innerHTML='<div class="hist-title">ð ë´ ì ì ê¸°ë¡</div><div class="no-hist">ìì§ ê¸°ë¡ì´ ë¶ì¡±í´ì. ë íì´ë³´ì¸ì!</div>';return}
+  if(hist.length<2){hw.innerHTML='<div class="hist-title">📈 내 점수 기록</div><div class="no-hist">아직 기록이 부족해요. 더 풀어보세요!</div>';return}
   const recent=hist.slice(-10);
   const avg=Math.round(recent.reduce((s,h)=>s+h.pct,0)/recent.length);
   const best=Math.max(...recent.map(h=>h.pct));
@@ -1108,12 +1108,12 @@ function renderHistChart(hist){
     </div>`;
   }).join('');
   hw.innerHTML=`
-    <div class="hist-title"><span>ð ë´ ì ì ë³í (ìµê·¼ ${recent.length}í)</span></div>
+    <div class="hist-title"><span>📈 내 점수 변화 (최근 ${recent.length}회)</span></div>
     <div class="hist-chart">${bars}</div>
     <div class="hist-stat-row">
-      <div class="hstat"><div class="hstat-l">íê· </div><div class="hstat-v">${avg}ì </div></div>
-      <div class="hstat"><div class="hstat-l">ìµê³ </div><div class="hstat-v" style="color:#16A34A">${best}ì </div></div>
-      <div class="hstat"><div class="hstat-l">ìì íì</div><div class="hstat-v">${hist.length}í</div></div>
+      <div class="hstat"><div class="hstat-l">평균</div><div class="hstat-v">${avg}점</div></div>
+      <div class="hstat"><div class="hstat-l">최고</div><div class="hstat-v" style="color:#16A34A">${best}점</div></div>
+      <div class="hstat"><div class="hstat-l">응시 횟수</div><div class="hstat-v">${hist.length}회</div></div>
     </div>`;
 }
 
@@ -1122,14 +1122,14 @@ function retryQuiz(){
   buildQuiz();
 }
 
-/* ââââââââ
-   ì í¸
-   ââââââââ */
+/* ════════
+   유틸
+   ════════ */
 function showLoad(msg){const o=document.getElementById('loading');document.getElementById('ldMsg').textContent=msg||'';o.classList.add('show')}
 function hideLoad(){document.getElementById('loading').classList.remove('show')}
-/* ââââââââââââââââââââ
-   êµ¬êµ¬ë¨ ê´ë¬¸
-   ââââââââââââââââââââ */
+/* ════════════════════
+   구구단 관문
+   ════════════════════ */
 let gateProblems=[],gateIdx=0,gateCorrect=0,gateCallback=null;
 
 function makeGateProb(){
@@ -1137,7 +1137,7 @@ function makeGateProb(){
   const ans=a*b;
   const wrongs=new Set();
   while(wrongs.size<3){const v=ans+ri(-5,5);if(v!==ans&&v>0)wrongs.add(v)}
-  return{q:`${a} Ã ${b} = ?`,ans:String(ans),choices:shuffle([String(ans),...[...wrongs]])};
+  return{q:`${a} × ${b} = ?`,ans:String(ans),choices:shuffle([String(ans),...[...wrongs]])};
 }
 
 function startGate(callback){
@@ -1151,7 +1151,7 @@ function startGate(callback){
 function renderGate(){
   const p=gateProblems[gateIdx];
   document.getElementById('gateQ').textContent=p.q;
-  document.getElementById('gateProg').textContent=`${gateIdx+1} / 3ë¬¸ì `;
+  document.getElementById('gateProg').textContent=`${gateIdx+1} / 3문제`;
   document.getElementById('gateStatus').textContent='';
   const gc=document.getElementById('gateChoices');
   gc.innerHTML='';
@@ -1168,7 +1168,7 @@ function selectGate(chosen,btn,p){
   document.querySelectorAll('.gate-btn').forEach(b=>b.onclick=null);
   const ok=chosen===p.ans;
   btn.classList.add(ok?'gate-ok':'gate-ng');
-  // ì¤ëµì´ë©´ ì ëµ íì
+  // 오답이면 정답 표시
   if(!ok){
     document.querySelectorAll('.gate-btn').forEach(b=>{
       if(b.textContent===p.ans)b.classList.add('gate-ok');
@@ -1177,25 +1177,25 @@ function selectGate(chosen,btn,p){
   const status=document.getElementById('gateStatus');
   if(ok){
     gateCorrect++;
-    status.textContent='â ì ëµ!';status.style.color='var(--green)';
+    status.textContent='✓ 정답!';status.style.color='var(--green)';
   } else {
-    status.textContent=`â ì¤ëµ! ì ëµì ${p.ans}`;status.style.color='var(--red)';
+    status.textContent=`✗ 오답! 정답은 ${p.ans}`;status.style.color='var(--red)';
   }
   setTimeout(()=>{
     gateIdx++;
     if(gateIdx<3){
-      // íë ¸ì¼ë©´ ì ë¬¸ì ë¡ êµì²´ í ê³ì
+      // 틀렸으면 새 문제로 교체 후 계속
       if(!ok) gateProblems[gateIdx]=makeGateProb();
       renderGate();
     } else {
       if(gateCorrect===3){
-        // 3ë¬¸ì  ëª¨ë ì ëµ
+        // 3문제 모두 정답
         document.getElementById('gateOverlay').classList.remove('show');
         if(gateCallback)gateCallback();
       } else {
-        // íë¦° ë¬¸ì  ìì¼ë©´ ì²ìë¶í° ë¤ì
+        // 틀린 문제 있으면 처음부터 다시
         const status2=document.getElementById('gateStatus');
-        status2.textContent=`${gateCorrect}/3 ì ëµ â ë¤ì ëì !`;status2.style.color='var(--red)';
+        status2.textContent=`${gateCorrect}/3 정답 — 다시 도전!`;status2.style.color='var(--red)';
         setTimeout(()=>{
           gateProblems=[makeGateProb(),makeGateProb(),makeGateProb()];
           gateIdx=0;gateCorrect=0;
@@ -1211,7 +1211,7 @@ function toggleTip(){
   const btn=document.getElementById('tipBtn');
   const showing=box.classList.contains('show');
   box.classList.toggle('show');
-  btn.textContent=showing?'ð¡ í ë³´ê¸°':'ð¡ í ë«ê¸°';
+  btn.textContent=showing?'💡 팁 보기':'💡 팁 닫기';
   btn.style.background=showing?'var(--amber-lt)':'#FDE68A';
 }
 function showErr(msg){alert(msg)}
