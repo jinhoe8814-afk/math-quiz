@@ -7,7 +7,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#2563EB;--blue-lt:#EFF6FF;--blue-bd:#BFDBFE;
+  --blue:#2563EB;--blue-lt:#EFF6FF;--blue-bd:#BFDBFE;hh
   --green:#16A34A;--green-lt:#F0FDF4;--green-bd:#BBF7D0;
   --red:#DC2626;--red-lt:#FEF2F2;--red-bd:#FECACA;
   --amber:#D97706;--amber-lt:#FFFBEB;--amber-bd:#FDE68A;hh
@@ -456,7 +456,7 @@ async function syncAll(){
       settings.pw=s?.pw||localSettings.pw;
       await binPut('settings',settings);
     }
-    records=Array.isArray(r?.records)?r.records:[];
+    const serverRecords=Array.isArray(r?.records)?r.records:[];let localRecords=[];try{const lc2=localStorage.getItem('mathCache_records');if(lc2){const d=JSON.parse(lc2);localRecords=Array.isArray(d?.records)?d.records:[];}}catch(e){}if(localRecords.length>serverRecords.length){records=localRecords;try{await binPut('records',{records});}catch(e){console.warn('records 서버 저장 실패:',e.message);}}else{records=serverRecords;}
     // 로컬 캐시 갱신
     try{localStorage.setItem('mathCache_settings',JSON.stringify(settings));}catch(e){}
         try{localStorage.setItem('mathCache_records',JSON.stringify({records}));}catch(e){}
@@ -469,7 +469,7 @@ async function syncAll(){
     // 서버 실패 시 로컬 캐시로 복구
     try{
       const lc=localStorage.getItem('mathCache_settings');
-      if(lc){settings=JSON.parse(lc);renderAll();}
+      if(lc){settings=JSON.parse(lc);}const lc2=localStorage.getItem('mathCache_records');if(lc2){const d=JSON.parse(lc2);records=Array.isArray(d?.records)?d.records:records;}renderAll();
     }catch(e2){}
   }
 }
