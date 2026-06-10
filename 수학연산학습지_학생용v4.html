@@ -1038,7 +1038,8 @@ async function submitQuiz(){
       domain:studentCfg.domain==='all'?'전 영역':studentCfg.domain,
       correct,total:problems.length,pct,details
     };
-        const recordToSend={...newRecord,details:[]};
+                try{const __cr=JSON.parse(localStorage.getItem('mathCache_records')||'{"records":[]}');__cr.records.push(newRecord);localStorage.setItem('mathCache_records',JSON.stringify(__cr));}catch(__e){}
+const recordToSend={...newRecord,details:[]};
         const encoded=encodeURIComponent(JSON.stringify(recordToSend));
     await jsonpRequest(RECORDS_URL+'?record='+encoded);
     console.log('기록 저장 완료');
